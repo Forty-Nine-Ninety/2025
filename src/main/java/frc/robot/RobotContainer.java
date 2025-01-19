@@ -4,13 +4,29 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveSettings;
+import frc.robot.Constants.Ports;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
+
+import java.io.File;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,17 +35,41 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
+  CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
+
+  // The robot's subsystems and commands are defined here...
+  //Subsystems
+  private final SwerveSubsystem m_drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
+  private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
+  //Commands
+  private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
+  private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_elevator);
+  private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
+  private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
+  private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
+  private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommandCommand(m_elevator);
+  private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommandCommand(m_elevator);
+  private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
+  private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
+  private final RumbleCommand m_rumbleCommand = new RumbleCommand(joystickDrive);
+  //Auto
+  private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private final AutoSpeakerCommand m_autoSpeakerCommand = new AutoSpeakerCommand(m_shooter,m_arm);
+  private final AutoAmpCommand m_autoAmpCommand = new AutoAmpCommand(m_shooter,m_arm);
+  //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    //Auto SmartDashboard sendable chooser
   }
 
   /**
@@ -42,14 +82,22 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    //XBOX
+    m_drive2Command.setSuppliers(
+        () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
+    );
+    //Joystick Bindings here
+    //DRIVER
+    //OPERATOR
   }
+
+  public void setTeleopDefaultCommands()
+    {
+        CommandScheduler.getInstance().setDefaultCommand(m_drivebase, !RobotBase.isSimulation() ? m_drive2Command : m_driveSimulationCommand);
+        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armNeutralCommand);
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -57,7 +105,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    //return m_autoChooser.getSelected();
+  }
+
+  public void setMotorBrake(boolean brake)
+  {
+      m_drivebase.setMotorBrake(brake);
   }
 }
