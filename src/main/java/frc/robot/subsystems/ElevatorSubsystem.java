@@ -68,7 +68,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     bottomLeft.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
 
     bottomRight.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
-    bottomRight.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
+    bottomRight.setOpenLoopRampRate(MwotionControl.OPEN_LOOP_RAMP_RATE); 
     
 }
 

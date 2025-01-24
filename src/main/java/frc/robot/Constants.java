@@ -110,7 +110,7 @@ public final class Constants
         public static final PIDConstants ELEVATOR_tbd_PID = new PIDConstants(tbd, tbd, tbd);
         public static final double CLOSED_LOOP_RAMP_RATE = 1.0;
         public static final double OPEN_LOOP_RAMP_RATE = 1.0;
-        public static final double ARM_FEEDFORWARD = 1; //tbd
+        public static final double ELEVATOR_FEEDFORWARD = 1; //tbd
     }
 
     public static final class AutonConstants
