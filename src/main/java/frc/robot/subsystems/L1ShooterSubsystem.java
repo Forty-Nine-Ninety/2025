@@ -24,7 +24,7 @@ public class L1ShooterSubsystem extends SubsystemBase {
   private void configureMotors(){
 
     outtakeMotor.restoreFactoryDefaults();
-    outtakeMotor.setSmartCurrentLimit(60);
+    outtakeMotor.setSmartCurrentLimit(15);
 
     // outtakeMotor.setInverted(true);
 
