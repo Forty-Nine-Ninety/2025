@@ -33,11 +33,15 @@ public final class Constants
         public static int PORT_JOYSTICK_OPERATOR = 1;
 
         //CAN IDs
-        public static final int CAN_ELEVATOR_BOTTOM_LEFT = 5;
-        public static final int CAN_ELEVATOR_BOTTOM_RIGHT = 6;
-        public static final int CAN_ELEVATOR_TOP_LEFT = 7;
-        public static final int CAN_ELEVATOR_TOP_RIGHT = 8;
+
+        //Swerve occupies 1-8
+
+        public static final int CAN_ELEVATOR_BOTTOM_LEFT = 9;
+        public static final int CAN_ELEVATOR_BOTTOM_RIGHT = 10;
+        public static final int CAN_ELEVATOR_TOP_LEFT = 11;
+        public static final int CAN_ELEVATOR_TOP_RIGHT = 12;
         
+        public static final int CAN_SHOOTER_SPARKMAX = 13;
     
     public static class MotorConfig
     {
@@ -108,6 +112,7 @@ public final class Constants
     {
         //PID
         public static final PIDConstants ELEVATOR_tbd_PID = new PIDConstants(tbd, tbd, tbd);
+        public static final PIDConstants L1SHOOTER_tbd_PID = new PIDConstants(tbd, tbd, tbd);
         public static final double CLOSED_LOOP_RAMP_RATE = 1.0;
         public static final double OPEN_LOOP_RAMP_RATE = 1.0;
         public static final double ELEVATOR_FEEDFORWARD = 1; //tbd
@@ -120,8 +125,8 @@ public final class Constants
         public static final HolonomicPathFollowerConfig autoBuilderPathConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
         //new PIDConstants(5.0, 0.0 ,0.2), //original p = 5, 1st attempt: p = 5, d = 0.5, 2nd attempt: p= 5, d = 0.5, 3rd attempt: p = 5, d = 3 this caused the wheels to shutter
         //new PIDConstants(1.5, 0.0, 0), //5.0, 0, 0.2
-        TRANSLATION_PID,
-        ANGLE_PID,
+       ?? TRANSLATION_PID,
+       ?? ANGLE_PID,
         RobotMeasurements.WHEEL_SPEED, // Max module speed, in m/s
         RobotMeasurements.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to furthest module.
         new ReplanningConfig());
