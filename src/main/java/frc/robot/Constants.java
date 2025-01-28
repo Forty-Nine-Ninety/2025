@@ -33,6 +33,7 @@ public final class Constants
         public static int PORT_JOYSTICK_OPERATOR = 1;
 
         //CAN IDs
+<<<<<<< Updated upstream
 
         //Swerve occupies 1-8
 
@@ -40,6 +41,13 @@ public final class Constants
         public static final int CAN_ELEVATOR_BOTTOM_RIGHT = 10;
         public static final int CAN_ELEVATOR_TOP_LEFT = 11;
         public static final int CAN_ELEVATOR_TOP_RIGHT = 12;
+=======
+        public static final int CAN_ELEVATOR_BOTTOM_LEFT = 5;
+        public static final int CAN_ELEVATOR_BOTTOM_RIGHT = 6;
+        public static final int CAN_ELEVATOR_TOP_LEFT = 7;
+        public static final int CAN_ELEVATOR_TOP_RIGHT = 8;
+
+>>>>>>> Stashed changes
         
         public static final int CAN_SHOOTER_SPARKMAX = 13;
     
