@@ -27,7 +27,7 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
     right.restoreFactoryDefaults(); 
     left.restoreFactoryDefaults();
 
-    right.setInverted() = true;
+    right.setInverted(true);
 
     right.setSmartCurrentLimit();
     left.setSmartCurrentLimit();
