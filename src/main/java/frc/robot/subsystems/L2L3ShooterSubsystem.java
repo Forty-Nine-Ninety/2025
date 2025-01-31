@@ -41,4 +41,15 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
     right.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
     left.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
   }
+
+  public void runMotor(double percent_output){
+    left.set(percent_output);
+    right.set(percent_output);
+  }
+
+  public void stop(){
+    left.set(0.0);
+    right.set(0.0);
+  }
+
 }
