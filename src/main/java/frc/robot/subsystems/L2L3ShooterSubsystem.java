@@ -18,10 +18,10 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
   private SparkPIDController shooterPID;
 
   public L2L3ShooterSubsystem() { // Constructor 
-    right = CANSparkMax(Ports.CAN_L2L3_SHOOTER_RIGHT, MotorType.kBrushless)
-    left = CANSparkMax(Ports.CAN_L2L3_SHOOTER_LEFT, MotorType.kBrushless)
+    right = CANSparkMax(Ports.CAN_L2L3_SHOOTER_RIGHT, MotorType.kBrushless);
+    left = CANSparkMax(Ports.CAN_L2L3_SHOOTER_LEFT, MotorType.kBrushless);
   }
-}
+
   @Override
   private void configureMotors() {
     right.restoreFactoryDefaults(); 
@@ -40,4 +40,5 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
     left.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE);
     right.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
     left.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+  }
 }

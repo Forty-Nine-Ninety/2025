@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,10 +22,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public ElevatorSubsystem(){
-    bottomLeft = new CANSparkMax(Ports.CAN_ELEVATOR_BOTTOM_LEFT, MotorType.kBrushless)
-    bottomRight = new CANSparkMax(Ports.CAN_ELEVATOR_BOTTOM_RIGHT, MotorType.kBrushless)
-    topLeft = new CANSparkMax(Ports.CAN_ELEVATOR_TOP_LEFT, MotorType.kBrushless)
-    topRight = new CANSparkMax(Ports.CAN_ELEVATOR_TOP_RIGHT, MotorType.kBrushless)
+    bottomLeft = new CANSparkMax(Ports.CAN_ELEVATOR_BOTTOM_LEFT, MotorType.kBrushless);
+    bottomRight = new CANSparkMax(Ports.CAN_ELEVATOR_BOTTOM_RIGHT, MotorType.kBrushless);
+    topLeft = new CANSparkMax(Ports.CAN_ELEVATOR_TOP_LEFT, MotorType.kBrushless);
+    topRight = new CANSparkMax(Ports.CAN_ELEVATOR_TOP_RIGHT, MotorType.kBrushless);
     
     pid_elevator = tbd.getPIDController();
     pid_encoder = tbd.getEncoder();
