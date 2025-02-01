@@ -1,5 +1,5 @@
 
-package frc.robot.commands; //(This for some reason gives me an error (Java(536871240)) can someone else try to fix it?)
+package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.L1ShooterSubsystem;
 import frc.robot.subsystems.L2L3ShooterSubsystem;
