@@ -16,10 +16,12 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
   
   private CANSparkMax right, left; 
   private SparkPIDController shooterPID;
+  private final DigitalInput m_breakbeam;
 
   public L2L3ShooterSubsystem() { // Constructor 
     right = CANSparkMax(Ports.CAN_L2L3_SHOOTER_RIGHT, MotorType.kBrushless);
     left = CANSparkMax(Ports.CAN_L2L3_SHOOTER_LEFT, MotorType.kBrushless);
+    m_breakbeam = new DigitalInput(Ports.PORT_DIO_BREAK_BEAM);
   }
 
   @Override
@@ -50,5 +52,9 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
   public void stop(){
     left.set(0.0);
     right.set(0.0);
+  }
+
+  public boolean breakBeam(){
+    return !m_breakbeam.get();
   }
 }
