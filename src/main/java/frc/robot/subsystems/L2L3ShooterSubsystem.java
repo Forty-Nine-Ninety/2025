@@ -51,5 +51,4 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
     left.set(0.0);
     right.set(0.0);
   }
-
 }
