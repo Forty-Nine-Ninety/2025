@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.L1ShooterSubsystem;
 import frc.robot.subsystems.L2L3ShooterSubsystem;
 public class OuttakeL2L3Command {
-    private final L2L3ShooterSubsystem L2L3Shooter;
+    private final L2L3ShooterSubsystem m_L2L3Shooter;
     public L2L3ShooterSubsystem (L2L3ShooterSubsystem L2L3Shooter){
         m_L2L3Shooter = L2L3Shooter;
         addRequirements(L2L3Shooter);
