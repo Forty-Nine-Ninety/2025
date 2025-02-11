@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class VisionSubsystem {
     private SwerveSubsystem m_drivebase;
     private PhotonCamera arducamOne;
-    //private PhotonPoseEstimator poseEstimator;
+    
     private PhotonPipelineResult result;
     private PhotonTrackedTarget currentTarget;
     private Transform2D pose;
