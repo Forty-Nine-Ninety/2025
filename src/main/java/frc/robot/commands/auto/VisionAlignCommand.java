@@ -4,11 +4,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class VisionAlignCommand {
+public class VisionAlignCommand extends SequentialCommandGroup{
     private final SwerveSubsystem m_drivebase;
     public VisionAlignCommand(SwerveSubsystem drivebase){
         m_drivebase = drivebase;
-        addCommands(new )
+        addCommands(m_drivebase.drive(new ChassisSpeeds(x,y,theta),
+                                      double rotation,
+                                      true)
+                    );
     }
 
 }

@@ -26,14 +26,20 @@ public class VisionSubsystem {
 
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
-            //poseEstimator.update();
             aprilTagiD = currentTarget.getFiducialId();
             pose = currentTarget.getCameraToTarget();
-            //USE DATA TO DRIVE ROBOT TO CORRECT POSITION, AUTO COMMAND
-            m_drivebase.drive();
-            pose.getX();
-            pose.getY();
-            
+            double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+            while(distance>/*DISTANCE FROM APRILTAG */){
+                double xSpeed = (Math.abs(pose.getX)<nodeLR-/*MARGIN OF ERROR*/ || pose.getX>nodeLR+/*MARGIN OF ERROR */)? /*CHASSIS SPEED */:0;
+                double ySpeed = (pose.getY>/*DISTANCE FROM CORAL */)? /*CHASSIS SPEED */:0;
+                double rotationSpeed = (Math.abs(currentTarget.getYaw)>/*MARGIN OF ERROR */)? /*ROTATION SPEED */:0;
+                if( rotationSpeed!=0 && currentTarget.getYaw<0){
+                    rotationSpeed = -rotationSpeed;
+                }
+                m_drivebase.drive(new ChassisSpeeds(xSpeed,ySpeed,rotationSpeed),
+                                  false,
+                                  new Translation2d(0,0));
+            }
         }
     }
 }
