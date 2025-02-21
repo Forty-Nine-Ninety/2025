@@ -15,10 +15,12 @@ public class VisionSubsystem {
     private PhotonTrackedTarget currentTarget;
     private Transform2D pose;
     int aprilTagiD;
+    int nodeLR;
 
-    public VisionSubsystem(SwerveSubsystem drivebase){
+    public VisionSubsystem(SwerveSubsystem drivebase,String node){
         m_drivebase = new SwerveSubsystem(drivebase);
         arducamOne = new PhotonCamera("Arducam 1");
+        nodeLR = (node.equals("left"))?-position,position;
     }
 
     public void update(){
