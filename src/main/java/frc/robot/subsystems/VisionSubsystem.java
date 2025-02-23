@@ -30,10 +30,10 @@ public class VisionSubsystem extends SubsystemBase{
 
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
-            aprilTagiD = currentTarget.getFiducialId();
-            pose = currentTarget.bestCameratoTarget();
-            double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+            aprilTagiD = currentTarget.getFiducialId(); 
+            //double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
             while(true){
+                pose = currentTarget.bestCameratoTarget();
                 double xSpeed = (Math.abs(pose.getX)<nodeLR-Constants.VisionConstants.xMarginOfError || pose.getX>nodeLR+Constants.VisionConstants.xMarginOfError)? 1:0;
                 double ySpeed = (pose.getY>0.399+Constants.VisionConstants.yMarginOfError)? Constants.VisionConstants.ySpeed:0;
                 double rotationSpeed = (Math.abs(currentTarget.getYaw)>Constants.VisionConstants.rotationMarginOfError)? Constants.VisionConstnats.rotationSpeed:0;
