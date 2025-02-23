@@ -21,7 +21,7 @@ public class VisionSubsystem extends SubsystemBase{
     public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,String node){
         m_drivebase = drivebase;
         arducamOne = photonCamera;
-        nodeLR = (node.equals("left"))?-Constants.VisionConstants.tagToNodeDistance,
+        nodeLR = (node.equals("left"))?-Constants.VisionConstants.tagToNodeDistance:
                                         Constants.VisionConstants.tagToNodeDistance;
     }
 
@@ -54,3 +54,4 @@ public class VisionSubsystem extends SubsystemBase{
 }
 
 /*NOTE: MEASUREMENTS ARE IN M, M/SEC, RAD/SEC */
+/*ADD ABORT COMMAND */
