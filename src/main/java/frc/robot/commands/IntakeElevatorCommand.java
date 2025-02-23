@@ -1,22 +1,22 @@
-
-//IMPORT STATEMENTS
 import frc.robot.commands;
 
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subssytems.L2L3ShooterSubsystem;
+
 public class IntakeElevatorCommand extends Command{
-    //INSTANCE VARIABLES
     private final ElevatorSubsystem m_elevator;
     private final L2L3ShooterSubsystem m_shooter;
 
-    //CONSTRUCTOR
     public IntakeElevatorCommand(ElevatorSubsystem elevator, L2L3ShooterSubsystem shooter){
         m_elevator = elevator;
         m_shooter = shooter;
         addRequirements(elevator);
         addRequirements(shooter);
     }
+
     @Override
     public void initialize(){
-        m_elevator.moveToPosition(0);
+        m_elevator.moveToPosition(/*tbd */);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class IntakeElevatorCommand extends Command{
             cancel();
         }
         else{
-            m_shooter.runMotor(50);
+            m_shooter.runMotor(1);
         }
     }
     @Override

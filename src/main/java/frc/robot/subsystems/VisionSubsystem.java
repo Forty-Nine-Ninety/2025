@@ -3,24 +3,26 @@ package frc.robot.subsystems;
 import edu.wpi.first.photonvision.PhotonCamera;
 import edu.wpi.first.photonvision.PhotonPipelineResult;
 import edu.wpi.first.photonvision.PhotonPoseEstimator;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class VisionSubsystem {
+public class VisionSubsystem extends SubsystemBase{
     private SwerveSubsystem m_drivebase;
     private PhotonCamera arducamOne;
     
     private PhotonPipelineResult result;
     private PhotonTrackedTarget currentTarget;
-    private Transform2D pose;
+    private Transform3D pose;
     int aprilTagiD;
     int nodeLR;
 
-    public VisionSubsystem(SwerveSubsystem drivebase,String node){
-        m_drivebase = new SwerveSubsystem(drivebase);
-        arducamOne = new PhotonCamera("Arducam 1");
-        nodeLR = (node.equals("left"))?-position,position;
+    public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,String node){
+        m_drivebase = drivebase;
+        arducamOne = photonCamera;
+        nodeLR = (node.equals("left"))?-Constants.VisionConstants.tagToNodeDistance,
+                                        Constants.VisionConstants.tagToNodeDistance;
     }
 
     public void update(){
@@ -29,12 +31,12 @@ public class VisionSubsystem {
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
             aprilTagiD = currentTarget.getFiducialId();
-            pose = currentTarget.getCameraToTarget();
+            pose = currentTarget.bestCameratoTarget();
             double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-            while(distance>/*DISTANCE FROM APRILTAG */){
-                double xSpeed = (Math.abs(pose.getX)<nodeLR-/*MARGIN OF ERROR*/ || pose.getX>nodeLR+/*MARGIN OF ERROR */)? /*CHASSIS SPEED */:0;
-                double ySpeed = (pose.getY>/*DISTANCE FROM CORAL */)? /*CHASSIS SPEED */:0;
-                double rotationSpeed = (Math.abs(currentTarget.getYaw)>/*MARGIN OF ERROR */)? /*ROTATION SPEED */:0;
+            while(pose.getY>0.399){
+                double xSpeed = (Math.abs(pose.getX)<nodeLR-Constants.AutonConstants.x || pose.getX>nodeLR+0.05)? 1:0;
+                double ySpeed = (pose.getY>0.399+margin)? 1:0;
+                double rotationSpeed = (Math.abs(currentTarget.getYaw)>0.1)? 3:0;
                 if( rotationSpeed!=0 && currentTarget.getYaw<0){
                     rotationSpeed = -rotationSpeed;
                 }
@@ -45,3 +47,5 @@ public class VisionSubsystem {
         }
     }
 }
+
+/*NOTE: MEASUREMENTS ARE IN M, M/SEC, RAD/SEC */
