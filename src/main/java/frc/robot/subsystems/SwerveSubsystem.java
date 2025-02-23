@@ -334,7 +334,7 @@ public class SwerveSubsystem extends SubsystemBase
     }
 
     /**
-     * Get the swerve drive kinematics object.
+     * 
      *
      * @return {@link SwerveDriveKinematics} of the swerve drive.
      */
