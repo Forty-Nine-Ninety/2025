@@ -81,18 +81,22 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    //XBOX
-    m_drive2Command.setSuppliers(
-        () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
-        () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
-    );
-    //Joystick Bindings here
-    //DRIVER
-    //OPERATOR
-  }
+  private void configureBindings()
+    {
+        //XBOX
+        m_driveCommand.setSuppliers(
+            () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
+            () -> joystickDrive.getRightX(),
+            () -> joystickDrive.getRightY()
+        );
 
+        m_drive2Command.setSuppliers(
+            () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
+        );
+  }
   public void setTeleopDefaultCommands()
     {
         CommandScheduler.getInstance().setDefaultCommand(m_drivebase, !RobotBase.isSimulation() ? m_drive2Command : m_driveSimulationCommand);
