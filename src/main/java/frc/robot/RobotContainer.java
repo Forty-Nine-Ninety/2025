@@ -52,15 +52,14 @@ public class RobotContainer {
   private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
   private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
   private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
-  private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommandCommand(m_elevator);
-  private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommandCommand(m_elevator);
+  private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
+  private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
+  private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator,m_L2L3Shooter);
   private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
   private final RumbleCommand m_rumbleCommand = new RumbleCommand(joystickDrive);
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
-  private final AutoSpeakerCommand m_autoSpeakerCommand = new AutoSpeakerCommand(m_shooter,m_arm);
-  private final AutoAmpCommand m_autoAmpCommand = new AutoAmpCommand(m_shooter,m_arm);
   //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
 
 
@@ -87,15 +86,13 @@ public class RobotContainer {
         m_driveCommand.setSuppliers(
             () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
             () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
-            () -> joystickDrive.getRightX(),
-            () -> joystickDrive.getRightY()
-        );
-
-        m_drive2Command.setSuppliers(
-            () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
             () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
         );
+
+        m_elevatorManualCommand.setSuppliers(
+          () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getLeftY(),1),DriveSettings.ARM_DEADBAND)
+        )
+        
   }
   public void setTeleopDefaultCommands()
     {

@@ -41,7 +41,14 @@ public final class Constants
         public static final int CAN_ELEVATOR_TOP_LEFT = 11;
         public static final int CAN_ELEVATOR_TOP_RIGHT = 12;
         
-        public static final int CAN_SHOOTER_SPARKMAX = 13;
+        public static final int CAN_L1SHOOTER = 13;
+
+        public static final int CAN_L2L3SHOOTER_LEFT = 14;
+        public static final int CAN_L2L3SHOOTER_RIGHT = 15;
+
+        //public static final int CAN_TRAPDOOR = 16;
+        //public static final int CAN_STINGER_ROTATION = 17;
+        //public static final int CAN_ELEVATOR_CLIPS = 18;
     
     public static class MotorConfig
     {
@@ -162,6 +169,7 @@ public final class Constants
         public static final double tagToNodeDistance = 0.17;
         public static final double xMarginOfError = 0.05;
         public static final double yMarginOfError = 0.03;
+        public static final double rotationMarginOfError = 0.1;
         public static final double translationSpeed = 3;
         public static final double rotationSpeed = 1;
     }

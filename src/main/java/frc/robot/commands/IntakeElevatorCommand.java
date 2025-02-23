@@ -7,11 +7,11 @@ public class IntakeElevatorCommand extends Command{
     private final ElevatorSubsystem m_elevator;
     private final L2L3ShooterSubsystem m_shooter;
 
-    public IntakeElevatorCommand(ElevatorSubsystem elevator, L2L3ShooterSubsystem shooter){
+    public IntakeElevatorCommand(ElevatorSubsystem elevator, L2L3ShooterSubsystem L2L3Shooter){
         m_elevator = elevator;
-        m_shooter = shooter;
+        m_shooter = L2L3Shooter;
         addRequirements(elevator);
-        addRequirements(shooter);
+        addRequirements(L2L3Shooter);
     }
 
     @Override

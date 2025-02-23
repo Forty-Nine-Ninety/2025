@@ -33,13 +33,18 @@ public class VisionSubsystem extends SubsystemBase{
             aprilTagiD = currentTarget.getFiducialId();
             pose = currentTarget.bestCameratoTarget();
             double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-            while(pose.getY>0.399){
-                double xSpeed = (Math.abs(pose.getX)<nodeLR-Constants.AutonConstants.x || pose.getX>nodeLR+0.05)? 1:0;
-                double ySpeed = (pose.getY>0.399+margin)? 1:0;
-                double rotationSpeed = (Math.abs(currentTarget.getYaw)>0.1)? 3:0;
-                if( rotationSpeed!=0 && currentTarget.getYaw<0){
+            while(true){
+                double xSpeed = (Math.abs(pose.getX)<nodeLR-Constants.VisionConstants.xMarginOfError || pose.getX>nodeLR+Constants.VisionConstants.xMarginOfError)? 1:0;
+                double ySpeed = (pose.getY>0.399+Constants.VisionConstants.yMarginOfError)? Constants.VisionConstants.ySpeed:0;
+                double rotationSpeed = (Math.abs(currentTarget.getYaw)>Constants.VisionConstants.rotationMarginOfError)? Constants.VisionConstnats.rotationSpeed:0;
+                if(rotationSpeed!=0 && currentTarget.getYaw<0){
                     rotationSpeed = -rotationSpeed;
                 }
+                if(xSpeed==0 && ySpeed==0 && rotationSpeed==0){
+                    break;
+                    /*Rumble here */
+                }
+                /*NOTE: MIGHT HAVE A PROBLEM WITH DRIVING FOREVER AND NOT UPDATING DATA */
                 m_drivebase.drive(new ChassisSpeeds(xSpeed,ySpeed,rotationSpeed),
                                   false,
                                   new Translation2d(0,0));
