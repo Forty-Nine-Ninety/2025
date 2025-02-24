@@ -9,7 +9,7 @@ public class ElevatorManualCommand extends Command{
     private double multiplier = 36.0;
     private DoubleSupplier m_joystickSupplier;
 
-    public ElevatorNeutralCommand(ElevatorSubsystem elevator){
+    public ElevatorManualCommand(ElevatorSubsystem elevator){
         m_elevator = elevator;
         addRequirements(elevator);
     }

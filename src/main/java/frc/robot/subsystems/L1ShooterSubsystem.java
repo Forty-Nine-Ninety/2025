@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class L1ShooterSubsystem extends SubsystemBase {
   private CANSparkMax shooter;
 
-  public L1Subsystem() {
+  public L1ShooterSubsystem() {
     outtakeMotor = new CANSparkMax(Ports.CAN_SHOOTER_SPARKMAX, MotorType.kBrushless);
 
     pid_L1shooter = tbd.getPIDController();

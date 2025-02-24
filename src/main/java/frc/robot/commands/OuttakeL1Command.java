@@ -6,7 +6,7 @@ import frc.robot.subsystems.L1ShooterSubsystem;
 public class OuttakeL1Command extends Command{
     private final L1ShooterSubsystem m_L1Shooter;
 
-    public OutakeL1Command (L1ShooterSubsystem L1Shooter){
+    public OuttakeL1Command (L1ShooterSubsystem L1Shooter){
         m_L1Shooter = L1Shooter;
         addRequirements(L1Shooter);
     }

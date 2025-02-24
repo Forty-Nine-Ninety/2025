@@ -91,7 +91,7 @@ public class RobotContainer {
 
         m_elevatorManualCommand.setSuppliers(
           () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getLeftY(),1),DriveSettings.ARM_DEADBAND)
-        )
+        );
         
   }
   public void setTeleopDefaultCommands()
