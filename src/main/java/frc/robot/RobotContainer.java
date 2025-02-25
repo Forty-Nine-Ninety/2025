@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.*;
+import frc.robot.Constants.Ports.DriveSettings;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
@@ -57,7 +58,6 @@ public class RobotContainer {
   private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator,m_L2L3shooter);
   private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-  private final RumbleCommand m_rumbleCommand = new RumbleCommand(joystickDrive);
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
@@ -96,8 +96,7 @@ public class RobotContainer {
   }
   public void setTeleopDefaultCommands()
     {
-        CommandScheduler.getInstance().setDefaultCommand(m_drivebase, !RobotBase.isSimulation() ? m_drive2Command : m_driveSimulationCommand);
-        CommandScheduler.getInstance().setDefaultCommand(m_arm, m_armNeutralCommand);
+        CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
     }
 
   /**

@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.*;
+import frc.robot.Constants.Ports.DriveSettings;
+import frc.robot.Constants.Ports.RobotMeasurements;
 import frc.robot.DriveUtil;
 
 import java.io.File;
@@ -96,7 +98,7 @@ public class SwerveSubsystem extends SubsystemBase
      */
     public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
     {
-        swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed);
+        swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed, null);
         setupPathPlanner();
     }
 
@@ -174,15 +176,14 @@ public class SwerveSubsystem extends SubsystemBase
     {
 // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
-                swerveDrive.getMaximumVelocity(), 4.0,
-                swerveDrive.getMaximumAngularVelocity(), Units.degreesToRadians(720));
+                swerveDrive.getMaximumChassisVelocity(), 4.0,
+                swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
                 pose,
                 constraints,
-                0.0, // Goal end velocity in meters/sec
-                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+                0.0 // Goal end velocity in meters/sec Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
                                                                          );
     }
 
@@ -207,7 +208,7 @@ public class SwerveSubsystem extends SubsystemBase
                                                                             headingX.getAsDouble() * DriveSettings.ARCADE_ROTATION_MULTIPLIER,
                                                                             headingY.getAsDouble() * DriveSettings.ARCADE_ROTATION_MULTIPLIER,
                                                                             swerveDrive.getOdometryHeading().getRadians(),
-                                                                            swerveDrive.getMaximumVelocity()));
+                                                                            swerveDrive.getMaximumChassisVelocity()));
         });
     }
 
@@ -228,7 +229,7 @@ public class SwerveSubsystem extends SubsystemBase
                                                                             translationY.getAsDouble() * DriveSettings.ARCADE_SPEED_Y_MULTIPLIER,
                                                                             rotation.getAsDouble() * Math.PI * DriveSettings.ARCADE_ROTATION_MULTIPLIER,
                                                                             swerveDrive.getOdometryHeading().getRadians(),
-                                                                            swerveDrive.getMaximumVelocity()));
+                                                                            swerveDrive.getMaximumChassisVelocity()));
         });
     }
 
@@ -242,7 +243,7 @@ public class SwerveSubsystem extends SubsystemBase
         return SwerveDriveTest.generateSysIdCommand(
             SwerveDriveTest.setDriveSysIdRoutine(
                 new Config(),
-                this, swerveDrive, 12),
+                this, swerveDrive, 12, false),
             3.0, 5.0, 3.0);
     }
 
@@ -272,9 +273,9 @@ public class SwerveSubsystem extends SubsystemBase
     {
         return run(() -> {
             // Make the robot move
-            swerveDrive.drive(new Translation2d(DriveUtil.powCopySign(translationX.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_X_EXPONENT) * DriveSettings.ARCADE_SPEED_X_MULTIPLIER * swerveDrive.getMaximumVelocity(),
-                                                DriveUtil.powCopySign(translationY.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_Y_EXPONENT) * DriveSettings.ARCADE_SPEED_Y_MULTIPLIER * swerveDrive.getMaximumVelocity()),
-                              DriveUtil.powCopySign(angularRotationX.getAsDouble(), DriveSettings.JOYSTICK_TURNING_EXPONENT) * DriveSettings.ARCADE_ROTATIONV2_MULTIPLIER * swerveDrive.getMaximumAngularVelocity(),
+            swerveDrive.drive(new Translation2d(DriveUtil.powCopySign(translationX.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_X_EXPONENT) * DriveSettings.ARCADE_SPEED_X_MULTIPLIER * swerveDrive.getMaximumChassisVelocity(),
+                                                DriveUtil.powCopySign(translationY.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_Y_EXPONENT) * DriveSettings.ARCADE_SPEED_Y_MULTIPLIER * swerveDrive.getMaximumChassisVelocity()),
+                              DriveUtil.powCopySign(angularRotationX.getAsDouble(), DriveSettings.JOYSTICK_TURNING_EXPONENT) * DriveSettings.ARCADE_ROTATIONV2_MULTIPLIER * swerveDrive.getMaximumChassisAngularVelocity(),
                               true,
                               false);
         });
