@@ -87,8 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 }
 
   public void moveToPosition(double setPoint) {
-    
-        pid_elevator.setReference(setPoint, CANSparkBase.ControlType.kPosition, 0, MotionControl.ELEVATOR_FEEDFORWARD);
+    pid_elevator.setReference(setPoint, CANSparkBase.ControlType.kPosition, 0, MotionControl.ELEVATOR_FEEDFORWARD);
   }
 
   public void resetElevatorPosition(){
