@@ -35,23 +35,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig topLeftConfig = new SparkMaxConfig();
     SparkMaxConfig topRightConfig = new SparkMaxConfig();
 
-<<<<<<< Updated upstream
     bottomLeftConfig.idleMode(IdleMode.kBrake);
     bottomRightConfig.idleMode(IdleMode.kBrake);
     topLeftConfig.idleMode(IdleMode.kBrake);
     topRightConfig.idleMode(IdleMode.kBrake);
-=======
-    bottomLeftConfig
-      .idleMode(IdleMode.kBrake);
-    bottomLeftConfig.closedLoop
-      .pid(0, 0, 0);
-    bottomRightConfig
-      .idleMode(IdleMode.kBrake);
-    topLeftConfig
-      .idleMode(IdleMode.kBrake);
-    topRightConfig
-      .idleMode(IdleMode.kBrake);
->>>>>>> Stashed changes
       
     //pid_elevator = tbd.getPIDController();
     //pid_encoder = tbd.getEncoder();
