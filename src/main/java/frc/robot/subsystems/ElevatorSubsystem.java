@@ -35,10 +35,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig topLeftConfig = new SparkMaxConfig();
     SparkMaxConfig topRightConfig = new SparkMaxConfig();
 
-    bottomLeftConfig.idleMode(IdleMode.kBrake);
-    bottomRightConfig.idleMode(IdleMode.kBrake);
-    topLeftConfig.idleMode(IdleMode.kBrake);
-    topRightConfig.idleMode(IdleMode.kBrake);
+    bottomLeftConfig
+      .idleMode(IdleMode.kBrake)
+      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+    bottomRightConfig.idleMode(IdleMode.kBrake)
+      .closedLoopRampRate(MotionControl
+      .CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+    topLeftConfig
+      .idleMode(IdleMode.kBrake)
+      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+    topRightConfig
+      .idleMode(IdleMode.kBrake)
+      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
       
     //pid_elevator = tbd.getPIDController();
     //pid_encoder = tbd.getEncoder();
@@ -69,20 +81,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     //bottomRight.setIdleMode(IdleMode.kBrake);
     //topLeft.setIdleMode(IdleMode.kBrake);
     //topRight.setIdleMode(IdleMode.kBrake);
-
-
-    // all ramp rates are currently 1 (one)
-    topLeft.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
-    topLeft.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
-
-    topRight.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
-    topRight.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
-
-    bottomLeft.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
-    bottomLeft.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
-
-    bottomRight.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
-    bottomRight.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
     
 }
 
