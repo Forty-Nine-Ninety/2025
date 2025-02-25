@@ -2,11 +2,11 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
-public class VisionAlignCommand extends SequentialCommandGroup{
+public class Auto21NBlueCommand extends SequentialCommandGroup{
     private final SwerveSubsystem m_drivebase;
-    public VisionAlignCommand(SwerveSubsystem drivebase){
+    public Auto21NBlueCommand(SwerveSubsystem drivebase){
         m_drivebase = drivebase;
         addCommands(m_drivebase.drive(new ChassisSpeeds(x,y,theta), rotation, true));
     }

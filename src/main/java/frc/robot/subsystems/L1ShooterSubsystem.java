@@ -19,10 +19,10 @@ public class L1ShooterSubsystem extends SubsystemBase {
   private SparkMax shooter;
 
   public L1ShooterSubsystem() {
-    outtakeMotor = new SparkMax(Ports.CAN_SHOOTER_SPARKMAX, MotorType.kBrushless);
+    SparkMax outtakeMotor = new SparkMax(Ports.CAN_SHOOTER_SPARKMAX, MotorType.kBrushless);
 
-    pid_L1shooter = tbd.getPIDController();
-    pid_encoder = tbd.getEncoder();
+    private SparkClosedLoopController pid_L1shooter = tbd.getPIDController();
+    private RelativeEncoder pid_encoder = tbd.getEncoder();
 
     configureMotors();
   }
