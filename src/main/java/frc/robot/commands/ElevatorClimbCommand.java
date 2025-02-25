@@ -13,7 +13,7 @@ public class ElevatorClimbCommand extends Command{
 
     @Override
     public void initialize(){
-        m_elevator.moveToPosition(/*setPoint here*/);
+        m_elevator.moveToPosition(0);
 
     }
 }

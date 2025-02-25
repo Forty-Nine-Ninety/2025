@@ -16,7 +16,7 @@ public class IntakeElevatorCommand extends Command{
 
     @Override
     public void initialize(){
-        m_elevator.moveToPosition(/*tbd */);
+        m_elevator.moveToPosition(0/*tbd */);
     }
 
     @Override

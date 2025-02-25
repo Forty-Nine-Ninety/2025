@@ -12,6 +12,6 @@ public class ElevatorL2Command extends Command{
     }
     @Override
     public void initialize(){
-        m_elevator.moveToPosition(/*tbd*/);
+        m_elevator.moveToPosition(0);
     }
 }
