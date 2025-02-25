@@ -20,7 +20,7 @@ public class ElevatorManualCommand extends Command{
 
     @Override
     public void execute(){
-        double position = m_joystickSupplier.getAsDouble;
+        double position = m_joystickSupplier.getAsDouble();
         double currentRotation = m_elevator.getPosition();
         m_elevator.moveToPosition(currentRotation+(position*multiplier));
     }
