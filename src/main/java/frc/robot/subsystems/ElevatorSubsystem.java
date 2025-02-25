@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax bottomLeft, bottomRight, topLeft, topRight;
-  private SparkClosedLoopController closedLoopController;
-  private RelativeEncoder encoder;
+  private SparkClosedLoopController pid_elevator;
+  private RelativeEncoder pid_encoder;
+
 
   public ElevatorSubsystem(){
     bottomLeft = new SparkMax(Ports.CAN_ELEVATOR_BOTTOM_RIGHT, MotorType.kBrushless);
@@ -34,14 +35,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig topLeftConfig = new SparkMaxConfig();
     SparkMaxConfig topRightConfig = new SparkMaxConfig();
 
-    bottomLeftConfig
-      .idleMode(IdleMode.kBrake);
-    bottomRightConfig
-      .idleMode(IdleMode.kBrake);
-    topLeftConfig
-      .idleMode(IdleMode.kBrake);
-    topRightConfig
-      .idleMode(IdleMode.kBrake);
+    bottomLeftConfig.idleMode(IdleMode.kBrake);
+    bottomRightConfig.idleMode(IdleMode.kBrake);
+    topLeftConfig.idleMode(IdleMode.kBrake);
+    topRightConfig.idleMode(IdleMode.kBrake);
       
     //pid_elevator = tbd.getPIDController();
     //pid_encoder = tbd.getEncoder();
@@ -75,7 +72,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     // all ramp rates are currently 1 (one)
-    SparkBaseConfig.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
+    topLeft.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
     topLeft.setOpenLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE); 
 
     topRight.setClosedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE); 
@@ -90,7 +87,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 }
 
   public void moveToPosition(double setPoint) {
-    pid_elevator.setReference(setPoint, CANSparkBase.ControlType.kPosition, 0, MotionControl.ELEVATOR_FEEDFORWARD);
+    
+        pid_elevator.setReference(setPoint, CANSparkBase.ControlType.kPosition, 0, MotionControl.ELEVATOR_FEEDFORWARD);
   }
 
   public void resetElevatorPosition(){
