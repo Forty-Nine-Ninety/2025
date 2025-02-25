@@ -7,13 +7,11 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.PIDConstants;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ourunits.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This

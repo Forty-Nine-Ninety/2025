@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -18,8 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.DriveSettings;
-import frc.robot.Constants.Ports;
+import frc.robot.Constants.*;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
@@ -54,7 +54,7 @@ public class RobotContainer {
   private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
   private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
   private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
-  private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator,m_L2L3Shooter);
+  private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator,m_L2L3shooter);
   private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
   private final RumbleCommand m_rumbleCommand = new RumbleCommand(joystickDrive);
