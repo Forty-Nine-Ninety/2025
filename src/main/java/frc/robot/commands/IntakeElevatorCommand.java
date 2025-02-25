@@ -1,7 +1,8 @@
-import frc.robot.commands;
+package frc.robot.commands;
 
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subssytems.L2L3ShooterSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.*;
 
 public class IntakeElevatorCommand extends Command {
     private final ElevatorSubsystem m_elevator;
