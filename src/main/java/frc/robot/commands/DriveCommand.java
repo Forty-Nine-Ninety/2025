@@ -26,9 +26,9 @@ public class DriveCommand extends Command{
     @Override
     public void execute() {
         // Make the robot move
-        m_drivebase.drive(new Translation2d(DriveUtil.powCopySign(m_translationX.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_X_EXPONENT) * DriveSettings.ARCADE_SPEED_X_MULTIPLIER * m_drivebase.getSwerveDrive().getMaximumVelocity(),
-                                            DriveUtil.powCopySign(m_translationY.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_Y_EXPONENT) * DriveSettings.ARCADE_SPEED_Y_MULTIPLIER * m_drivebase.getSwerveDrive().getMaximumVelocity()),
-                          DriveUtil.powCopySign(m_angularRotationX.getAsDouble(), DriveSettings.JOYSTICK_TURNING_EXPONENT) * DriveSettings.ARCADE_ROTATIONV2_MULTIPLIER * m_drivebase.getSwerveDrive().getMaximumAngularVelocity(),
+        m_drivebase.drive(new Translation2d(DriveUtil.powCopySign(m_translationX.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_X_EXPONENT) * DriveSettings.ARCADE_SPEED_X_MULTIPLIER * m_drivebase.getSwerveDrive().getMaximumChassisVelocity(),
+                                            DriveUtil.powCopySign(m_translationY.getAsDouble(), DriveSettings.JOYSTICK_THROTTLE_Y_EXPONENT) * DriveSettings.ARCADE_SPEED_Y_MULTIPLIER * m_drivebase.getSwerveDrive().getMaximumChassisVelocity()),
+                          DriveUtil.powCopySign(m_angularRotationX.getAsDouble(), DriveSettings.JOYSTICK_TURNING_EXPONENT) * DriveSettings.ARCADE_ROTATIONV2_MULTIPLIER * m_drivebase.getSwerveDrive().getMaximumChassisAngularVelocity(),
                           true);
     }
 }

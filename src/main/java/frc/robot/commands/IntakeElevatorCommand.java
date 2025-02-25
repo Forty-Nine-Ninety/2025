@@ -3,7 +3,7 @@ import frc.robot.commands;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subssytems.L2L3ShooterSubsystem;
 
-public class IntakeElevatorCommand extends Command{
+public class IntakeElevatorCommand extends Command {
     private final ElevatorSubsystem m_elevator;
     private final L2L3ShooterSubsystem m_shooter;
 

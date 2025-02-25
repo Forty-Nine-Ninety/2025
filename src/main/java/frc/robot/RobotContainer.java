@@ -55,7 +55,7 @@ public class RobotContainer {
   private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
   private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
   private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
-  private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator,m_L2L3shooter);
+  private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
   private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
   //Auto
