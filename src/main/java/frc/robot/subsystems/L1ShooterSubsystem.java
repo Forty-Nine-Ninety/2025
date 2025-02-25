@@ -1,14 +1,25 @@
 package frc.robot.subsystems;
-import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj2.command.Command;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig;
+
+import frc.robot.Constants.*;
+import frc.robot.Constants.Ports.MotionControl;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class L1ShooterSubsystem extends SubsystemBase {
-  private CANSparkMax shooter;
+  private SparkMax shooter;
 
   public L1ShooterSubsystem() {
-    outtakeMotor = new CANSparkMax(Ports.CAN_SHOOTER_SPARKMAX, MotorType.kBrushless);
+    outtakeMotor = new SparkMax(Ports.CAN_SHOOTER_SPARKMAX, MotorType.kBrushless);
 
     pid_L1shooter = tbd.getPIDController();
     pid_encoder = tbd.getEncoder();
