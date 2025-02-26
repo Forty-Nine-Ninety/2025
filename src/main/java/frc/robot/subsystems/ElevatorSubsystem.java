@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -85,7 +86,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 }
 
   public void moveToPosition(double setPoint) {
-    pid_elevator.setReference(setPoint, CANSparkBase.ControlType.kPosition, 0, MotionControl.ELEVATOR_FEEDFORWARD);
+    pid_elevator.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD);
   }
 
   public void resetElevatorPosition(){
