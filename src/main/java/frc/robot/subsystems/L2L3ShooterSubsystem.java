@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkClosedLoopController;
+//import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class L2L3ShooterSubsystem extends SubsystemBase {
   
   private SparkMax right, left; 
-  private SparkClosedLoopController shooterPID;
+  //private SparkClosedLoopController shooterPID;
   private final DigitalInput m_breakbeam;
 
   public L2L3ShooterSubsystem() { // Constructor 

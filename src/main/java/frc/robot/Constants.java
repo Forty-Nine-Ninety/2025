@@ -7,7 +7,9 @@ package frc.robot;
 
 import java.util.HashMap;
 
+import com.pathplanner.lib.config.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.ReplanningConfig;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Unit;

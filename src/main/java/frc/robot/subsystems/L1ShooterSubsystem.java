@@ -1,25 +1,25 @@
 package frc.robot.subsystems;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkClosedLoopController;
+//import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.spark.SparkLowLevel.MotorType;
+//import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import frc.robot.Constants.*;
+//import frc.robot.Constants.*;
 import frc.robot.Constants.Ports.MotionControl;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class L1ShooterSubsystem extends SubsystemBase {
 
   private SparkMax outtakeMotor;
-  private SparkClosedLoopController pid_L1shooter;
-  private RelativeEncoder pid_encoder; 
+  //private SparkClosedLoopController pid_L1shooter;
+  //private RelativeEncoder pid_encoder; 
 
   public L1ShooterSubsystem() {
-    SparkMax outtakeMotor = new SparkMax(Ports.CAN_L1SHOOTER, MotorType.kBrushless);
+    //SparkMax outtakeMotor = new SparkMax(Ports.CAN_L1SHOOTER, MotorType.kBrushless);
     SparkMaxConfig outtakeMotorConfig = new SparkMaxConfig(); 
 
     outtakeMotorConfig

@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.photonvision.PhotonCamera;
-import edu.wpi.first.photonvision.PhotonPipelineResult;
-import edu.wpi.first.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonCamera;
+import org.photonvision.vision.pipeline.result.CVPipelineResult;
+import org.photonvision.PhotonPoseEstimator;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;

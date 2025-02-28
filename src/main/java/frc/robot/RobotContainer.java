@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -83,15 +82,28 @@ public class RobotContainer {
   private void configureBindings()
     {
         //XBOX
+        //DRIVE CONTROLLER
         m_driveCommand.setSuppliers(
             () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
             () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
             () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
         );
 
+        //OPERATOR CONTROLLERd
         m_elevatorManualCommand.setSuppliers(
           () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getLeftY(),1),DriveSettings.ARM_DEADBAND)
         );
+
+        joystickOperator.a().onTrue(m_elevatorL1Command);
+        joystickOperator.b().onTrue(m_elevatorL2Command);
+        joystickOperator.y().onTrue(m_elevatorL3Command);
+        joystickOperator.x().onTrue(m_elevatorNeutralCommand);
+        joystickOperator.povRight().onTrue(m_elevatorClimbCommand);
+        joystickOperator.povLeft().onTrue(m_intakeElevatorCommand);
+        joystickOperator.leftBumper().onTrue(m_outtakeL1Command);
+        joystickOperator.rightBumper().onTrue(m_outtakeL2L3Command);
+
+        joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
         
   }
   public void setTeleopDefaultCommands()
