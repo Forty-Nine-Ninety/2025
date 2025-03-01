@@ -46,7 +46,7 @@ public final class Constants
         public static final int CAN_L2L3SHOOTER_LEFT = 14;
         public static final int CAN_L2L3SHOOTER_RIGHT = 15;
 
-        public static final int PORT_DIO_BREAK_BEAM = 0; // for l2l3 subsystem -chloe
+        public static final int PORT_DIO_BREAK_BEAM = 0;
 
         //public static final int CAN_TRAPDOOR = 16;
         //public static final int CAN_STINGER_ROTATION = 17;

@@ -5,10 +5,16 @@
 
 package frc.robot;
 
+import java.io.File;
+import java.io.IOException;
+
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.SubsystemConfig;
+import swervelib.parser.SwerveParser;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -50,14 +56,25 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.setMotorBrake(true);
+    disabledTimer.reset();
+    disabledTimer.start();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (disabledTimer.hasElapsed(Constants.SubsystemConfig.WHEEL_LOCK_TIME))
+        {
+            m_robotContainer.setMotorBrake(false);
+            disabledTimer.stop();
+        }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.setMotorBrake(true);
     // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -79,6 +96,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.setTeleopDefaultCommands();
+    m_robotContainer.setMotorBrake(true);
   }
 
   /** This function is called periodically during operator control. */
@@ -89,6 +109,13 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    try
+        {
+            new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
   }
 
   /** This function is called periodically during test mode. */
