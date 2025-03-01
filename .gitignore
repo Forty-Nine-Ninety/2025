@@ -1,6 +1,7 @@
 
 .gradle
-.DS_Store
+**/.DS_Store
 bin
 build
+*.swp
 
