@@ -7,13 +7,13 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import com.pathplanner.lib.config.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.ReplanningConfig;
+//import com.pathplanner.lib.config.HolonomicPathFollowerConfig;
+//import com.pathplanner.lib.config.ReplanningConfig;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import edu.wpi.first.math.controller.PIDController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean constants. This
@@ -70,8 +70,8 @@ public final class Constants
         //public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
         //public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     }
-
-    public static class OurUnits
+    /*
+     * public static class OurUnits
     {
         //Base units
         public static Unit METER = new BaseUnit(Dimension.Length, 1d);
@@ -108,6 +108,10 @@ public final class Constants
         public static Unit COULOMB = new CompoundUnit(new Unit[] {AMPERE, SECOND}, new Unit[] {});
         public static Unit VOLTAGE = new CompoundUnit(JOULE, COULOMB);
     }
+     *
+     * 
+     */
+    
 
     public static class SubsystemConfig
     {
@@ -120,8 +124,8 @@ public final class Constants
     public static class MotionControl
     {
         //PID
-        public static final PIDConstants ELEVATOR_tbd_PID = new PIDConstants(1, 1, 1);
-        public static final PIDConstants L1SHOOTER_tbd_PID = new PIDConstants(1, 1, 1);
+        public static final PIDController ELEVATOR_tbd_PID = new PIDController(1, 1, 1);
+        public static final PIDController L1SHOOTER_tbd_PID = new PIDController(1, 1, 1);
         public static final double CLOSED_LOOP_RAMP_RATE = 1.0;
         public static final double OPEN_LOOP_RAMP_RATE = 1.0;
         public static final double ELEVATOR_FEEDFORWARD = 1; //tbd
@@ -129,15 +133,19 @@ public final class Constants
 
     public static final class AutonConstants
     {
-        public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-        public static final PIDConstants ANGLE_PID   = new PIDConstants(0.4, 0, 0.01);
+        public static final PIDController TRANSLATION_PID = new PIDController(0.7, 0, 0);
+        public static final PIDController ANGLE_PID   = new PIDController(0.4, 0, 0.01);
+        /*
         public static final HolonomicPathFollowerConfig autoBuilderPathConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-        //new PIDConstants(5.0, 0.0 ,0.2), //original p = 5, 1st attempt: p = 5, d = 0.5, 2nd attempt: p= 5, d = 0.5, 3rd attempt: p = 5, d = 3 this caused the wheels to shutter
-        //new PIDConstants(1.5, 0.0, 0), //5.0, 0, 0.2
+        //new PIDController(5.0, 0.0 ,0.2), //original p = 5, 1st attempt: p = 5, d = 0.5, 2nd attempt: p= 5, d = 0.5, 3rd attempt: p = 5, d = 3 this caused the wheels to shutter
+        //new PIDController(1.5, 0.0, 0), //5.0, 0, 0.2
 
         RobotMeasurements.WHEEL_SPEED, // Max module speed, in m/s
         RobotMeasurements.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to furthest module.
-        new ReplanningConfig());
+        new ReplanningConfig())
+        
+        ;
+        */
 
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;

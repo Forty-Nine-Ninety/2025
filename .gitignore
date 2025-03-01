@@ -1,5 +1,6 @@
 
 .gradle
 .DS_Store
-bin/main/frc/robot/commands/ElevatorManualCommand.class
-bin/main/frc/robot/RobotContainer.class
+bin
+build
+

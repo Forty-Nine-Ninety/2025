@@ -1,4 +1,4 @@
-package frc.robot.commands.auto;
+/*package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -31,3 +31,4 @@ public class Auto21NBlueCommand extends SequentialCommandGroup{
         );
     }
 }
+*/
