@@ -84,14 +84,21 @@ public class ElevatorSubsystem extends SubsystemBase {
 }
 
   public void moveToPosition(double setPoint) {
-    pid_elevator.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD);
+    if (pid_elevator != null) {
+      pid_elevator.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD);
+    }
   }
 
   public void resetElevatorPosition(){
-    pid_encoder.setPosition(0);
+    if (pid_encoder != null) {
+      pid_encoder.setPosition(0);
+    }
   }
 
   public double getPosition() {
+    if (pid_encoder == null) {
+      return 0;
+    }
     return (pid_encoder.getPosition());
   }
 }

@@ -33,8 +33,8 @@
     },
     "###Joysticks": {
       "Collapsed": "0",
-      "Pos": "254,733",
-      "Size": "796,73"
+      "Pos": "282,565",
+      "Size": "796,155"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -43,7 +43,7 @@
     },
     "###NetworkTables Info": {
       "Collapsed": "0",
-      "Pos": "50,90",
+      "Pos": "196,83",
       "Size": "750,145"
     },
     "###Other Devices": {
