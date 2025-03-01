@@ -7,11 +7,10 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import com.pathplanner.lib.config.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.config.ReplanningConfig;
+//import com.pathplanner.lib.config.HolonomicPathFollowerConfig;
+//import com.pathplanner.lib.config.ReplanningConfig;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -136,6 +135,7 @@ public final class Constants
     {
         public static final PIDController TRANSLATION_PID = new PIDController(0.7, 0, 0);
         public static final PIDController ANGLE_PID   = new PIDController(0.4, 0, 0.01);
+        /*
         public static final HolonomicPathFollowerConfig autoBuilderPathConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
         //new PIDController(5.0, 0.0 ,0.2), //original p = 5, 1st attempt: p = 5, d = 0.5, 2nd attempt: p= 5, d = 0.5, 3rd attempt: p = 5, d = 3 this caused the wheels to shutter
         //new PIDController(1.5, 0.0, 0), //5.0, 0, 0.2
@@ -145,6 +145,7 @@ public final class Constants
         new ReplanningConfig())
         
         ;
+        */
 
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
