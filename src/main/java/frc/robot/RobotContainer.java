@@ -5,6 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -35,7 +39,6 @@ import com.pathplanner.lib.auto.NamedCommands;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  
 
   CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
   CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
@@ -66,6 +69,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    System.out.println("ROBOT CONTAINER CONSTRUCTOR REACHED");
 
     //Auto SmartDashboard sendable chooser
   }
@@ -81,6 +85,7 @@ public class RobotContainer {
    */
   private void configureBindings()
     {
+        System.out.println("CONFIGURE BINDINGS REACHED");
         //XBOX
         //DRIVE CONTROLLER
         m_driveCommand.setSuppliers(
@@ -105,10 +110,33 @@ public class RobotContainer {
 
         joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
         
+
+
+        //SIMULATION
+
+        /*if (RobotBase.isSimulation()){
+          m_drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+        } 
+        else{
+          m_drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+        }
+
+        if (Robot.isSimulation()){
+          Pose2d target = new Pose2d(new Translation2d(1, 4),
+                                     Rotation2d.fromDegrees(90));
+          //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
+          
+        joystickDrive.start().onTrue(Commands.runOnce(() -> m_drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+        joystickDrive.button(1).whileTrue(m_drivebase.sysIdDriveMotorCommand());
+        joystickDrive.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
+                                                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
+        }*/
   }
+
   public void setTeleopDefaultCommands()
     {
-        CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
+      System.out.println("SET TELEOP DEFAULT COMMANDS REACHED");
+      CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
     }
 
   /**
@@ -122,6 +150,7 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake)
   {
-      m_drivebase.setMotorBrake(brake);
+    System.out.println("SET MOTOR BRAKE REACHED");
+    m_drivebase.setMotorBrake(brake);
   }
 }
