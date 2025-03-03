@@ -43,7 +43,7 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
     right.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     left.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    //right.setInverted(true);
+    right.setInverted(true);
 
     //shooterPID.setP(L2L3_SHOOTER_PID); // PID values not in yet 
     //shooterPID.setI(L2L3_SHOOTER_PID);
