@@ -13,13 +13,15 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.*;
 import frc.robot.Constants.Ports.MotionControl;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax bottomLeft, bottomRight, topLeft, topRight;
-  private SparkClosedLoopController pid_elevator;
+  SparkMaxConfig bottomLeftConfig, bottomRightConfig, topLeftConfig, topRightConfig;
+  private PIDController pid_elevator;
   private RelativeEncoder pid_encoder;
 
 
@@ -29,10 +31,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     topLeft = new SparkMax(Ports.CAN_ELEVATOR_TOP_LEFT, MotorType.kBrushless);
     topRight = new SparkMax(Ports.CAN_ELEVATOR_TOP_RIGHT, MotorType.kBrushless);
 
-    SparkMaxConfig bottomLeftConfig = new SparkMaxConfig();
-    SparkMaxConfig bottomRightConfig = new SparkMaxConfig();
-    SparkMaxConfig topLeftConfig = new SparkMaxConfig();
-    SparkMaxConfig topRightConfig = new SparkMaxConfig();
+    bottomLeftConfig = new SparkMaxConfig();
+    bottomRightConfig = new SparkMaxConfig();
+    topLeftConfig = new SparkMaxConfig();
+    topRightConfig = new SparkMaxConfig();
 
     bottomLeftConfig
       .idleMode(IdleMode.kBrake)
@@ -50,11 +52,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
-      
-    //pid_elevator = tbd.getPIDController();
+
     //pid_encoder = tbd.getEncoder();
     configureMotors();
-    
   }
 
   private void configureMotors(){
@@ -62,19 +62,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     bottomRight.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topLeft.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topRight.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    bottomLeftConfig.follow(bottomLeft,true);
+    
     // depends on design from mech
-    // bottomLeft.setInverted(true);
-    // topLeft.setInverted(true);
+    //bottomLeft.setInverted(true);
+    //topLeft.setInverted(true);
 
     //bottomLeft.setSmartCurrentLimit(60);
     //bottomRight.setSmartCurrentLimit(60);
     //topLeft.setSmartCurrentLimit(60);
     //topRight.setSmartCurrentLimit(60);
 
-    //pid_elevator.setP(MotionControl.ELEVATOR_tbd_PID.kP);
-    //pid_elevator.setI(MotionControl.ELEVATOR_tbd_PID.kI);
-    //pid_elevator.setD(MotionControl.ELEVATOR_tbd_PID.kD);
+    pid_elevator.setP(MotionControl.ELEVATOR_PID.kP);
+    pid_elevator.setI(MotionControl.ELEVATOR_PID.kI);
+    pid_elevator.setD(MotionControl.ELEVATOR_PID.kD);
     
     //bottomLeft.setIdleMode(IdleMode.kBrake);
     //bottomRight.setIdleMode(IdleMode.kBrake);
@@ -85,7 +86,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void moveToPosition(double setPoint) {
     if (pid_elevator != null) {
-      pid_elevator.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD);
+      //Error on next line
+      //pid_elevator.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD);
     }
   }
 

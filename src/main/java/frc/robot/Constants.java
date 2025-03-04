@@ -7,6 +7,8 @@ package frc.robot;
 
 import java.util.HashMap;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -121,7 +123,7 @@ public final class Constants
     public static class MotionControl
     {
         //PID
-        public static final PIDController ELEVATOR_tbd_PID = new PIDController(1, 1, 1);
+        public static final PIDConstants ELEVATOR_PID = new PIDConstants(0.2, 0.00001, 1);
         public static final PIDController L1SHOOTER_tbd_PID = new PIDController(1, 1, 1);
         public static final double CLOSED_LOOP_RAMP_RATE = 1.0;
         public static final double OPEN_LOOP_RAMP_RATE = 1.0;

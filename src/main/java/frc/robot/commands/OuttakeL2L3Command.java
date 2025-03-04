@@ -12,6 +12,6 @@ public class OuttakeL2L3Command extends Command{
     }
     @Override
         public void initialize(){
-            m_L2L3Shooter.runMotor(1);
+            m_L2L3Shooter.runMotor(0.2);
     }
 }
