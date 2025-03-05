@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import frc.robot.Constants.*;
+  import frc.robot.Constants.*;
 import frc.robot.Constants.Ports.MotionControl;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,9 +40,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
-    bottomRightConfig.idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl
-      .CLOSED_LOOP_RAMP_RATE)
+    bottomRightConfig
+      .idleMode(IdleMode.kBrake)
+      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
     topLeftConfig
       .idleMode(IdleMode.kBrake)
@@ -52,6 +52,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+
 
     //pid_encoder = tbd.getEncoder();
     configureMotors();
@@ -63,6 +64,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     topLeft.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topRight.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     bottomLeftConfig.follow(bottomLeft,true);
+    bottomRightConfig.follow(bottomRight);
+    topLeftConfig.follow(bottomLeft, true);
+    topRightConfig.follow(bottomRight);
     
     // depends on design from mech
     //bottomLeft.setInverted(true);
