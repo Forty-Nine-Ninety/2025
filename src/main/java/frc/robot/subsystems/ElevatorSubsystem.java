@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-  import frc.robot.Constants.*;
+import frc.robot.Constants.*;
 import frc.robot.Constants.Ports.MotionControl;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax bottomLeft, bottomRight, topLeft, topRight;
-  SparkMaxConfig bottomLeftConfig, bottomRightConfig, topLeftConfig, topRightConfig;
+  private SparkMaxConfig bottomLeftConfig, bottomRightConfig, topLeftConfig, topRightConfig;
   private PIDController pid_elevator;
   private RelativeEncoder pid_encoder;
 
@@ -53,9 +53,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
 
-
-    //pid_encoder = tbd.getEncoder();
+    pid_elevator = new PIDController(MotionControl.ELEVATOR_PID.kP,
+                                     MotionControl.ELEVATOR_PID.kI,
+                                     MotionControl.ELEVATOR_PID.kD);
     configureMotors();
+
+    pid_encoder = bottomLeft.getEncoder();
   }
 
   private void configureMotors(){
@@ -77,9 +80,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     //topLeft.setSmartCurrentLimit(60);
     //topRight.setSmartCurrentLimit(60);
 
-    pid_elevator.setP(MotionControl.ELEVATOR_PID.kP);
-    pid_elevator.setI(MotionControl.ELEVATOR_PID.kI);
-    pid_elevator.setD(MotionControl.ELEVATOR_PID.kD);
+    //pid_elevator.setP(MotionControl.ELEVATOR_PID.kP);
+    //pid_elevator.setI(MotionControl.ELEVATOR_PID.kI);
+    //pid_elevator.setD(MotionControl.ELEVATOR_PID.kD);
     
     //bottomLeft.setIdleMode(IdleMode.kBrake);
     //bottomRight.setIdleMode(IdleMode.kBrake);
@@ -90,12 +93,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void moveToPosition(double setPoint) {
     if (pid_elevator != null) {
-      //Error on next line
-      //pid_elevator.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD);
+      pid_elevator.setSetpoint(setPoint/*, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD*/);
     }
   }
 
-  public void resetElevatorPosition(){
+  public void zeroElevatorPosition(){
     if (pid_encoder != null) {
       pid_encoder.setPosition(0);
     }
