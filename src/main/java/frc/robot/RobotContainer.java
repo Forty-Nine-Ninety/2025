@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +27,7 @@ import frc.robot.Constants.*;
 import frc.robot.Constants.Ports.DriveSettings;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.*;
 
 import java.io.File;
 
@@ -70,7 +72,19 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    //Auto SmartDashboard sendable chooser
+    
+    // Auto - SmartDashboard
+    m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
+    m_autoChooser.addOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
+    //m_autoChooser.addOption("Red 1: One Note", new Auto11NRedCommand(m_drivebase,m_arm,m_shooter));
+    //m_autoChooser.addOption("Red 2: One Note", new Auto21NRedCommand(m_drivebase,m_arm,m_shooter));
+    //m_autoChooser.addOption("Red 3: One Note", new Auto31NRedCommand(m_drivebase,m_arm,m_shooter));
+    m_autoChooser.addOption("Blue 1: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
+    m_autoChooser.addOption("Blue 2: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
+    m_autoChooser.addOption("Blue 3: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
+    //m_autoChooser.addOption("Red 2 Two Note", new Auto22NRedCommand(m_drivebase,m_arm,m_shooter,m_intake));
+    //m_autoChooser.addOption("Blue 2 Two Note", new Auto22NBlueCommand(m_drivebase,m_arm,m_shooter,m_intake));
+    Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
   }
 
   /**
