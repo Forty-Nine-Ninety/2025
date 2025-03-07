@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.*;
@@ -40,6 +41,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+    bottomLeftConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .pid(1.0, 0.0, 0.0);
     bottomRightConfig
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
@@ -53,10 +57,6 @@ public class ElevatorSubsystem extends SubsystemBase {
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
 
-    pid_controller = new PIDController(MotionControl.ELEVATOR_PID.kP,
-                                       MotionControl.ELEVATOR_PID.kI,
-                                       MotionControl.ELEVATOR_PID.kD);
-                                       //bottomLeft.getPIDController();
 
     pid_encoder = bottomLeft.getEncoder();
 
