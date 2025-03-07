@@ -69,7 +69,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    System.out.println("ROBOT CONTAINER CONSTRUCTOR REACHED");
 
     //Auto SmartDashboard sendable chooser
   }
@@ -85,7 +84,6 @@ public class RobotContainer {
    */
   private void configureBindings()
     {
-        System.out.println("CONFIGURE BINDINGS REACHED");
         //XBOX
         //DRIVE CONTROLLER
         m_driveCommand.setSuppliers(
@@ -135,7 +133,6 @@ public class RobotContainer {
 
   public void setTeleopDefaultCommands()
     {
-      System.out.println("SET TELEOP DEFAULT COMMANDS REACHED");
       CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
     }
 
@@ -150,7 +147,6 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake)
   {
-    System.out.println("SET MOTOR BRAKE REACHED");
     m_drivebase.setMotorBrake(brake);
   }
 }
