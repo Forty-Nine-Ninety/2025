@@ -92,6 +92,8 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
         );
 
+        joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
+
         //OPERATOR CONTROLLERd
         m_elevatorManualCommand.setSuppliers(
           () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getLeftY(),1),DriveSettings.ARM_DEADBAND)
