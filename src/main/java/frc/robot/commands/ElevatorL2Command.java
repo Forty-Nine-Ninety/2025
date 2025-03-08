@@ -10,6 +10,7 @@ public class ElevatorL2Command extends Command{
         m_elevator = elevator;
         addRequirements(elevator);
     }
+    
     @Override
     public void initialize(){
         m_elevator.moveToPosition(9.1);

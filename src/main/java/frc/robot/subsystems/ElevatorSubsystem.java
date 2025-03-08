@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.MotControllerJNI;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -9,7 +10,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.*;
@@ -22,7 +22,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax bottomLeft, bottomRight, topLeft, topRight;
   private SparkMaxConfig bottomLeftConfig, bottomRightConfig, topLeftConfig, topRightConfig;
-  private PIDController pid_controller;
+  private SparkClosedLoopController pid_controller;
   private RelativeEncoder pid_encoder;
 
 
@@ -37,28 +37,36 @@ public class ElevatorSubsystem extends SubsystemBase {
     topLeftConfig = new SparkMaxConfig();
     topRightConfig = new SparkMaxConfig();
 
+    pid_controller = bottomRight.getClosedLoopController();
+
     bottomLeftConfig
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
-    bottomLeftConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .pid(1.0, 0.0, 0.0);
+      //.inverted(true)
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      .follow(bottomRight,true);
     bottomRightConfig
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      .inverted(false);
+    bottomRightConfig.closedLoop
+      .pid(MotionControl.ELEVATOR_PID.kP, MotionControl.ELEVATOR_PID.kI, MotionControl.ELEVATOR_PID.kD)
+      .outputRange(MotionControl.ELEVATOR_MIN_OUTPUT, MotionControl.ELEVATOR_MAX_OUTUT);
     topLeftConfig
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      //.inverted(true)
+      .follow(bottomRight,true);
     topRightConfig
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      .inverted(false)
+      .follow(bottomRight);
 
-
-    pid_encoder = bottomLeft.getEncoder();
+    pid_encoder = bottomRight.getEncoder();
 
     configureMotors();
   }
@@ -68,10 +76,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     bottomRight.configure(bottomRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topLeft.configure(topLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topRight.configure(topRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    //bottomLeft is leader
-    bottomRightConfig.follow(bottomLeft,true);
-    topLeftConfig.follow(bottomLeft);
-    topRightConfig.follow(bottomLeft,true);
+    //bottomLeft is leader *in russian accent with boss music*
+
 
     /*
     bottomLeft.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -82,7 +88,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     bottomRightConfig.follow(bottomRight);
     topLeftConfig.follow(bottomLeft, true);
     topRightConfig.follow(bottomRight);
-    */
+  
 
     //pid_controller.setP(MotionControl.ELEVATOR_PID.kP);
     //pid_controller.setI(MotionControl.ELEVATOR_PID.kI);
@@ -97,16 +103,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     bottomRightConfig.idleMode(IdleMode.kBrake);
     topLeftConfig.idleMode(IdleMode.kBrake);
     topRightConfig.idleMode(IdleMode.kBrake);
-    
+     */
 }
 
   public void moveToPosition(double setPoint) {
     System.out.println("moveToPosition reached");
     if (pid_controller != null) {
+      
+      /* 
       for(int i=0;i<20;i++){
-        System.out.println(pid_controller.getSetpoint());
+        System.out.println(bottomLef);
       }
-      pid_controller.setSetpoint(setPoint/*, ControlType.kPosition, ClosedLoopSlot.kSlot0, MotionControl.ELEVATOR_FEEDFORWARD*/);
+      */
+      pid_controller.setReference(setPoint, ControlType.kPosition);
     }
     System.out.println("moveToPosition executed");
   }

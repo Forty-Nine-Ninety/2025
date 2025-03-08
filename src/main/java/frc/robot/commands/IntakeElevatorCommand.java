@@ -17,7 +17,7 @@ public class IntakeElevatorCommand extends Command {
 
     @Override
     public void initialize(){
-        m_elevator.moveToPosition(0/*tbd */);
+        m_elevator.moveToPosition(3.3);
     }
 
     @Override
@@ -29,6 +29,7 @@ public class IntakeElevatorCommand extends Command {
             m_shooter.runMotor(1);
         }
     }
+
     @Override
     public void end(boolean interrupted){
         m_shooter.runMotor(0);

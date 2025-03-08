@@ -11,7 +11,7 @@ public class OuttakeL1Command extends Command{
         addRequirements(L1Shooter);
     }
     @Override
-        public void initialize(){
-            m_L1Shooter.runMotor(1);
+    public void initialize(){
+        m_L1Shooter.runMotor(0.5);
     }
 }
