@@ -15,10 +15,10 @@ public class IntakeElevatorCommand extends Command {
         addRequirements(L2L3Shooter);
     }
 
-    @Override
+    /*@Override
     public void initialize(){
         m_elevator.moveToPosition(3.3);
-    }
+    }*/
 
     @Override
     public void execute(){
