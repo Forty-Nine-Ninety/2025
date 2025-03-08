@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -64,6 +64,8 @@ public class RobotContainer {
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private SendableChooser<String> m_noteChooser = new SendableChooser<>();
+  private SendableChooser<String> m_exitChooser = new SendableChooser<>();
   //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
 
 
@@ -84,7 +86,21 @@ public class RobotContainer {
     m_autoChooser.addOption("Blue 3: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
     //m_autoChooser.addOption("Red 2 Two Note", new Auto22NRedCommand(m_drivebase,m_arm,m_shooter,m_intake));
     //m_autoChooser.addOption("Blue 2 Two Note", new Auto22NBlueCommand(m_drivebase,m_arm,m_shooter,m_intake));
-    Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
+
+    m_noteChooser.setDefaultOption("Exit", "0");
+    m_noteChooser.addOption("1 note", "1");
+    m_noteChooser.addOption("2 note", "2");
+    m_noteChooser.addOption("3 note", "3");
+
+    m_exitChooser.setDefaultOption("1", "Exit 1");
+    m_exitChooser.addOption("2", "Exit 2");
+    m_exitChooser.addOption("3", "Exit 3");
+
+    Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser); //Will need to be updated by Next year if we still use elastic
+
+    SmartDashboard.putData("Note Chooser",m_noteChooser);
+    SmartDashboard.putData("Starting Position",m_exitChooser);
+
   }
 
   /**
