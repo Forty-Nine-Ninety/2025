@@ -127,7 +127,7 @@ public final class Constants
         public static final double ELEVATOR_MAX_OUTUT = 0.5;
         public static final double ELEVATOR_MIN_OUTPUT = -0.3;
         //public static final PIDController L1SHOOTER_PID = new PIDController(1, 1, 1);
-        public static final double CLOSED_LOOP_RAMP_RATE = 1.0;
+        public static final double CLOSED_LOOP_RAMP_RATE = 1000.0;
         public static final double OPEN_LOOP_RAMP_RATE = 1.0;
         //public static final double ELEVATOR_FEEDFORWARD = 1;
     }
