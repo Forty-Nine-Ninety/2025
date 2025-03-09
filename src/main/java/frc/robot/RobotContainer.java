@@ -101,6 +101,53 @@ public class RobotContainer {
     SmartDashboard.putData("Note Chooser",m_noteChooser);
     SmartDashboard.putData("Starting Position",m_exitChooser);
 
+    String m_chosenExit = m_exitChooser.getSelected();
+    String m_chosenNote = m_noteChooser.getSelected();
+    switch(m_chosenExit){
+      case "Exit 1":
+        switch(m_chosenNote){
+          case "0":
+            m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
+            break;
+          case "1":
+            m_autoChooser.addOption("Blue 1: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
+            break;
+          case"2":
+            //m_autoChooser.addOption("Blue 1: Two Note", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"12CBlue"));
+          case "3":
+            //m_autoChooser.addOption("Blue 1: Three Note", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"13CBlue"));
+        }  
+
+      case "Exit 2":
+        switch(m_chosenNote){
+          case "0":
+            m_autoChooser.setDefaultOption("Blue 2: Exit", m_drivebase.getAutonomousCommand("2ExitBlue"));
+            break;
+          case "1":
+            m_autoChooser.addOption("Blue 2: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
+            break;
+          case"2":
+            //m_autoChooser.addOption("Blue 2: Two Note", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"22CBlue"));
+          case "3":
+            //m_autoChooser.addOption("Blue 2: Three Note", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"23CBlue"));
+        }  
+
+      case "Exit 3":
+        switch(m_chosenNote){
+          case "0":
+            m_autoChooser.setDefaultOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
+            break;
+          case "1":
+            m_autoChooser.addOption("Blue 3: One Note", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
+            break;
+          case"2":
+            //m_autoChooser.addOption("Blue 3: Two Note", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"32CBlue"));
+          case "3":
+            //m_autoChooser.addOption("Blue 3: Three Note", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"33CBlue"));
+        }  
+
+    }
+
   }
 
   /**
