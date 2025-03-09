@@ -62,6 +62,9 @@ public class RobotContainer {
   private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
   private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
+  private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"Arducam One",joystickOperator);
+  private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"Arducam One",joystickOperator);
+
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   private SendableChooser<String> m_coralChooser = new SendableChooser<>();
@@ -198,7 +201,7 @@ public class RobotContainer {
 
         joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
 
-        //OPERATOR CONTROLLERd
+        //OPERATOR CONTROLLER
         m_elevatorManualCommand.setSuppliers(
           () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getLeftY(),1),DriveSettings.ARM_DEADBAND)
         );
@@ -207,34 +210,15 @@ public class RobotContainer {
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
         joystickOperator.x().onTrue(m_elevatorNeutralCommand);
-        joystickOperator.povRight().onTrue(m_elevatorClimbCommand);
-        joystickOperator.povLeft().onTrue(m_intakeElevatorCommand);
+        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
+        joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
+        joystickOperator.povLeft().onTrue(m_visionAlignLeftCommand);
+        joystickOperator.povRight().onTrue(m_visionAlignRightCommand);
+
         joystickOperator.leftBumper().onTrue(m_outtakeL1Command);
         joystickOperator.rightBumper().onTrue(m_outtakeL2L3Command);
 
         joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
-        
-
-
-        //SIMULATION
-
-        /*if (RobotBase.isSimulation()){
-          m_drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
-        } 
-        else{
-          m_drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-        }
-
-        if (Robot.isSimulation()){
-          Pose2d target = new Pose2d(new Translation2d(1, 4),
-                                     Rotation2d.fromDegrees(90));
-          //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
-          
-        joystickDrive.start().onTrue(Commands.runOnce(() -> m_drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-        joystickDrive.button(1).whileTrue(m_drivebase.sysIdDriveMotorCommand());
-        joystickDrive.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
-                                                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
-        }*/
   }
 
   public void setTeleopDefaultCommands()
