@@ -29,12 +29,12 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
 
     rightconfig
       .idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+      .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE);
     leftconfig
       .idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE);
+      .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE);
 
       configureMotors();
   }

@@ -49,11 +49,13 @@ public class RobotContainer {
   //Subsystems
   private final SwerveSubsystem m_drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem(m_elevator);
   private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
   private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
   //Commands
   private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
-  private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_elevator);
+  //private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
+  //private final ElevatorUnclimbCommand m_elevatorUnclimbCommand = new ElevatorUnclimbCommand(m_climber);
   private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
   private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
   private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
@@ -210,7 +212,7 @@ public class RobotContainer {
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
         joystickOperator.x().onTrue(m_elevatorNeutralCommand);
-        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
+//        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
         joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
         joystickOperator.povLeft().onTrue(m_visionAlignLeftCommand);
         joystickOperator.povRight().onTrue(m_visionAlignRightCommand);
