@@ -212,7 +212,7 @@ public class RobotContainer {
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
         joystickOperator.x().onTrue(m_elevatorNeutralCommand);
-        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
+//        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
         joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
         joystickOperator.povLeft().onTrue(m_visionAlignLeftCommand);
         joystickOperator.povRight().onTrue(m_visionAlignRightCommand);
