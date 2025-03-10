@@ -62,8 +62,8 @@ public class RobotContainer {
   private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
   private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-  private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"Arducam One",joystickOperator);
-  private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"Arducam One",joystickOperator);
+  private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"scamcam",joystickOperator);
+  private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"scamcam",joystickOperator);
 
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -116,17 +116,17 @@ public class RobotContainer {
             break;
           
           case "1":
-            m_autoChooser.addOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
+            m_autoChooser.setDefaultOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
             System.out.println("11CBlue");
             break;
           
           case"2":
-            //m_autoChooser.addOption("Blue 1: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"12CBlue"));
+            //m_autoChooser.setDefaultOption("Blue 1: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"12CBlue"));
             System.out.println("12CBlue");
             break;
   
           case "3":
-            //m_autoChooser.addOption("Blue 1: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"13CBlue"));
+            //m_autoChooser.setDefaultOption("Blue 1: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"13CBlue"));
             System.out.println("13CBlue");
             break;
         }  
@@ -139,17 +139,17 @@ public class RobotContainer {
             break;
 
           case "1":
-            m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
+            m_autoChooser.setDefaultOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
             System.out.println("21CBlue");
             break;
 
           case"2":
-            //m_autoChooser.addOption("Blue 2: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"22CBlue"));
+            //m_autoChooser.setDefaultOption("Blue 2: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"22CBlue"));
             System.out.println("22CBlue");
             break;
 
           case "3":
-            //m_autoChooser.addOption("Blue 2: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"23CBlue"));
+            //m_autoChooser.setDefaultOption("Blue 2: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"23CBlue"));
             System.out.println("23CBlue");
             break;
         }  
@@ -162,17 +162,17 @@ public class RobotContainer {
             break;
 
           case "1":
-            m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
+            m_autoChooser.setDefaultOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
             System.out.println("31CBlue");
             break;
 
           case"2":
-            //m_autoChooser.addOption("Blue 3: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"32CBlue"));
+            //m_autoChooser.setDefaultOption("Blue 3: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"32CBlue"));
             System.out.println("32CBlue");
             break;
 
           case "3":
-            //m_autoChooser.addOption("Blue 3: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"33CBlue"));
+            //m_autoChooser.setDefaultOption("Blue 3: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"33CBlue"));
             System.out.println("33CBlue");
             break;
         }  
