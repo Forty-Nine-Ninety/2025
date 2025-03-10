@@ -11,13 +11,14 @@ public class OuttakeL2L3Command extends Command{
         addRequirements(L2L3shooter);
     }
 
-    @Override
+    /*@Override
     public void initialize(){
-        m_L2L3Shooter.runMotor(0);
-    }
+        m_L2L3Shooter.runMotor(0.25);
+    }*/
+
     @Override
-        public void execute(){
-            m_L2L3Shooter.runMotor(0.4);
+    public void execute(){
+        m_L2L3Shooter.runMotor(0.4);
     }
 
     @Override

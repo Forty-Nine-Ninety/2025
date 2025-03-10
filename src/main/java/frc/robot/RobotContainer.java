@@ -203,7 +203,7 @@ public class RobotContainer {
 
         //OPERATOR CONTROLLER
         m_elevatorManualCommand.setSuppliers(
-          () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getLeftY(),1),DriveSettings.ARM_DEADBAND)
+          () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getRightY(),1),DriveSettings.ARM_DEADBAND)
         );
 
         joystickOperator.a().onTrue(m_elevatorL1Command);
@@ -215,8 +215,8 @@ public class RobotContainer {
         joystickOperator.povLeft().onTrue(m_visionAlignLeftCommand);
         joystickOperator.povRight().onTrue(m_visionAlignRightCommand);
 
-        joystickOperator.leftBumper().onTrue(m_outtakeL1Command);
-        joystickOperator.rightBumper().onTrue(m_outtakeL2L3Command);
+        joystickOperator.leftBumper().toggleOnTrue(m_outtakeL1Command);
+        joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
         joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
   }

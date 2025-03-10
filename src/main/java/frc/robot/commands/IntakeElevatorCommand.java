@@ -23,6 +23,7 @@ public class IntakeElevatorCommand extends Command {
     @Override
     public void execute(){
         if(m_shooter.breakBeam()){
+            //RUMBLE
             cancel();
         }
         else{

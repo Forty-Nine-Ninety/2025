@@ -55,10 +55,10 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
     right.set(percent_output);
   }
 
-  public void stop(){
+  /*public void stop(){
     left.set(0.0);
     right.set(0.0);
-  }
+  }*/
 
   public boolean breakBeam(){
     return !m_breakbeam.get();
