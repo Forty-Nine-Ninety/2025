@@ -26,7 +26,7 @@ public class IntakeElevatorCommand extends Command {
             cancel();
         }
         else{
-            m_shooter.runMotor(1);
+            m_shooter.runMotor(0.6);
         }
     }
 
