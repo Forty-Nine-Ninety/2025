@@ -41,28 +41,29 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     bottomLeftConfig
       .idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
+      .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
       //.inverted(true)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE)
       .follow(bottomRight,true);
     bottomRightConfig
       .idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
-      .inverted(false);
+      .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE)
+      .inverted(false)
+      .smartCurrentLimit(55);
     bottomRightConfig.closedLoop
       .pid(MotionControl.ELEVATOR_PID.kP, MotionControl.ELEVATOR_PID.kI, MotionControl.ELEVATOR_PID.kD)
       .outputRange(MotionControl.ELEVATOR_MIN_OUTPUT, MotionControl.ELEVATOR_MAX_OUTUT);
     topLeftConfig
       .idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE)
       //.inverted(true)
       .follow(bottomRight,true);
     topRightConfig
       .idleMode(IdleMode.kBrake)
-      .closedLoopRampRate(MotionControl.CLOSED_LOOP_RAMP_RATE)
-      .openLoopRampRate(MotionControl.OPEN_LOOP_RAMP_RATE)
+      .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
+      .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE)
       .inverted(false)
       .follow(bottomRight);
 

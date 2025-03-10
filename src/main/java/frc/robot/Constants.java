@@ -47,9 +47,9 @@ public final class Constants
 
         public static final int PORT_DIO_BREAK_BEAM = 0;
 
-        //public static final int CAN_TRAPDOOR = 16;
-        //public static final int CAN_STINGER_ROTATION = 17;
-        //public static final int CAN_ELEVATOR_CLIPS = 18;
+        public static final int CAN_TRAPDOOR = 16;
+        public static final int CAN_STINGER_ROTATION = 17;
+        public static final int CAN_ELEVATOR_CLIPS = 18;
     
     public static class MotorConfig
     {
@@ -127,9 +127,26 @@ public final class Constants
         public static final double ELEVATOR_MAX_OUTUT = 0.5;
         public static final double ELEVATOR_MIN_OUTPUT = -0.3;
         //public static final PIDController L1SHOOTER_PID = new PIDController(1, 1, 1);
-        public static final double CLOSED_LOOP_RAMP_RATE = 1000.0;
-        public static final double OPEN_LOOP_RAMP_RATE = 1.0;
+        public static final double ELEVATOR_CLOSED_LOOP_RAMP_RATE = 1000.0;
+        public static final double ELEVATOR_OPEN_LOOP_RAMP_RATE = 1.0;
         //public static final double ELEVATOR_FEEDFORWARD = 1;
+
+        public static final int STINGER_AMP_LIMIT = 10;
+        public static final int CLIPS_AMP_LIMIT = 10;
+        public static final int TRAPDOOR_AMP_LIMIT = 10;
+        
+        public static final PIDConstants STINGER_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
+        public static final PIDConstants CLIPS_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
+        public static final PIDConstants TRAPDOOR_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
+
+        public static final double TRADPDOOR_LOWERED_POSITION = 10; // TODO @avery
+        public static final double TRADPDOOR_LIFTED_POSITION = 10; // TODO @avery
+        public static final double ELEVATOR_STINGER_POSITION = 10; // TODO @avery
+        public static final double STINGER_DEPLOYED_POSITION = 10; // TODO @avery
+        public static final double STINGER_CAGEUP_POSITION = 10; // TODO @avery
+        public static final double ELEVATOR_ZERO_POSITION = 0; // TODO @avery
+        public static final double CLIPS_ENGAGED_POSITION = 10; // TODO @avery
+        public static final double CLIPS_DISENGAGED_POSITION = 10; // TODO @avery
     }
 
     public static final class AutonConstants
