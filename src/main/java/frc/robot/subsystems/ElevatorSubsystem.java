@@ -108,24 +108,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 }
 
   public void moveToPosition(double setPoint) {
-    System.out.println("moveToPosition reached");
     if (pid_controller != null) {
       pid_controller.setReference(setPoint, ControlType.kPosition);
     }
-    System.out.println("moveToPosition executed");
   }
 
   public void zeroElevatorPosition(){
 
     pid_encoder.setPosition(0);
-
-    System.out.println("zeroElevatorPosition executed");
   }
 
   public double getPosition() {
-    System.out.println("getPosition reached");
     if (pid_encoder == null) {
-      System.out.println("pid_encoder==null");
       return 0;
     }
     return (pid_encoder.getPosition());
