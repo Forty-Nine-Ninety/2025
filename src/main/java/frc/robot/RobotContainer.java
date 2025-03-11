@@ -54,7 +54,7 @@ public class RobotContainer {
   private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
   //Commands
   private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
-  //private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
+  private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
   //private final ElevatorUnclimbCommand m_elevatorUnclimbCommand = new ElevatorUnclimbCommand(m_climber);
   private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
   private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
@@ -66,6 +66,7 @@ public class RobotContainer {
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
   private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"scamcam",joystickOperator);
   private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"scamcam",joystickOperator);
+  
 
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -92,17 +93,18 @@ public class RobotContainer {
     //m_autoChooser.addOption("Red 2 Two Coral", new Auto22NRedCommand(m_drivebase,m_arm,m_shooter,m_intake));
     //m_autoChooser.addOption("Blue 2 Two Coral", new Auto22NBlueCommand(m_drivebase,m_arm,m_shooter,m_intake));
 
-    m_coralChooser.setDefaultOption("Exit", "0");
+    /*m_coralChooser.setDefaultOption("Exit", "0");
     m_coralChooser.addOption("1 coral", "1");
     m_coralChooser.addOption("2 coral", "2");
     m_coralChooser.addOption("3 coral", "3");
 
     m_exitChooser.setDefaultOption("1", "Exit 1");
     m_exitChooser.addOption("2", "Exit 2");
-    m_exitChooser.addOption("3", "Exit 3");
+    m_exitChooser.addOption("3", "Exit 3");*/
 
     Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser); //Will need to be updated by Next year if we still use elastic
 
+    /*
     SmartDashboard.putData("Coral Chooser",m_coralChooser);
     SmartDashboard.putData("Starting Position",m_exitChooser);
 
@@ -177,8 +179,8 @@ public class RobotContainer {
             //m_autoChooser.setDefaultOption("Blue 3: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"33CBlue"));
             System.out.println("33CBlue");
             break;
-        }  
-    }
+        } 
+    }*/
     SmartDashboard.updateValues();
   }
 
@@ -221,6 +223,8 @@ public class RobotContainer {
         joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
         joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
+
+        joystickDrive.button(6).onTrue(m_elevatorClimbCommand);
   }
 
   public void setTeleopDefaultCommands()
@@ -233,9 +237,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-    //return m_autoChooser.getSelected();
-  // }
+  public Command getAutonomousCommand() {
+    return m_autoChooser.getSelected();
+    //return m_drivebase.getAutonomousCommand("1ExitBlue");
+    //return new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue");
+  }
 
   public void setMotorBrake(boolean brake)
   {
