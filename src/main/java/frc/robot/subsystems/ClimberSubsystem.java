@@ -87,12 +87,9 @@ public class ClimberSubsystem extends SubsystemBase {
                 break;
             case TRAPDOOR_LIFTED:
                 // move elevator to CLIMB_POS and advance state
-                System.out.println("YOOHOO");
                 m_elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
-                System.out.println("Move to position done");
                 m_climbState = ClimbState.ELEVATOR_CLIMB_POS;
                 System.out.println(m_climbState);
-                System.out.println("STOP HERE");
                 break;
             case ELEVATOR_CLIMB_POS:
                 // deploy stinger and advance state

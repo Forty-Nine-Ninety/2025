@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 
 /**
@@ -27,18 +28,23 @@ public class ElevatorClimbCommand extends Command{
         addRequirements(climber);
     }
 
+    boolean joystickSignal = false;
+
     @Override
-    public void initialize(){
+    public void execute(){
         // So if currently false the signal must go true for at least .2 seconds before being read as a True signal.
-        if (m_debouncer.calculate(true)) {
-            System.out.println("Advancing climb state");
+        if (m_debouncer.calculate(!joystickSignal)) { // Command.WaitUntilCommand(boolean) or new WaitUntilCommand(boolean)?
             m_climber.advanceClimbState();
-            end(true);
+            joystickSignal = !joystickSignal;
+            System.out.println("Advancing climb state");
+        }
+        else{
+            System.out.println("Button not pressed to advance climb state");
         }
     }
 
     @Override
     public void end(boolean interrupted){
-        System.out.println("Command Finished. YIPEEEEEE");
+        System.out.println("Command Finished");
     }
 }
