@@ -179,6 +179,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     public Command getAutonomousCommand(String pathName)
     {
+        System.out.println("SWERVEgetAutonomousCommand");
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         return new PathPlannerAuto(pathName);
     }
