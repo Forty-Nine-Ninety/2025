@@ -131,20 +131,20 @@ public final class Constants
         public static final double ELEVATOR_OPEN_LOOP_RAMP_RATE = 1.0;
         //public static final double ELEVATOR_FEEDFORWARD = 1;
 
-        public static final int STINGER_AMP_LIMIT = 10;
+        public static final int STINGER_AMP_LIMIT = 40;
         public static final int CLIPS_AMP_LIMIT = 10;
         public static final int TRAPDOOR_AMP_LIMIT = 10;
         
-        public static final PIDConstants STINGER_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
+        public static final PIDConstants STINGER_PID = new PIDConstants(0.1, 0, 0);
         public static final PIDConstants CLIPS_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
-        public static final PIDConstants TRAPDOOR_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
+        public static final PIDConstants TRAPDOOR_PID = new PIDConstants(0.1, 0, 0); 
 
-        public static final double TRADPDOOR_LOWERED_POSITION = 10; // TODO @avery
-        public static final double TRADPDOOR_LIFTED_POSITION = 10; // TODO @avery
-        public static final double ELEVATOR_STINGER_POSITION = 10; // TODO @avery
-        public static final double STINGER_DEPLOYED_POSITION = 10; // TODO @avery
-        public static final double STINGER_CAGEUP_POSITION = 10; // TODO @avery
-        public static final double ELEVATOR_ZERO_POSITION = 0; // TODO @avery
+        public static final double TRADPDOOR_LOWERED_POSITION = 0; 
+        public static final double TRADPDOOR_LIFTED_POSITION = 48; 
+        public static final double ELEVATOR_STINGER_POSITION = 18; 
+        public static final double STINGER_DEPLOYED_POSITION = 70; 
+        public static final double STINGER_CAGEUP_POSITION = 10; 
+        public static final double ELEVATOR_ZERO_POSITION = 0;
         public static final double CLIPS_ENGAGED_POSITION = 10; // TODO @avery
         public static final double CLIPS_DISENGAGED_POSITION = 10; // TODO @avery
     }

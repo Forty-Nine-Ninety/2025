@@ -16,13 +16,9 @@ import frc.robot.Constants.Ports;
 import frc.robot.Constants.Ports.MotionControl;
 
 public class ClimberSubsystem extends SubsystemBase {
-    private SparkMax stingerMotor;
-    private SparkMax clipMotor;
-    private SparkMax trapdoorMotor;
-    private SparkClosedLoopController stingerController;
-    private SparkClosedLoopController clipController;
-    private SparkClosedLoopController trapdoorController;
-    private ElevatorSubsystem elevator;
+    private SparkMax stingerMotor,clipMotor,trapdoorMotor;
+    private SparkClosedLoopController stingerController,clipController,trapdoorController;
+    private ElevatorSubsystem m_elevator;
 
     private enum ClimbState {
         NOT_CLIMBING,
@@ -37,7 +33,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private ClimbState m_climbState = ClimbState.NOT_CLIMBING;
 
     public ClimberSubsystem(ElevatorSubsystem elevator) {
-        this.elevator = elevator;
+        m_elevator = elevator;
         stingerMotor = new SparkMax(Ports.CAN_STINGER_ROTATION, MotorType.kBrushless);
         clipMotor = new SparkMax(Ports.CAN_ELEVATOR_CLIPS, MotorType.kBrushless);
         trapdoorMotor = new SparkMax(Ports.CAN_TRAPDOOR, MotorType.kBrushless);
@@ -49,7 +45,7 @@ public class ClimberSubsystem extends SubsystemBase {
         stingerConfig
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(MotionControl.STINGER_AMP_LIMIT)
-            //.inverted(true)
+            .inverted(true)
             .closedLoop
                 .pid(MotionControl.STINGER_PID.kP, MotionControl.STINGER_PID.kI, MotionControl.STINGER_PID.kD)
             ;
@@ -65,14 +61,14 @@ public class ClimberSubsystem extends SubsystemBase {
         trapdoorConfig
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(MotionControl.TRAPDOOR_AMP_LIMIT)
+            .inverted(true)
             .closedLoop
                 .pid(MotionControl.TRAPDOOR_PID.kP, MotionControl.TRAPDOOR_PID.kI, MotionControl.TRAPDOOR_PID.kD)
-            //.inverted(true)
             ;
 
         stingerController = stingerMotor.getClosedLoopController();
         clipController = clipMotor.getClosedLoopController();
-        trapdoorController = clipMotor.getClosedLoopController();
+        trapdoorController = trapdoorMotor.getClosedLoopController();
 
         stingerMotor.configure(stingerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         clipMotor.configure(clipConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -84,33 +80,47 @@ public class ClimberSubsystem extends SubsystemBase {
         switch (m_climbState) {
             case NOT_CLIMBING:
                 // lift trapdoor, advance state to trapdoor-lifted
+                System.out.println("Step 1 Initiated");
                 trapdoorController.setReference(MotionControl.TRADPDOOR_LIFTED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.TRAPDOOR_LIFTED;
+                System.out.println(m_climbState);
                 break;
             case TRAPDOOR_LIFTED:
                 // move elevator to CLIMB_POS and advance state
-                elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
+                System.out.println("YOOHOO");
+                m_elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
+                System.out.println("Move to position done");
                 m_climbState = ClimbState.ELEVATOR_CLIMB_POS;
+                System.out.println(m_climbState);
+                System.out.println("STOP HERE");
                 break;
             case ELEVATOR_CLIMB_POS:
                 // deploy stinger and advance state
+                System.out.println("Step 3 Initiated");
                 stingerController.setReference(MotionControl.STINGER_DEPLOYED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.STINGER_DEPLOYED;
+                System.out.println(m_climbState);
                 break;
             case STINGER_DEPLOYED:
                 // move stinger to CAGE_LIFTED position and advance state
+                System.out.println("Step 4 Initiated");
                 stingerController.setReference(MotionControl.STINGER_CAGEUP_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.STINGER_CAGE_LIFTED;
+                System.out.println(m_climbState);
                 break;
             case STINGER_CAGE_LIFTED:
                 // move elevator to zero and advance state
-                elevator.moveToPosition(MotionControl.ELEVATOR_ZERO_POSITION);
+                System.out.println("Step 5 Initiated");
+                m_elevator.moveToPosition(MotionControl.ELEVATOR_ZERO_POSITION);
                 m_climbState = ClimbState.ELEVATOR_TO_ZERO;
+                System.out.println(m_climbState);
                 break;
             case ELEVATOR_TO_ZERO:
                 // engage clipse and advance state
-                clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
+                System.out.println("Step 6 Initiated");
+                //clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.CLIPS_ENGAGED;
+                System.out.println(m_climbState);
                 break;
             case CLIPS_ENGAGED:
                 System.out.println("Clips already engaged! Climbing should be done");
@@ -144,7 +154,7 @@ public class ClimberSubsystem extends SubsystemBase {
                 break;
             case ELEVATOR_TO_ZERO:
                 // Move elevator back to stinger position and update state
-                elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
+                m_elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
                 m_climbState = ClimbState.STINGER_CAGE_LIFTED;
                 break;
             case CLIPS_ENGAGED:

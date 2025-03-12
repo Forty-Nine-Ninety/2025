@@ -214,7 +214,7 @@ public class RobotContainer {
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
         joystickOperator.x().onTrue(m_elevatorNeutralCommand);
-//        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
+        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
         joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
         joystickOperator.povLeft().onTrue(m_visionAlignLeftCommand);
         joystickOperator.povRight().onTrue(m_visionAlignRightCommand);
@@ -224,7 +224,7 @@ public class RobotContainer {
 
         joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
 
-        joystickDrive.button(6).onTrue(m_elevatorClimbCommand);
+        //joystickDrive.button(8).onTrue(m_elevatorClimbCommand);
   }
 
   public void setTeleopDefaultCommands()

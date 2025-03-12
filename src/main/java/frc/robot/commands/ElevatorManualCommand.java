@@ -22,6 +22,8 @@ public class ElevatorManualCommand extends Command{
     public void execute(){
         double position = m_joystickSupplier.getAsDouble();
         double currentRotation = m_elevator.getPosition();
-        m_elevator.moveToPosition(currentRotation+(position*multiplier));
+        if(currentRotation>0 && currentRotation<18){
+            m_elevator.moveToPosition(currentRotation+(position*multiplier));
+        }
     }
 }

@@ -22,7 +22,7 @@ public class ElevatorClimbCommand extends Command{
         m_climber = climber;
 
         // Creates a Debouncer in "both" mode.
-        m_debouncer = new Debouncer(0.2, Debouncer.DebounceType.kRising);
+        m_debouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
 
         addRequirements(climber);
     }
@@ -33,6 +33,12 @@ public class ElevatorClimbCommand extends Command{
         if (m_debouncer.calculate(true)) {
             System.out.println("Advancing climb state");
             m_climber.advanceClimbState();
+            end(true);
         }
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        System.out.println("Command Finished. YIPEEEEEE");
     }
 }
