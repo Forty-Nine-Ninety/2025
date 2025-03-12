@@ -34,8 +34,11 @@ public class ElevatorClimbCommand extends Command{
     public void execute(){
         // So if currently false the signal must go true for at least .2 seconds before being read as a True signal.
         if (m_debouncer.calculate(!joystickSignal)) { // Command.WaitUntilCommand(boolean) or new WaitUntilCommand(boolean)?
+            System.out.println("1");
             m_climber.advanceClimbState();
+            System.out.println("2");
             joystickSignal = !joystickSignal;
+            System.out.println("3"+joystickSignal);
             System.out.println("Advancing climb state");
         }
         else{

@@ -20,7 +20,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private SparkClosedLoopController stingerController,clipController,trapdoorController;
     private ElevatorSubsystem m_elevator;
 
-    private enum ClimbState {
+    public enum ClimbState {
         NOT_CLIMBING,
         TRAPDOOR_LIFTED,
         ELEVATOR_CLIMB_POS,
@@ -161,6 +161,10 @@ public class ClimberSubsystem extends SubsystemBase {
                 break;
         }
     }
+
+    //public  getClimbState(){
+
+    //}
 
     @Override
     public void initSendable(SendableBuilder builder) {

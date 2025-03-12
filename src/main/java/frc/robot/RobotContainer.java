@@ -82,106 +82,17 @@ public class RobotContainer {
 
     
     // Auto - SmartDashboard
+    NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));
+
     m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
     m_autoChooser.addOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
-    //m_autoChooser.addOption("Red 1: One Coral", new Auto11NRedCommand(m_drivebase,m_arm,m_shooter));
-    //m_autoChooser.addOption("Red 2: One Coral", new Auto21NRedCommand(m_drivebase,m_arm,m_shooter));
-    //m_autoChooser.addOption("Red 3: One Coral", new Auto31NRedCommand(m_drivebase,m_arm,m_shooter));
     m_autoChooser.addOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
     m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
     m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
-    //m_autoChooser.addOption("Red 2 Two Coral", new Auto22NRedCommand(m_drivebase,m_arm,m_shooter,m_intake));
-    //m_autoChooser.addOption("Blue 2 Two Coral", new Auto22NBlueCommand(m_drivebase,m_arm,m_shooter,m_intake));
-
-    /*m_coralChooser.setDefaultOption("Exit", "0");
-    m_coralChooser.addOption("1 coral", "1");
-    m_coralChooser.addOption("2 coral", "2");
-    m_coralChooser.addOption("3 coral", "3");
-
-    m_exitChooser.setDefaultOption("1", "Exit 1");
-    m_exitChooser.addOption("2", "Exit 2");
-    m_exitChooser.addOption("3", "Exit 3");*/
-
-    Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser); //Will need to be updated by Next year if we still use elastic
-
-    /*
-    SmartDashboard.putData("Coral Chooser",m_coralChooser);
-    SmartDashboard.putData("Starting Position",m_exitChooser);
-
-    String m_chosenExit = m_exitChooser.getSelected();
-    String m_chosenCoral = m_coralChooser.getSelected();
-    switch(m_chosenExit){
-
-      case "Exit 1":
-        switch(m_chosenCoral){
-          case "0":
-            m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
-            System.out.println("1ExitBlue");
-            break;
-          
-          case "1":
-            m_autoChooser.setDefaultOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
-            System.out.println("11CBlue");
-            break;
-          
-          case"2":
-            //m_autoChooser.setDefaultOption("Blue 1: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"12CBlue"));
-            System.out.println("12CBlue");
-            break;
-  
-          case "3":
-            //m_autoChooser.setDefaultOption("Blue 1: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"13CBlue"));
-            System.out.println("13CBlue");
-            break;
-        }  
-
-      case "Exit 2":
-        switch(m_chosenCoral){
-          case "0":
-            m_autoChooser.setDefaultOption("Blue 2: Exit", m_drivebase.getAutonomousCommand("2ExitBlue"));
-            System.out.println("2ExitBlue");
-            break;
-
-          case "1":
-            m_autoChooser.setDefaultOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
-            System.out.println("21CBlue");
-            break;
-
-          case"2":
-            //m_autoChooser.setDefaultOption("Blue 2: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"22CBlue"));
-            System.out.println("22CBlue");
-            break;
-
-          case "3":
-            //m_autoChooser.setDefaultOption("Blue 2: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"23CBlue"));
-            System.out.println("23CBlue");
-            break;
-        }  
-
-      case "Exit 3":
-        switch(m_chosenCoral){
-          case "0":
-            m_autoChooser.setDefaultOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
-            System.out.println("3ExitBlue");
-            break;
-
-          case "1":
-            m_autoChooser.setDefaultOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
-            System.out.println("31CBlue");
-            break;
-
-          case"2":
-            //m_autoChooser.setDefaultOption("Blue 3: Two Coral", new Auto2NBlueCommand(m_drivebase,m_L1shooter,"32CBlue"));
-            System.out.println("32CBlue");
-            break;
-
-          case "3":
-            //m_autoChooser.setDefaultOption("Blue 3: Three Coral", new Auto3NBlueCommand(m_drivebase,m_L1shooter,"33CBlue"));
-            System.out.println("33CBlue");
-            break;
-        } 
-    }*/
-    SmartDashboard.updateValues();
+    
+    Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
+    
+    //SmartDashboard.updateValues();
   }
 
   /**
@@ -238,8 +149,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autoChooser.getSelected();
-    //return m_drivebase.getAutonomousCommand("1ExitBlue");
+    //return m_autoChooser.getSelected();
+    return m_drivebase.getAutonomousCommand("1ExitBlue");
     //return new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue");
   }
 

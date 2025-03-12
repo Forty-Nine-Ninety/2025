@@ -1,6 +1,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 //import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.L1ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -15,9 +16,9 @@ public class Auto1NBlueCommand extends SequentialCommandGroup{
         m_drivebase = drivebase;
         m_L1shooter = shooter;
         addCommands(m_drivebase.getAutonomousCommand(pathname),
-                    //new WaitCommand(0),
-                    new OuttakeL1Command(m_L1shooter).withTimeout(2),
-                    //new WaitCommand(0)
+                    new WaitCommand(0),
+                    new AutoL1ShooterCommand(m_L1shooter).withTimeout(2),
+                    new WaitCommand(0),
                     m_drivebase.getAutonomousCommand(exitPath)
         );
     }
@@ -27,7 +28,7 @@ public class Auto1NBlueCommand extends SequentialCommandGroup{
         m_drivebase = drivebase;
         m_L1shooter = shooter;
         addCommands(m_drivebase.getAutonomousCommand(pathname),
-                    //new WaitCommand(0),
+                    new WaitCommand(0),
                     new OuttakeL1Command(m_L1shooter).withTimeout(2)
         );
     }
