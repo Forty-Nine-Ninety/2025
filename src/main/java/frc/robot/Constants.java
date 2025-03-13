@@ -136,7 +136,7 @@ public final class Constants
         public static final int TRAPDOOR_AMP_LIMIT = 10;
         
         public static final PIDConstants STINGER_PID = new PIDConstants(0.1, 0, 0);
-        public static final PIDConstants CLIPS_PID = new PIDConstants(0.2, 0.0000001, 0); // TODO @Avery tune
+        public static final PIDConstants CLIPS_PID = new PIDConstants(0.1, 0, 0); 
         public static final PIDConstants TRAPDOOR_PID = new PIDConstants(0.1, 0, 0); 
 
         public static final double TRADPDOOR_LOWERED_POSITION = 0; 
@@ -145,8 +145,8 @@ public final class Constants
         public static final double STINGER_DEPLOYED_POSITION = 70; 
         public static final double STINGER_CAGEUP_POSITION = 10; 
         public static final double ELEVATOR_ZERO_POSITION = 0;
-        public static final double CLIPS_ENGAGED_POSITION = 10; // TODO @avery
-        public static final double CLIPS_DISENGAGED_POSITION = 10; // TODO @avery
+        public static final double CLIPS_ENGAGED_POSITION = 10;
+        public static final double CLIPS_DISENGAGED_POSITION = 0;
     }
 
     public static final class AutonConstants

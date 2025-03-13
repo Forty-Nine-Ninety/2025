@@ -20,7 +20,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private SparkClosedLoopController stingerController,clipController,trapdoorController;
     private ElevatorSubsystem m_elevator;
 
-    public enum ClimbState {
+    private enum ClimbState {
         NOT_CLIMBING,
         TRAPDOOR_LIFTED,
         ELEVATOR_CLIMB_POS,
@@ -76,6 +76,32 @@ public class ClimberSubsystem extends SubsystemBase {
 
     }
 
+
+
+    public void liftTrapdoor(){
+        trapdoorController.setReference(MotionControl.TRADPDOOR_LIFTED_POSITION, ControlType.kPosition);
+    }
+
+    public void setElevator(){
+        m_elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
+    }
+
+    public void deployStinger(){
+        stingerController.setReference(MotionControl.STINGER_DEPLOYED_POSITION, ControlType.kPosition);
+    }
+
+    public void liftCageUp(){
+        stingerController.setReference(MotionControl.STINGER_CAGEUP_POSITION, ControlType.kPosition);
+    }
+
+    public void zeroElevator(){
+        m_elevator.moveToPosition(MotionControl.ELEVATOR_ZERO_POSITION);
+    }
+
+    public void clip(){
+        clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
+    }
+
     public void advanceClimbState() {
         switch (m_climbState) {
             case NOT_CLIMBING:
@@ -115,7 +141,7 @@ public class ClimberSubsystem extends SubsystemBase {
             case ELEVATOR_TO_ZERO:
                 // engage clipse and advance state
                 System.out.println("Step 6 Initiated");
-                //clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
+                clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.CLIPS_ENGAGED;
                 System.out.println(m_climbState);
                 break;
@@ -161,10 +187,6 @@ public class ClimberSubsystem extends SubsystemBase {
                 break;
         }
     }
-
-    //public  getClimbState(){
-
-    //}
 
     @Override
     public void initSendable(SendableBuilder builder) {

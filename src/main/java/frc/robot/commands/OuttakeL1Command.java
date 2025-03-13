@@ -19,6 +19,7 @@ public class OuttakeL1Command extends Command{
     @Override
     public void execute(){
         m_L1Shooter.runMotor(0.25);
+        System.out.println("l1running");
     }
 
     @Override

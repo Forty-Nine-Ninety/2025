@@ -66,12 +66,10 @@ public class RobotContainer {
   private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
   private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"scamcam",joystickOperator);
   private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"scamcam",joystickOperator);
-  
 
   //Auto
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
-  private SendableChooser<String> m_coralChooser = new SendableChooser<>();
-  private SendableChooser<String> m_exitChooser = new SendableChooser<>();
+
   //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
 
 
@@ -125,7 +123,7 @@ public class RobotContainer {
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
         joystickOperator.x().onTrue(m_elevatorNeutralCommand);
-        joystickOperator.povUp().onTrue(m_elevatorClimbCommand);
+        joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
         joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
         joystickOperator.povLeft().onTrue(m_visionAlignLeftCommand);
         joystickOperator.povRight().onTrue(m_visionAlignRightCommand);
