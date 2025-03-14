@@ -26,7 +26,7 @@ public class L1ShooterSubsystem extends SubsystemBase {
       .idleMode(IdleMode.kBrake)
       .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE)
-      .smartCurrentLimit(15); // Might change, idk
+      .smartCurrentLimit(15); 
 
     configureMotors();
   }
