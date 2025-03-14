@@ -148,8 +148,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     System.out.println("getAutonomousCommand");
-    return m_autoChooser.getSelected();
-    //return m_drivebase.getAutonomousCommand("1ExitBlue");
+    //return m_autoChooser.getSelected();
+    return m_drivebase.getAutonomousCommand("1ExitBlue");
     //return new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue");
   }
 
