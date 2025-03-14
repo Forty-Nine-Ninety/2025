@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -42,54 +43,94 @@ import com.pathplanner.lib.auto.NamedCommands;
  */
 public class RobotContainer {
 
-  CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
-  CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
-
-  // The robot's subsystems and commands are defined here...
-  //Subsystems
-  private final SwerveSubsystem m_drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
-  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-  private final ClimberSubsystem m_climber = new ClimberSubsystem(m_elevator);
-  private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
-  private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
-  //Commands
-  private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
-  private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
-  //private final ElevatorUnclimbCommand m_elevatorUnclimbCommand = new ElevatorUnclimbCommand(m_climber);
-  private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
-  private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
-  private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
-  private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
-  private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
-  private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
-  private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
-  private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-  private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"scamcam",joystickOperator);
-  private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"scamcam",joystickOperator);
-
-  //Auto
-  private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
-
-  //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
-
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-
+  public static final Command m_chosenAuto = null;
+    CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
+    CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
+  
+    // The robot's subsystems and commands are defined here...
+    //Subsystems
+    private final SwerveSubsystem m_drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+    private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+    private final ClimberSubsystem m_climber = new ClimberSubsystem(m_elevator);
+    private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
+    private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
+    //Commands
+    private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
+    private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
+    //private final ElevatorUnclimbCommand m_elevatorUnclimbCommand = new ElevatorUnclimbCommand(m_climber);
+    private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
+    private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
+    private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
+    private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
+    private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
+    private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
+    private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
+    private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
+    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"scamcam",joystickOperator);
+    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"scamcam",joystickOperator);
     
-    // Auto - SmartDashboard
-    NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));
+  
+    //Auto
+    private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+    private SendableChooser<String> m_coralChooser = new SendableChooser<>();
+    private SendableChooser<String> m_exitChooser = new SendableChooser<>();
+    //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
+  
+  
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
+      // Configure the trigger bindings
+      configureBindings();
+  
+      
+      // Auto - SmartDashboard
+      NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));
+  
+      m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
+      m_autoChooser.addOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
+      m_autoChooser.addOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
+      m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
+      m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
+      
+      Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
+      
+      m_coralChooser.setDefaultOption("Exit","0");
+      m_coralChooser.addOption("1 Coral","1");
+      //m_coralChooser.addOption("2 Coral","2");
+      //m_coralChooser.addOption("3 Coral","3");
+  
+      m_exitChooser.setDefaultOption("Blue Exit 1","1");
+      m_exitChooser.addOption("Exit 2","2");
+      m_exitChooser.addOption("Blue Exit 3","3");
+      String m_chosenExit = m_exitChooser.getSelected();
+      String m_chosenCoral = m_coralChooser.getSelected();
+      Command m_chosenAuto;
 
-    m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
-    m_autoChooser.addOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
-    m_autoChooser.addOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
-    m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
-    m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
-    
-    Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
-    
+    switch(m_chosenExit){
+      case "1":
+        switch(m_chosenCoral){
+          case "0":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
+          case "1":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("11CBlue");
+        }
+      case "2":
+        switch(m_chosenCoral){
+          case "1":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("21CBlue");
+        }  
+      case "3":
+        switch(m_chosenCoral){
+          case "0":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("3ExitCBlue");
+          case "1":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("31CBlue");
+            
+        }
+      default:
+        m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
+    }
+    System.out.println(m_chosenAuto);
     //SmartDashboard.updateValues();
   }
 
@@ -148,8 +189,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     System.out.println("getAutonomousCommand");
-    //return m_autoChooser.getSelected();
-    return m_drivebase.getAutonomousCommand("1ExitBlue");
+    return m_chosenAuto;
+    //return m_drivebase.getAutonomousCommand("1ExitBlue");
     //return new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue");
   }
 
