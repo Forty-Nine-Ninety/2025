@@ -39,8 +39,8 @@ public class VisionSubsystem extends SubsystemBase{
 
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
-            aprilTagiD = currentTarget.getFiducialId(); 
-            System.out.printf("Target %s detected",aprilTagiD);
+            //aprilTagiD = currentTarget.getFiducialId(); 
+            System.out.printf("Target detected");
             //double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
             while(true){
                 pose = currentTarget.getBestCameraToTarget();
@@ -55,8 +55,11 @@ public class VisionSubsystem extends SubsystemBase{
                     break;
                 }
                 /*NOTE: MIGHT HAVE A PROBLEM WITH DRIVING FOREVER AND NOT UPDATING DATA */
-                m_drivebase.drive(new Translation2d(pose.getX(),pose.getY()),currentTarget.getYaw(),true);
+                //pose = currentTarget.getBestCameraToTarget();
+                //m_drivebase.drive(new Translation2d(pose.getX(),pose.getY()),currentTarget.getYaw(),true);
             }
+
+            m_drivebase.drive(new Translation2d(pose.getX(),pose.getY()),currentTarget.getYaw(),true);
         }
         else{
             System.out.println("Target not detected");

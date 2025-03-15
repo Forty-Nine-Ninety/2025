@@ -192,8 +192,8 @@ public final class Constants
     public static final class VisionConstants
     {
         //Vision, in m, m/s, rad/s
-        public static final double tagToNodeDistance = 0.17;
-        public static final double xMarginOfError = 0.05;
+        public static final double tagToNodeDistance = 0.34;
+        public static final double xMarginOfError = 0.08;
         public static final double yMarginOfError = 0.03;
         public static final double rotationMarginOfError = 0.1;
         public static final double translationSpeed = 3;
