@@ -43,7 +43,7 @@ import com.pathplanner.lib.auto.NamedCommands;
  */
 public class RobotContainer {
 
-  public static final Command m_chosenAuto = null;
+  public Command m_chosenAuto = null;
     CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
     CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
   
@@ -104,7 +104,7 @@ public class RobotContainer {
       m_exitChooser.addOption("Blue Exit 3","3");
       String m_chosenExit = m_exitChooser.getSelected();
       String m_chosenCoral = m_coralChooser.getSelected();
-      Command m_chosenAuto;
+      //Command m_chosenAuto;
 
     switch(m_chosenExit){
       case "1":
@@ -122,7 +122,7 @@ public class RobotContainer {
       case "3":
         switch(m_chosenCoral){
           case "0":
-            m_chosenAuto = m_drivebase.getAutonomousCommand("3ExitCBlue");
+            m_chosenAuto = m_drivebase.getAutonomousCommand("3ExitBlue");
           case "1":
             m_chosenAuto = m_drivebase.getAutonomousCommand("31CBlue");
             

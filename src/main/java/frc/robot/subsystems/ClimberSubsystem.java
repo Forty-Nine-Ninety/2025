@@ -139,7 +139,7 @@ public class ClimberSubsystem extends SubsystemBase {
                 System.out.println(m_climbState);
                 break;
             case ELEVATOR_TO_ZERO:
-                // engage clipse and advance state
+                // engage clips and advance state
                 System.out.println("Step 6 Initiated");
                 clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.CLIPS_ENGAGED;

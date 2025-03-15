@@ -142,10 +142,10 @@ public final class Constants
         public static final double TRADPDOOR_LOWERED_POSITION = 0; 
         public static final double TRADPDOOR_LIFTED_POSITION = 48; 
         public static final double ELEVATOR_STINGER_POSITION = 18; 
-        public static final double STINGER_DEPLOYED_POSITION = 70; 
-        public static final double STINGER_CAGEUP_POSITION = 10; 
+        public static final double STINGER_DEPLOYED_POSITION = 146; 
+        public static final double STINGER_CAGEUP_POSITION = 36.5; 
         public static final double ELEVATOR_ZERO_POSITION = 0;
-        public static final double CLIPS_ENGAGED_POSITION = 10/12;
+        public static final double CLIPS_ENGAGED_POSITION = 10;
         public static final double CLIPS_DISENGAGED_POSITION = 0;
     }
 
