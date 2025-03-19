@@ -50,7 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       .closedLoopRampRate(MotionControl.ELEVATOR_CLOSED_LOOP_RAMP_RATE)
       .openLoopRampRate(MotionControl.ELEVATOR_OPEN_LOOP_RAMP_RATE)
       .inverted(false)
-      .smartCurrentLimit(55);
+      .smartCurrentLimit(31);
     bottomRightConfig.closedLoop
       .pid(MotionControl.ELEVATOR_PID.kP, MotionControl.ELEVATOR_PID.kI, MotionControl.ELEVATOR_PID.kD)
       .outputRange(MotionControl.ELEVATOR_MIN_OUTPUT, MotionControl.ELEVATOR_MAX_OUTUT);

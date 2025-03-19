@@ -13,7 +13,7 @@ public class ElevatorL1Command extends Command{
 
     @Override
     public void initialize(){
-        m_elevator.moveToPosition(3.3);
+        m_elevator.moveToPosition(3.4);
 
     }
 }
