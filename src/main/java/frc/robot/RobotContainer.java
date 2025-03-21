@@ -154,6 +154,8 @@ public class RobotContainer {
         );
 
         joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
+        joystickDrive.leftBumper().toggleOnTrue(m_outtakeL1Command);
+        joystickDrive.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
         //OPERATOR CONTROLLER
         m_elevatorManualCommand.setSuppliers(
