@@ -39,13 +39,13 @@ public class VisionSubsystem extends SubsystemBase{
 
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
-            //aprilTagiD = currentTarget.getFiducialId(); 
-            System.out.printf("Target detected");
+            aprilTagiD = currentTarget.getFiducialId(); 
+            System.out.printf("Target detected:",aprilTagiD);
             //double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
             while(true){
                 pose = currentTarget.getBestCameraToTarget();
-                double xSpeed = (Math.abs(pose.getX())<nodeLR-VisionConstants.xMarginOfError || pose.getX()>nodeLR+VisionConstants.xMarginOfError)? 1:0;
-                double ySpeed = (pose.getY()>0.399+VisionConstants.yMarginOfError)? 1:0;
+                double xSpeed = (Math.abs(pose.getX())<nodeLR-VisionConstants.xMarginOfError || pose.getX()>nodeLR+VisionConstants.xMarginOfError)? VisionConstants.translationSpeed:0;
+                double ySpeed = (pose.getY()>0.399+VisionConstants.yMarginOfError)? VisionConstants.translationSpeed:0;
                 double rotationSpeed = (Math.abs(currentTarget.getYaw())>VisionConstants.rotationMarginOfError)? VisionConstants.rotationSpeed:0;
                 if(rotationSpeed!=0 && currentTarget.getYaw()<0){
                     rotationSpeed = -rotationSpeed;

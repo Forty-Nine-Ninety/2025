@@ -16,7 +16,7 @@ public class Auto1NBlueCommand extends SequentialCommandGroup{
         m_drivebase = drivebase;
         m_L1shooter = shooter;
         addCommands(m_drivebase.getAutonomousCommand(pathname),
-                    new WaitCommand(0),
+                    new WaitCommand(0.5),
                     new AutoL1ShooterCommand(m_L1shooter).withTimeout(2),
                     new WaitCommand(0),
                     m_drivebase.getAutonomousCommand(exitPath)
@@ -28,7 +28,7 @@ public class Auto1NBlueCommand extends SequentialCommandGroup{
         m_drivebase = drivebase;
         m_L1shooter = shooter;
         addCommands(m_drivebase.getAutonomousCommand(pathname),
-                    new WaitCommand(0),
+                    new WaitCommand(0.5),
                     new OuttakeL1Command(m_L1shooter).withTimeout(2)
         );
     }

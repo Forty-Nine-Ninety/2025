@@ -62,7 +62,7 @@ public final class Constants
         public static final double DRIVE_GEAR_RATIO = 5.9; //previously 6.75
         public static final double STEERING_GEAR_RATIO = 150.0/7.0;
 
-        public static double ARM_MOTION_REDUCTION = 1000.0/3.0;
+        //public static double ARM_MOTION_REDUCTION = 1000.0/3.0;
         
         public static double ROBOT_RADIUS = 0.47;
         public static double WHEEL_SPEED = 4.60; //Meters per sec
@@ -196,7 +196,7 @@ public final class Constants
         public static final double xMarginOfError = 0.08;
         public static final double yMarginOfError = 0.03;
         public static final double rotationMarginOfError = 0.1;
-        public static final double translationSpeed = 3;
+        public static final double translationSpeed = 0.5;
         public static final double rotationSpeed = 1;
     }
 

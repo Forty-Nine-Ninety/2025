@@ -148,9 +148,9 @@ public class RobotContainer {
         //XBOX
         //DRIVE CONTROLLER
         m_driveCommand.setSuppliers(
-            () -> MathUtil.applyDeadband(joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
-            () -> MathUtil.applyDeadband(joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
+            () -> MathUtil.applyDeadband(-joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(-joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(-joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
         );
 
         joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
@@ -191,7 +191,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     System.out.println("getAutonomousCommand");
-    return m_chosenAuto;
+    return m_autoChooser.getSelected();
     //return m_drivebase.getAutonomousCommand("1ExitBlue");
     //return new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue");
   }
