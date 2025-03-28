@@ -123,7 +123,7 @@ public final class Constants
     public static class MotionControl
     {
         //PID
-        public static final PIDConstants ELEVATOR_PID = new PIDConstants(0.2, 0.0000001, 0);
+        public static final PIDConstants ELEVATOR_PID = new PIDConstants(0.1, 0.0000001, 0);
         public static final double ELEVATOR_MAX_OUTUT = 0.5;
         public static final double ELEVATOR_MIN_OUTPUT = -0.3;
         //public static final PIDController L1SHOOTER_PID = new PIDController(1, 1, 1);
@@ -143,7 +143,7 @@ public final class Constants
         public static final double TRADPDOOR_LIFTED_POSITION = 48; 
         public static final double ELEVATOR_STINGER_POSITION = 18; 
         public static final double STINGER_DEPLOYED_POSITION = 146; 
-        public static final double STINGER_CAGEUP_POSITION = 36.5; 
+        public static final double STINGER_CAGEUP_POSITION = 30; 
         public static final double ELEVATOR_ZERO_POSITION = 0;
         public static final double CLIPS_ENGAGED_POSITION = 10;
         public static final double CLIPS_DISENGAGED_POSITION = 0;

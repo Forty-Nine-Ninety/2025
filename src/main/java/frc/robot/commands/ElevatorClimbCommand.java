@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -18,10 +19,11 @@ import frc.robot.subsystems.ClimberSubsystem;
  */
 public class ElevatorClimbCommand extends Command{
     private ClimberSubsystem m_climber;
-    // private Debouncer m_debouncer;
+    //private Debouncer m_debouncer;
     
     public ElevatorClimbCommand(ClimberSubsystem climber){
         m_climber = climber;
+        //m_joystick = joystick;
 
         // Creates a Debouncer in "both" mode.
         //m_debouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
@@ -34,15 +36,15 @@ public class ElevatorClimbCommand extends Command{
     @Override
     public void initialize(){
         // So if currently false the signal must go true for at least .2 seconds before being read as a True signal.
-        /*if (RobotContainer.joystickOperator.getPovUp()) { // Command.WaitUntilCommand(boolean) or new WaitUntilCommand(boolean)?
+        /*if (m_joystick.getPovUp()) { // Command.WaitUntilCommand(boolean) or new WaitUntilCommand(boolean)?
             m_climber.advanceClimbState();
             joystickSignal = !joystickSignal;
             System.out.println("Advancing climb state");
         }
         else{
             System.out.println("Button not pressed to advance climb state");
-        }
-        */
+        }*/
+        
         System.out.println("running");
         m_climber.advanceClimbState();
     }
