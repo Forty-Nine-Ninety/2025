@@ -95,7 +95,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void zeroElevator(){
-        m_elevator.moveToPosition(MotionControl.ELEVATOR_ZERO_POSITION);
+        m_elevator.moveToPosition(MotionControl.ELEVATOR_ZERO_POSITION-1.5);
     }
 
     public void clip(){

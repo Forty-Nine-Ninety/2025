@@ -135,7 +135,7 @@ public final class Constants
         public static final int CLIPS_AMP_LIMIT = 10;
         public static final int TRAPDOOR_AMP_LIMIT = 10;
         
-        public static final PIDConstants STINGER_PID = new PIDConstants(0.1, 0, 0);
+        public static final PIDConstants STINGER_PID = new PIDConstants(1, 0, 0);
         public static final PIDConstants CLIPS_PID = new PIDConstants(0.1, 0, 0); 
         public static final PIDConstants TRAPDOOR_PID = new PIDConstants(0.1, 0, 0); 
 
@@ -143,16 +143,16 @@ public final class Constants
         public static final double TRADPDOOR_LIFTED_POSITION = 48; 
         public static final double ELEVATOR_STINGER_POSITION = 18; 
         public static final double STINGER_DEPLOYED_POSITION = 146; 
-        public static final double STINGER_CAGEUP_POSITION = 30; 
-        public static final double ELEVATOR_ZERO_POSITION = 0;
-        public static final double CLIPS_ENGAGED_POSITION = 10;
+        public static final double STINGER_CAGEUP_POSITION = 35; 
+        public static final double ELEVATOR_ZERO_POSITION = -1.5;
+        public static final double CLIPS_ENGAGED_POSITION = 15;
         public static final double CLIPS_DISENGAGED_POSITION = 0;
     }
 
     public static final class AutonConstants
     {
-        public static final PIDController TRANSLATION_PID = new PIDController(0.7, 0, 0);
-        public static final PIDController ANGLE_PID   = new PIDController(0.4, 0, 0.01);
+        public static final PIDController TRANSLATION_PID = new PIDController(0.7, 0.0001, 0.2);
+        public static final PIDController ANGLE_PID   = new PIDController(0.4, 0.01, 0.1);
         /*
         public static final HolonomicPathFollowerConfig autoBuilderPathConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
         //new PIDController(5.0, 0.0 ,0.2), //original p = 5, 1st attempt: p = 5, d = 0.5, 2nd attempt: p= 5, d = 0.5, 3rd attempt: p = 5, d = 3 this caused the wheels to shutter
@@ -196,8 +196,8 @@ public final class Constants
         public static final double xMarginOfError = 0.08;
         public static final double yMarginOfError = 0.03;
         public static final double rotationMarginOfError = 0.1;
-        public static final double translationSpeed = 0.5;
-        public static final double rotationSpeed = 1;
+        public static final double translationSpeed = 0.05;
+        public static final double rotationSpeed = 0.1;
     }
 
     public static class DriveSettings
