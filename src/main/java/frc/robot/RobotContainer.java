@@ -52,7 +52,7 @@ public class RobotContainer {
     CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
   
     //Vision
-    private final PhotonCamera m_arducam = new PhotonCamera("Scamcam");
+    private final PhotonCamera m_arducam = new PhotonCamera("scamcam");
   
     // The robot's subsystems and commands are defined here...
     //Subsystems
@@ -74,8 +74,8 @@ public class RobotContainer {
     private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
     private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,"scamcam",joystickOperator);
-    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,"scamcam",joystickOperator);
+    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
+    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
     
   
     //Auto
@@ -186,9 +186,9 @@ public class RobotContainer {
   }
 
   public void setTeleopDefaultCommands()
-    {
+  {
       CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
-    }
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -199,14 +199,14 @@ public class RobotContainer {
     return m_autoChooser.getSelected();
   }
 
-  public void scanForApriltag(PhotonCamera camera){
-    PhotonPipelineResult result = camera.getLatestResult();
+  public void scanForApriltag(){
+    PhotonPipelineResult result = m_arducam.getLatestResult();
     Transform3d pose = result.getBestTarget().getBestCameraToTarget();
     double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
     if(result.hasTargets() && distance<=3){
         m_vision.update();
     }
-}
+  }
 
   public void setMotorBrake(boolean brake)
   {

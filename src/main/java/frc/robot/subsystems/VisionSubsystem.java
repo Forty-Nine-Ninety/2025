@@ -30,11 +30,10 @@ public class VisionSubsystem extends SubsystemBase{
 
     private RumbleCommandHelper m_rumble;
 
-    public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,String node,CommandXboxController joystick){
+    public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,CommandXboxController joystick){
         m_drivebase = drivebase;
         arducamOne = photonCamera;
-        nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
-                                                 VisionConstants.tagToNode;
+        nodeLR = -VisionConstants.tagToNode;
         m_rumble = new RumbleCommandHelper(joystick);
     }
 
@@ -42,9 +41,14 @@ public class VisionSubsystem extends SubsystemBase{
         result = arducamOne.getLatestResult();
         double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
         if(result.hasTargets() && distance<=3){
-            
+
             update();
         }
+    }
+
+    public void setNodeLR(String node){
+        nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
+                                                 VisionConstants.tagToNode;
     }
 
     public void update(){
