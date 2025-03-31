@@ -32,7 +32,6 @@ public final class Constants
         public static int PORT_JOYSTICK_OPERATOR = 1;
 
         //CAN IDs
-
         //Swerve occupies 1-8
 
         public static final int CAN_ELEVATOR_BOTTOM_LEFT = 9;
@@ -61,13 +60,9 @@ public final class Constants
         public static double DRIVETRAIN_WHEEL_DIAMETER_IN = 4.0;
         public static final double DRIVE_GEAR_RATIO = 5.9; //previously 6.75
         public static final double STEERING_GEAR_RATIO = 150.0/7.0;
-
-        //public static double ARM_MOTION_REDUCTION = 1000.0/3.0;
         
         public static double ROBOT_RADIUS = 0.47;
         public static double WHEEL_SPEED = 4.60; //Meters per sec
-        //public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-        //public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     }
     /*
      * public static class OurUnits
@@ -115,7 +110,6 @@ public final class Constants
     public static class SubsystemConfig
     {
         //Movement information
-
         // Hold time on motor brakes when disabled
         public static final double WHEEL_LOCK_TIME = 10; // seconds
     }
@@ -126,10 +120,8 @@ public final class Constants
         public static final PIDConstants ELEVATOR_PID = new PIDConstants(0.1, 0.0000001, 0);
         public static final double ELEVATOR_MAX_OUTUT = 0.5;
         public static final double ELEVATOR_MIN_OUTPUT = -0.3;
-        //public static final PIDController L1SHOOTER_PID = new PIDController(1, 1, 1);
         public static final double ELEVATOR_CLOSED_LOOP_RAMP_RATE = 1000.0;
         public static final double ELEVATOR_OPEN_LOOP_RAMP_RATE = 1.0;
-        //public static final double ELEVATOR_FEEDFORWARD = 1;
 
         public static final int STINGER_AMP_LIMIT = 40;
         public static final int CLIPS_AMP_LIMIT = 10;
@@ -192,7 +184,7 @@ public final class Constants
     public static final class VisionConstants
     {
         //Vision, in m, m/s, rad/s
-        public static final double tagToNodeDistance = 0.34;
+        public static final double tagToNode = 0.34;
         public static final double xMarginOfError = 0.08;
         public static final double yMarginOfError = 0.03;
         public static final double rotationMarginOfError = 0.1;

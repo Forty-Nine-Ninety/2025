@@ -11,9 +11,10 @@ public class VisionAlignLeftCommand extends Command{
     private PhotonCamera photonCamera;
     private VisionSubsystem m_vision;
 
-    public VisionAlignLeftCommand(SwerveSubsystem drivebase,String camera,CommandXboxController joystick){
-        photonCamera = new PhotonCamera(camera);
-        m_vision = new VisionSubsystem(drivebase,photonCamera,"left",joystick);
+    public VisionAlignLeftCommand(SwerveSubsystem drivebase,PhotonCamera camera,CommandXboxController joystick){
+        photonCamera = camera;
+        m_vision = new VisionSubsystem(drivebase,photonCamera,joystick);
+        m_vision.setNodeLR("left");
     }
 
     @Override

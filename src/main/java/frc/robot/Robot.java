@@ -94,13 +94,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.setMotorBrake(true);
-    System.out.println("ROBOT.java autonomousInit 1");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     System.out.println(m_autonomousCommand.getName());
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-      System.out.println("ROBOT.java autonomousInit 2");
     }
   }
 
@@ -124,7 +122,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.scanForApriltag();
+  }
 
   @Override
   public void testInit() {

@@ -9,6 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -32,6 +33,9 @@ import frc.robot.commands.auto.*;
 
 import java.io.File;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -43,9 +47,12 @@ import com.pathplanner.lib.auto.NamedCommands;
  */
 public class RobotContainer {
 
-  public Command m_chosenAuto = null;
+    public Command m_chosenAuto = null;
     CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
     CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
+  
+    //Vision
+    private final PhotonCamera m_arducam = new PhotonCamera("Scamcam");
   
     // The robot's subsystems and commands are defined here...
     //Subsystems
@@ -54,6 +61,7 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber = new ClimberSubsystem(m_elevator);
     private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
     private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
+    private final VisionSubsystem m_vision = new VisionSubsystem(m_drivebase,m_arducam,joystickDrive);
     //Commands
     private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
     private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
@@ -75,7 +83,6 @@ public class RobotContainer {
     private SendableChooser<String> m_coralChooser = new SendableChooser<>();
     private SendableChooser<String> m_exitChooser = new SendableChooser<>();
     //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
-  
   
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -166,6 +173,7 @@ public class RobotContainer {
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
         joystickOperator.x().onTrue(m_elevatorNeutralCommand);
+
         joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
         joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
         joystickOperator.povLeft().toggleOnTrue(m_visionAlignLeftCommand);
@@ -175,8 +183,6 @@ public class RobotContainer {
         joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
         joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
-
-        //joystickDrive.button(8).onTrue(m_elevatorClimbCommand);
   }
 
   public void setTeleopDefaultCommands()
@@ -190,11 +196,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    System.out.println("getAutonomousCommand");
     return m_autoChooser.getSelected();
-    //return m_drivebase.getAutonomousCommand("1ExitBlue");
-    //return new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue");
   }
+
+  public void scanForApriltag(PhotonCamera camera){
+    PhotonPipelineResult result = camera.getLatestResult();
+    Transform3d pose = result.getBestTarget().getBestCameraToTarget();
+    double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+    if(result.hasTargets() && distance<=3){
+        m_vision.update();
+    }
+}
 
   public void setMotorBrake(boolean brake)
   {
