@@ -9,6 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -200,12 +201,18 @@ public class RobotContainer {
   }
 
   public void scanForApriltag(){
-    PhotonPipelineResult result = m_arducam.getLatestResult();
-    Transform3d pose = result.getBestTarget().getBestCameraToTarget();
-    double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-    if(result.hasTargets() && distance<=3){
-        m_vision.update();
-    }
+    m_vision.scanForApriltag();
+    /*PhotonPipelineResult result = m_arducam.getLatestResult();
+    System.out.println("2. Container scan. Pose and distance:");
+    if(result.hasTargets()){
+      Transform3d pose = result.getBestTarget().getBestCameraToTarget();
+      double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+      System.out.println(pose);
+      System.out.println(distance);
+      //if(distance<=3){
+      //  m_vision.update();
+      //}
+    }*/
   }
 
   public void setMotorBrake(boolean brake)
