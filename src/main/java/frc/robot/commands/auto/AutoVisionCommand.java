@@ -5,7 +5,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.auto.AutoDriveCommand;
 
 
 public class AutoVisionCommand extends SequentialCommandGroup{

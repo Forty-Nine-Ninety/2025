@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
-//import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-//import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -40,8 +38,4 @@ public class L1ShooterSubsystem extends SubsystemBase {
   public void runMotor(double percent_output){
     outtakeMotor.set(percent_output);
   }
-
-  /*public void stop(){
-    outtakeMotor.set(0.0);
-  }*/
 }

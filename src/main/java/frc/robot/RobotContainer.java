@@ -72,7 +72,7 @@ public class RobotContainer {
     private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
     private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
     private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
-    private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
+    private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_L2L3shooter);
     private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
     private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
@@ -183,7 +183,7 @@ public class RobotContainer {
         joystickOperator.leftBumper().toggleOnTrue(m_outtakeL1Command);
         joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
-        joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
+        joystickOperator.rightStick().toggleOnTrue(m_elevatorManualCommand);
   }
 
   public void setTeleopDefaultCommands()
@@ -198,21 +198,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return m_autoChooser.getSelected();
-  }
-
-  public void scanForApriltag(){
-    m_vision.scanForApriltag();
-    /*PhotonPipelineResult result = m_arducam.getLatestResult();
-    System.out.println("2. Container scan. Pose and distance:");
-    if(result.hasTargets()){
-      Transform3d pose = result.getBestTarget().getBestCameraToTarget();
-      double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-      System.out.println(pose);
-      System.out.println(distance);
-      //if(distance<=3){
-      //  m_vision.update();
-      //}
-    }*/
   }
 
   public void setMotorBrake(boolean brake)

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RumbleCommandHelper;
 import frc.robot.commands.auto.AutoVisionCommand;
 
@@ -44,6 +45,11 @@ public class VisionSubsystem extends SubsystemBase{
         m_rumble = new RumbleCommandHelper(joystick);
     }
 
+    public void setNodeLR(String node){
+        nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
+                                                 VisionConstants.tagToNode;
+    }
+
     public void scanForApriltag(){
         PhotonPipelineResult result = arducamOne.getLatestResult();
         if(result.hasTargets()){
@@ -52,24 +58,19 @@ public class VisionSubsystem extends SubsystemBase{
           System.out.println(pose);
           System.out.println(distance);
           if(distance<=3){
+            m_rumble.schedule();
             update();
           }
         }
       }
 
-    public void setNodeLR(String node){
-        nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
-                                                 VisionConstants.tagToNode;
-    }
-
+    
     public void update(){
-        System.out.println("3. Update");
         result = arducamOne.getLatestResult();
 
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
-            aprilTagiD = currentTarget.getFiducialId(); 
-            System.out.printf("4. Target detected:",aprilTagiD);
+            aprilTagiD = currentTarget.getFiducialId();
             //double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
             //while(true){
                 pose = currentTarget.getBestCameraToTarget();
@@ -99,9 +100,15 @@ public class VisionSubsystem extends SubsystemBase{
                 //m_drivebase.drive(new Translation2d(DriveUtil.powCopySign(pose.getY(),3),
                 //                    DriveUtil.powCopySign(pose.getX(),3)),
                 //                    DriveUtil.powCopySign(currentTarget.getYaw(),3),false);
+                
                 //m_drivebase.drive(new ChassisSpeeds(ySpeed,xSpeed,rotationSpeed));
-                new AutoVisionCommand(m_drivebase,pose,currentTarget);
-                System.out.println("6. REPEAT");
+                DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
+                m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
+                System.out.println("SET SUPPLIERS");
+                m_driveCommand.schedule();
+                System.out.println("SCHEDULED");
+                
+                //new AutoVisionCommand(m_drivebase,pose,currentTarget);
                 //break;
             //}
         }
