@@ -19,6 +19,6 @@ public class VisionAlignRightCommand extends Command{
 
     @Override
     public void initialize(){
-        m_vision.update();
+        m_vision.scanForApriltag();
     }
 }
