@@ -157,7 +157,7 @@ public class RobotContainer {
         //DRIVE CONTROLLER
         m_driveCommand.setSuppliers(
             () -> MathUtil.applyDeadband(-joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
             () -> MathUtil.applyDeadband(-joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
         );
 

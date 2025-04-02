@@ -21,7 +21,9 @@ public class AutoDriveCommand extends Command{
     }
 
     @Override
-    public void initialize(){
+    public void execute(){
+        System.out.println("DRIVE COMMAND");
+        System.out.println(pose);
          m_drivebase.drive(new Translation2d(DriveUtil.powCopySign(pose.getY(),3),
                                     DriveUtil.powCopySign(pose.getX(),3)),
                                     DriveUtil.powCopySign(currentTarget.getYaw(),3),false);

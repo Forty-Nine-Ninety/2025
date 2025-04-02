@@ -16,6 +16,8 @@ public class AutoVisionCommand extends SequentialCommandGroup{
         m_drivebase = drivebase;
         m_pose = pose;
         m_currentTarget = currentTarget;
-        addCommands(new AutoDriveCommand(m_drivebase,m_pose,m_currentTarget).withTimeout(2.5));
+        System.out.println("RUNNING");
+        System.out.println(m_pose);
+        addCommands(new AutoDriveCommand(m_drivebase,m_pose,m_currentTarget));
     }
 }
