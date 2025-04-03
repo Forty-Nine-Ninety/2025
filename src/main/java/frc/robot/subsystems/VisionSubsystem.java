@@ -23,11 +23,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.RumbleCommandHelper;
+import frc.robot.commands.VisionDriveCommand;
 import frc.robot.commands.auto.AutoVisionCommand;
 
 public class VisionSubsystem extends SubsystemBase{
     private SwerveSubsystem m_drivebase;
+    private DriveCommand m_driveCommand;
     private PhotonCamera arducamOne;
     
     private PhotonPipelineResult result;
@@ -36,13 +39,16 @@ public class VisionSubsystem extends SubsystemBase{
     int aprilTagiD;
     double nodeLR;
 
-    private RumbleCommandHelper m_rumble;
+    private RumbleCommand m_rumble;
+    private CommandXboxController m_joystick;
 
     public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,CommandXboxController joystick){
         m_drivebase = drivebase;
         arducamOne = photonCamera;
         nodeLR = -VisionConstants.tagToNode;
-        m_rumble = new RumbleCommandHelper(joystick);
+        m_rumble = new RumbleCommand(joystick);
+        m_joystick = joystick;
+        m_driveCommand = new DriveCommand(m_drivebase);
     }
 
     public void setNodeLR(String node){
@@ -55,25 +61,24 @@ public class VisionSubsystem extends SubsystemBase{
         if(result.hasTargets()){
           Transform3d pose = result.getBestTarget().getBestCameraToTarget();
           double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-          System.out.println(pose);
-          System.out.println(distance);
           if(distance<=3){
-            m_rumble.schedule();
-            update();
+            //new RumbleCommand(m_joystick);
+            //m_rumble.schedule();
           }
         }
-      }
+    }
 
-    
     public void update(){
         result = arducamOne.getLatestResult();
+        boolean done = false;
 
         if(result.hasTargets()){
             currentTarget = result.getBestTarget();
-            aprilTagiD = currentTarget.getFiducialId();
             //double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-            //while(true){
-                pose = currentTarget.getBestCameraToTarget();
+            //while(!done&&result.hasTargets()){
+                drive();
+                System.out.println("driving");
+                /*pose = currentTarget.getBestCameraToTarget();
                 double xSpeed = (pose.getX()<nodeLR-VisionConstants.xMarginOfError || 
                                  pose.getX()>nodeLR+VisionConstants.xMarginOfError)?
                                  getTranslationSpeed(pose.getX()):0; //real life y axis
@@ -84,7 +89,8 @@ public class VisionSubsystem extends SubsystemBase{
                     rotationSpeed = -rotationSpeed;
                 }
                 if(xSpeed==0 && ySpeed==0 && rotationSpeed==0){
-                    m_rumble.schedule();
+                    //m_rumble.schedule();
+                    //new RumbleCommand(m_joystick);
                     //break;
                 }
                 //System.out.println("5. Speeds:");
@@ -102,20 +108,54 @@ public class VisionSubsystem extends SubsystemBase{
                 //                    DriveUtil.powCopySign(currentTarget.getYaw(),3),false);
                 
                 //m_drivebase.drive(new ChassisSpeeds(ySpeed,xSpeed,rotationSpeed));
-                DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
                 m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
                 System.out.println("SET SUPPLIERS");
-                m_driveCommand.schedule();
+                new VisionDriveCommand(m_driveCommand);
                 System.out.println("SCHEDULED");
                 
                 //new AutoVisionCommand(m_drivebase,pose,currentTarget);
                 //break;
+                */
             //}
         }
         else{
             System.out.println("4. Target not detected");
         }
     }
+
+    private boolean drive(){
+        if(!result.hasTargets()){
+            return false;
+        }
+                pose = currentTarget.getBestCameraToTarget();
+                double xSpeed = (pose.getX()<nodeLR-VisionConstants.xMarginOfError || 
+                                 pose.getX()>nodeLR+VisionConstants.xMarginOfError)?
+                                 getTranslationSpeed(pose.getX()):0; //real life y axis
+                double ySpeed = (pose.getY()>0.399+VisionConstants.yMarginOfError)?
+                                 getTranslationSpeed(pose.getY()):0; //real life x axis
+                double rotationSpeed = (Math.abs(currentTarget.getYaw())>VisionConstants.rotationMarginOfError)? VisionConstants.rotationSpeed:0;
+                if(rotationSpeed!=0 && currentTarget.getYaw()<0){
+                    rotationSpeed = -rotationSpeed;
+                }
+                if(xSpeed==0 && ySpeed==0 && rotationSpeed==0){
+                    System.out.println("SPEEDS ZERO");
+                    return true;
+                }
+                System.out.println(pose);
+                System.out.println(xSpeed);
+                //else{
+                    //m_driveCommand.cancel();
+                    m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
+                    new VisionDriveCommand(m_driveCommand);
+                    return false;
+                //}
+    }
+
+    /*public void visionDrive(){
+        while(!drive()){
+            System.out.println("driving");
+          }
+    }*/
 
     private double getTranslationSpeed(double distance){
         double speed = 2.90/(1+4.75*Math.pow(Math.E,41)*Math.pow(Math.E,(-248*distance)));

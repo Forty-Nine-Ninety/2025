@@ -75,8 +75,8 @@ public class RobotContainer {
     private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_L2L3shooter);
     private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
-    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
+    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator,this);
+    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator,this);
     
   
     //Auto
@@ -186,9 +186,19 @@ public class RobotContainer {
         joystickOperator.rightStick().toggleOnTrue(m_elevatorManualCommand);
   }
 
+  //VISION COMMANDS
+
+  public void scanForApriltag(){
+    m_vision.scanForApriltag();
+  }
+
   public void setTeleopDefaultCommands()
   {
       CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
+  }
+
+  public void cancelDriveCommand(){
+    CommandScheduler.getInstance().cancel(m_driveCommand);
   }
 
   /**

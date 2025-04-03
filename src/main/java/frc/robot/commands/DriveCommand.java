@@ -45,4 +45,9 @@ public class DriveCommand extends Command{
                 false);
         }
     }
+
+    @Override
+    public void end(boolean interrupted){
+        System.out.println("DRIVE COMMAND END");
+    }
 }
