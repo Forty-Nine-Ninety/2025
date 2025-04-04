@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -35,7 +34,6 @@ import frc.robot.commands.auto.*;
 import java.io.File;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -75,8 +73,8 @@ public class RobotContainer {
     private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_L2L3shooter);
     private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator,this);
-    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator,this);
+    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
+    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
     
   
     //Auto
@@ -195,10 +193,6 @@ public class RobotContainer {
   public void setTeleopDefaultCommands()
   {
       CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
-  }
-
-  public void cancelDriveCommand(){
-    CommandScheduler.getInstance().cancel(m_driveCommand);
   }
 
   /**

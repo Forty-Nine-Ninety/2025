@@ -30,6 +30,7 @@ import frc.robot.commands.auto.AutoVisionCommand;
 
 public class VisionSubsystem extends SubsystemBase{
     private SwerveSubsystem m_drivebase;
+    private VisionDriveCommand m_visionDrive;
     private DriveCommand m_driveCommand;
     private PhotonCamera arducamOne;
     
@@ -41,6 +42,7 @@ public class VisionSubsystem extends SubsystemBase{
 
     private RumbleCommand m_rumble;
     private CommandXboxController m_joystick;
+    private boolean driving = false;
 
     public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,CommandXboxController joystick){
         m_drivebase = drivebase;
@@ -58,113 +60,53 @@ public class VisionSubsystem extends SubsystemBase{
 
     public void scanForApriltag(){
         PhotonPipelineResult result = arducamOne.getLatestResult();
-        if(result.hasTargets()){
+        if(result.hasTargets()&&!driving){
           Transform3d pose = result.getBestTarget().getBestCameraToTarget();
           double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
           if(distance<=3){
-            //new RumbleCommand(m_joystick);
-            //m_rumble.schedule();
+            new RumbleCommand(m_joystick);
+            m_rumble.schedule();
           }
         }
     }
 
     public void update(){
         result = arducamOne.getLatestResult();
-        boolean done = false;
-
-        if(result.hasTargets()){
-            currentTarget = result.getBestTarget();
-            //double distance = sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-            //while(!done&&result.hasTargets()){
-                drive();
-                System.out.println("driving");
-                /*pose = currentTarget.getBestCameraToTarget();
-                double xSpeed = (pose.getX()<nodeLR-VisionConstants.xMarginOfError || 
-                                 pose.getX()>nodeLR+VisionConstants.xMarginOfError)?
-                                 getTranslationSpeed(pose.getX()):0; //real life y axis
-                double ySpeed = (pose.getY()>0.399+VisionConstants.yMarginOfError)?
-                                 getTranslationSpeed(pose.getY()):0; //real life x axis
-                double rotationSpeed = (Math.abs(currentTarget.getYaw())>VisionConstants.rotationMarginOfError)? VisionConstants.rotationSpeed:0;
-                if(rotationSpeed!=0 && currentTarget.getYaw()<0){
-                    rotationSpeed = -rotationSpeed;
-                }
-                if(xSpeed==0 && ySpeed==0 && rotationSpeed==0){
-                    //m_rumble.schedule();
-                    //new RumbleCommand(m_joystick);
-                    //break;
-                }
-                //System.out.println("5. Speeds:");
-                //System.out.println(xSpeed);
-                //System.out.println(ySpeed);
-                //System.out.println(rotationSpeed);
-                //System.out.println(pose.getX());
-                //System.out.println(pose.getY());
-                //System.out.println(currentTarget.getYaw());
-                //Pose2d targetPose = new Pose2d(pose.getX(),pose.getY(),new Rotation2d(currentTarget.getYaw()*2*Math.PI/180));
-                //m_drivebase.driveToPose(new Pose2d(pose.getX(),pose.getY(),new Rotation2d(currentTarget.getYaw()*2*Math.PI/180)));
-                //System.out.println(targetPose);
-                //m_drivebase.drive(new Translation2d(DriveUtil.powCopySign(pose.getY(),3),
-                //                    DriveUtil.powCopySign(pose.getX(),3)),
-                //                    DriveUtil.powCopySign(currentTarget.getYaw(),3),false);
-                
-                //m_drivebase.drive(new ChassisSpeeds(ySpeed,xSpeed,rotationSpeed));
-                m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
-                System.out.println("SET SUPPLIERS");
-                new VisionDriveCommand(m_driveCommand);
-                System.out.println("SCHEDULED");
-                
-                //new AutoVisionCommand(m_drivebase,pose,currentTarget);
-                //break;
-                */
-            //}
-        }
+        driving = true;
+        if(result.hasTargets()){currentTarget = result.getBestTarget();}
         else{
-            System.out.println("4. Target not detected");
+            System.out.println("Target not detected");
+            return;
         }
+        m_visionDrive = new VisionDriveCommand(this,m_drivebase,result,currentTarget,nodeLR);
+        //m_visionDrive.wait(200);
+        System.out.println("driving");
     }
 
-    private boolean drive(){
+    private void drive(){
         if(!result.hasTargets()){
-            return false;
+            return;
         }
-                pose = currentTarget.getBestCameraToTarget();
-                double xSpeed = (pose.getX()<nodeLR-VisionConstants.xMarginOfError || 
-                                 pose.getX()>nodeLR+VisionConstants.xMarginOfError)?
-                                 getTranslationSpeed(pose.getX()):0; //real life y axis
-                double ySpeed = (pose.getY()>0.399+VisionConstants.yMarginOfError)?
-                                 getTranslationSpeed(pose.getY()):0; //real life x axis
-                double rotationSpeed = (Math.abs(currentTarget.getYaw())>VisionConstants.rotationMarginOfError)? VisionConstants.rotationSpeed:0;
-                if(rotationSpeed!=0 && currentTarget.getYaw()<0){
-                    rotationSpeed = -rotationSpeed;
-                }
-                if(xSpeed==0 && ySpeed==0 && rotationSpeed==0){
-                    System.out.println("SPEEDS ZERO");
-                    return true;
-                }
-                System.out.println(pose);
-                System.out.println(xSpeed);
-                //else{
-                    //m_driveCommand.cancel();
-                    m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
-                    new VisionDriveCommand(m_driveCommand);
-                    return false;
-                //}
+        pose = currentTarget.getBestCameraToTarget();
+        double xSpeed = (pose.getX()<nodeLR-VisionConstants.xMarginOfError || 
+                         pose.getX()>nodeLR+VisionConstants.xMarginOfError)?
+                         getTranslationSpeed(pose.getX()):0; //real life y axis
+        double ySpeed = (pose.getY()>0.399+VisionConstants.yMarginOfError)?
+                         getTranslationSpeed(pose.getY()):0; //real life x axis
+        double rotationSpeed = (Math.abs(currentTarget.getYaw())>VisionConstants.rotationMarginOfError)? VisionConstants.rotationSpeed:0;
+        if(rotationSpeed!=0 && currentTarget.getYaw()<0){
+            rotationSpeed = -rotationSpeed;
+        }
+        if(xSpeed==0 && ySpeed==0 && rotationSpeed==0){
+            System.out.println("SPEEDS ZERO");
+            return;
+           }
+        //m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
+        //new VisionDriveCommand(m_driveCommand);
     }
 
-    /*public void visionDrive(){
-        while(!drive()){
-            System.out.println("driving");
-          }
-    }*/
-
-    private double getTranslationSpeed(double distance){
+    public double getTranslationSpeed(double distance){
         double speed = 2.90/(1+4.75*Math.pow(Math.E,41)*Math.pow(Math.E,(-248*distance)));
         return speed;
     }
 }
-
-/*NOTE: MEASUREMENTS ARE IN M, M/SEC, RAD/SEC */
-/*ADD ABORT COMMAND */
-//Get camera
-//Drive to position
-//Shoot coral
