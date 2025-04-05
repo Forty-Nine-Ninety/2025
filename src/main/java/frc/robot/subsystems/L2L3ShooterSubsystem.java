@@ -43,7 +43,7 @@ public class L2L3ShooterSubsystem extends SubsystemBase {
   }
 
   public void runMotor(double percent_output){
-    left.set(percent_output);
+    left.set(-percent_output);
     right.set(percent_output);
   }
 
