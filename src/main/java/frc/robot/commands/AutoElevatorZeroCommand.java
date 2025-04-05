@@ -14,5 +14,6 @@ public class AutoElevatorZeroCommand extends Command{
     @Override
     public void initialize(){
         m_elevator.moveToPosition(0);
+        System.out.println("Old encoder value: "+m_elevator.getPosition());
     }
 }

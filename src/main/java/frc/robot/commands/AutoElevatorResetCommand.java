@@ -14,5 +14,6 @@ public class AutoElevatorResetCommand extends Command{
     @Override
     public void initialize(){
         m_elevator.zeroElevatorPosition();
+        System.out.println("New encoder value: "+m_elevator.getPosition());
     }
 }

@@ -111,8 +111,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void zeroElevatorPosition(){
-
     pid_encoder.setPosition(0);
+  }
+
+  public void setElevatorPosition(double position){
+    pid_encoder.setPosition(position);
   }
 
   public double getPosition() {
