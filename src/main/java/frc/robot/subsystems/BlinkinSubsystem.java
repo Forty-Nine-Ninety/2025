@@ -6,16 +6,21 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+
 
 public class BlinkinSubsystem extends SubsystemBase {
    private static Spark m_blinkin;
    private static BlinkinSubsystem m_controller = null;
    private DriverStation.Alliance m_alliance;
+   PowerDistribution m_PDH;
 
-   private BlinkinSubsystem() {
+   public BlinkinSubsystem() {
       m_blinkin = new Spark(9);
       Optional<Alliance> m_alliance = DriverStation.getAlliance();
+      m_PDH = new PowerDistribution(1, ModuleType.kRev);
    }
 
    public static BlinkinSubsystem getInstance() {
@@ -23,6 +28,10 @@ public class BlinkinSubsystem extends SubsystemBase {
          m_controller = new BlinkinSubsystem();
       }
       return m_controller;
+   }
+
+   public void turnOnLED(){
+      m_PDH.setSwitchableChannel(true);
    }
 
    public void changeLEDColor() {

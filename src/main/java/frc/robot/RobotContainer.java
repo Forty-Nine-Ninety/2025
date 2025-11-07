@@ -37,6 +37,8 @@ import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -45,7 +47,6 @@ import com.pathplanner.lib.auto.NamedCommands;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
     public Command m_chosenAuto = null;
     CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
     CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
@@ -61,6 +62,7 @@ public class RobotContainer {
     private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
     private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
     private final VisionSubsystem m_vision = new VisionSubsystem(m_drivebase,m_arducam,joystickDrive);
+    private final BlinkinSubsystem m_blinkin = new BlinkinSubsystem();
     //Commands
     private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
     private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
@@ -136,6 +138,7 @@ public class RobotContainer {
       default:
         m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
     }
+    m_blinkin.turnOnLED();
     System.out.println(m_chosenAuto);
     //SmartDashboard.updateValues();
   }
