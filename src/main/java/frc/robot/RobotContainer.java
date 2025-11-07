@@ -77,6 +77,8 @@ public class RobotContainer {
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
     private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
     private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
+    private final AutoElevatorZeroCommand m_autoElevatorZeroCommand = new AutoElevatorZeroCommand(m_elevator);
+    private final AutoElevatorResetCommand m_autoElevatorResetCommand = new AutoElevatorResetCommand(m_elevator);
     
   
     //Auto
@@ -174,10 +176,10 @@ public class RobotContainer {
         joystickOperator.a().onTrue(m_elevatorL1Command);
         joystickOperator.b().onTrue(m_elevatorL2Command);
         joystickOperator.y().onTrue(m_elevatorL3Command);
-        joystickOperator.x().onTrue(m_elevatorNeutralCommand);
+        joystickOperator.x().onTrue(m_autoElevatorZeroCommand);
 
         joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
-        joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
+        joystickOperator.povDown().onTrue(m_autoElevatorResetCommand);
         joystickOperator.povLeft().toggleOnTrue(m_visionAlignLeftCommand);
         joystickOperator.povRight().toggleOnTrue(m_visionAlignRightCommand);
 

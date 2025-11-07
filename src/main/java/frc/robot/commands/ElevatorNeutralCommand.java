@@ -10,8 +10,13 @@ public class ElevatorNeutralCommand extends SequentialCommandGroup{
     public ElevatorNeutralCommand(ElevatorSubsystem elevator){
         m_elevator = elevator;
         addCommands(new AutoElevatorZeroCommand(m_elevator),
-                    new WaitCommand(0.7),
+                    new WaitCommand(0.5),
                     new AutoElevatorResetCommand(m_elevator)
                     );
+                    System.out.println(m_elevator.getPosition());        
+        new WaitCommand(0.5) ;   
+        m_elevator.zeroElevatorPosition();
+        System.out.println(m_elevator.getPosition());
+        
     }
 }
