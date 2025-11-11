@@ -140,7 +140,7 @@ public class RobotContainer {
       default:
         m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
     }
-    m_blinkin.turnOnLED();
+    //m_blinkin.turnOnLED();
     System.out.println(m_chosenAuto);
     //SmartDashboard.updateValues();
   }
