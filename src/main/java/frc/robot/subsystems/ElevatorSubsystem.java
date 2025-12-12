@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class ElevatorSubsystem extends SubsystemBase {
-
+  
   private SparkMax bottomLeft, bottomRight, topLeft, topRight;
   private SparkMaxConfig bottomLeftConfig, bottomRightConfig, topLeftConfig, topRightConfig;
   private SparkClosedLoopController pid_controller;
@@ -74,35 +74,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     bottomRight.configure(bottomRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topLeft.configure(topLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topRight.configure(topRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    //bottomLeft is leader *in russian accent with boss music*
-
-
-    /*
-    bottomLeft.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    bottomRight.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    topLeft.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    topRight.configure(new SparkMaxConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    bottomLeftConfig.follow(bottomLeft,true);
-    bottomRightConfig.follow(bottomRight);
-    topLeftConfig.follow(bottomLeft, true);
-    topRightConfig.follow(bottomRight);
-  
-
-    //pid_controller.setP(MotionControl.ELEVATOR_PID.kP);
-    //pid_controller.setI(MotionControl.ELEVATOR_PID.kI);
-    //pid_controller.setD(MotionControl.ELEVATOR_PID.kD);
-
-    bottomLeftConfig.smartCurrentLimit(60);
-    bottomRightConfig.smartCurrentLimit(60);
-    topLeftConfig.smartCurrentLimit(60);
-    topRightConfig.smartCurrentLimit(60);
-    
-    bottomLeftConfig.idleMode(IdleMode.kBrake);
-    bottomRightConfig.idleMode(IdleMode.kBrake);
-    topLeftConfig.idleMode(IdleMode.kBrake);
-    topRightConfig.idleMode(IdleMode.kBrake);
-     */
-}
+    //bottomRight is leader *in russian accent with boss music*
+  }
 
   public void moveToPosition(double setPoint) {
     if (pid_controller != null) {

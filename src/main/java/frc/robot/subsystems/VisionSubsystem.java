@@ -27,6 +27,7 @@ import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.RumbleCommandHelper;
 import frc.robot.commands.VisionDriveCommand;
 import frc.robot.commands.auto.AutoVisionCommand;
+import java.util.List;
 
 public class VisionSubsystem extends SubsystemBase{
     private SwerveSubsystem m_drivebase;
@@ -34,6 +35,7 @@ public class VisionSubsystem extends SubsystemBase{
     private DriveCommand m_driveCommand;
     private PhotonCamera arducamOne;
     
+    private List<PhotonPipelineResult> results;
     private PhotonPipelineResult result;
     private PhotonTrackedTarget currentTarget;
     private Transform3d pose;
@@ -57,21 +59,25 @@ public class VisionSubsystem extends SubsystemBase{
         nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
                                                  VisionConstants.tagToNode;
     }
-
+    //This method currently finds the distance of the April Tag being scanned
     public void scanForApriltag(){
-        PhotonPipelineResult result = arducamOne.getLatestResult();
-        if(result.hasTargets()&&!driving){
-          Transform3d pose = result.getBestTarget().getBestCameraToTarget();
-          double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-          if(distance<=3){
-            new RumbleCommand(m_joystick);
-            m_rumble.schedule();
-          }
+        results = arducamOne.getAllUnreadResults();
+        for(PhotonPipelineResult result:results){
+            //List<PhotonTrackedTarget> targetPositions = result.getTargets();
+            if(result.hasTargets()&&!driving){
+                Transform3d pose = result.getBestTarget().getBestCameraToTarget();
+                double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+                if(distance<=3){
+                  new RumbleCommand(m_joystick);
+                  m_rumble.schedule();
+                }
+            }
         }
+       
     }
-
+    //Updates the que for Vision scanning. We run scanForApriltag to clear the que caused by getAllUnreadResults(). Is frequently run
     public void update(){
-        result = arducamOne.getLatestResult();
+        this.scanForApriltag();
         driving = true;
         if(result.hasTargets()){currentTarget = result.getBestTarget();}
         else{
@@ -82,7 +88,7 @@ public class VisionSubsystem extends SubsystemBase{
         //m_visionDrive.wait(200);
         System.out.println("driving");
     }
-
+    // The ultimate goal, driving the robot to the vision tag once alligned. Before we work on this we need to potentially rework vision but at least fix it.
     private void drive(){
         if(!result.hasTargets()){
             return;
