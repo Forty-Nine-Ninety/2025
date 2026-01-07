@@ -59,23 +59,23 @@ public class VisionSubsystem extends SubsystemBase{
         nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
                                                  VisionConstants.tagToNode;
     }
-    //This method currently finds the distance of the April Tag being scanned
+    //This method finds the distance of the April Tag being scanned
     public void scanForApriltag(){
-        results = arducamOne.getAllUnreadResults();
-        for(PhotonPipelineResult result:results){
+        List<PhotonPipelineResult> results = arducamOne.getAllUnreadResults();
+        PhotonPipelineResult result = results.get(-1);
+        
             //List<PhotonTrackedTarget> targetPositions = result.getTargets();
-            if(result.hasTargets()&&!driving){
-                Transform3d pose = result.getBestTarget().getBestCameraToTarget();
-                double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-                if(distance<=3){
-                  new RumbleCommand(m_joystick);
-                  m_rumble.schedule();
-                }
+        if(result.hasTargets()&&!driving){
+            Transform3d pose = result.getBestTarget().getBestCameraToTarget();
+            double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+            if(distance<=3){
+                new RumbleCommand(m_joystick);
+                m_rumble.schedule();
             }
         }
        
     }
-    //Updates the que for Vision scanning. We run scanForApriltag to clear the que caused by getAllUnreadResults(). Is frequently run
+    //Updates the que for Vision scanning. We run scanForApriltag to clear the que caused by getAllUnreadResults(). Update is frequently run
     public void update(){
         this.scanForApriltag();
         driving = true;

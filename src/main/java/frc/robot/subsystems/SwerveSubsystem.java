@@ -54,7 +54,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase
 {
 
-    private final VisionSubsystem m_vision;
+    //private final VisionSubsystem m_vision;
     /**
      * Swerve drive object.
      */
@@ -69,9 +69,8 @@ public class SwerveSubsystem extends SubsystemBase
      *
      * @param directory Directory of swerve drive config files.
      */
-    public SwerveSubsystem(File directory,VisionSubsystem vision)
+    public SwerveSubsystem(File directory)
     {
-        m_vision = vision;
         
         // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
         //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -109,9 +108,8 @@ public class SwerveSubsystem extends SubsystemBase
      * @param driveCfg      SwerveDriveConfiguration for the swerve.
      * @param controllerCfg Swerve Controller.
      */
-    public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg, VisionSubsystem vision)
+    public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
     {
-        m_vision = vision;
         swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed, null);
         setupPathPlanner();
     }
@@ -125,14 +123,15 @@ public class SwerveSubsystem extends SubsystemBase
     public Command aimAtTarget(PhotonCamera camera)
     {
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        PhotonPipelineResult result = results.get(-1);
         return run(() -> {
             //Temporary fix. We need to find a way to get "result" into swerve subsystem through a method or a rework of another method.
-            for(PhotonPipelineResult result:results){
-                m_vision.scanForApriltag();
-                if (result.hasTargets()) {
-                        drive(getTargetSpeeds(0,0, Rotation2d.fromDegrees(result.getBestTarget().getYaw()))); // Not sure if this will work, more math may be required.
-                }
+            
+            
+            if (result.hasTargets()) {
+                drive(getTargetSpeeds(0,0, Rotation2d.fromDegrees(result.getBestTarget().getYaw()))); // Not sure if this will work, more math may be required.
             }
+
           
         });
     }
