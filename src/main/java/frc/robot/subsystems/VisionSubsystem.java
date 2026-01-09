@@ -78,7 +78,7 @@ public class VisionSubsystem extends SubsystemBase{
         }
        
     }
-    //Updates the que for Vision scanning. We run scanForApriltag to clear the que caused by getAllUnreadResults(). Update is frequently run
+    //Updates the variables in Vision Subsystem. Run this method often.
     public void update(){
         this.scanForApriltag();
         driving = true;
@@ -91,7 +91,8 @@ public class VisionSubsystem extends SubsystemBase{
         //m_visionDrive.wait(200);
         System.out.println("driving");
     }
-    // Getter methods. They return data
+
+    // Getter methods. They return data. Only run after using update()
     public Transform3d getPose(){
         return pose;
     }
