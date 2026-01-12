@@ -44,6 +44,7 @@ public class VisionSubsystem extends SubsystemBase{
 
     private RumbleCommand m_rumble;
     private CommandXboxController m_joystick;
+    double m_distance;
     private boolean driving = false;
 
     public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,CommandXboxController joystick){
@@ -53,6 +54,7 @@ public class VisionSubsystem extends SubsystemBase{
         m_rumble = new RumbleCommand(joystick);
         m_joystick = joystick;
         m_driveCommand = new DriveCommand(m_drivebase);
+        
     }
 
     public void setNodeLR(String node){
@@ -75,12 +77,13 @@ public class VisionSubsystem extends SubsystemBase{
                     m_rumble.schedule();
                 }
             }
+            m_distance = distance;
         }
         
             //List<PhotonTrackedTarget> targetPositions = result.getTargets();
        
     }
-    //Updates the que for Vision scanning. We run scanForApriltag to clear the que caused by getAllUnreadResults(). Update is frequently run
+    //Updates the variables in Vision Subsystem. Run this method often.
     public void update(){
         this.scanForApriltag();
         driving = true;
@@ -93,6 +96,19 @@ public class VisionSubsystem extends SubsystemBase{
         //m_visionDrive.wait(200);
         System.out.println("driving");
     }
+
+    // Getter methods. They return data. Only run after using update()
+    public Transform3d getPose(){
+        return pose;
+    }
+    public double getDistance(){
+        return m_distance;
+    }
+    // public (Unknown Data Type) getAngle(){
+    //     return angle;
+    // }
+
+
     // The ultimate goal, driving the robot to the vision tag once alligned. Before we work on this we need to potentially rework vision but at least fix it.
     private void drive(){
         if(!result.hasTargets()){
