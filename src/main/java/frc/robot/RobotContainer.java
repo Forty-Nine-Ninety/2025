@@ -20,6 +20,12 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -92,7 +98,9 @@ public class RobotContainer {
     public RobotContainer() {
       // Configure the trigger bindings
       configureBindings();
-  
+    
+
+      CameraServer.startAutomaticCapture();
       
       // Auto - SmartDashboard
       NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));

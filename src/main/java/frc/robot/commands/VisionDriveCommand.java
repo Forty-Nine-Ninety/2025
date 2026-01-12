@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Ports.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import java.util.List;
 
 //import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -16,7 +17,7 @@ public class VisionDriveCommand extends Command{
     private VisionSubsystem m_vision;
 
     private DriveCommand m_driveCommand;
-    
+    private List<PhotonPipelineResult> results;
     private PhotonPipelineResult result;
     private PhotonTrackedTarget currentTarget;
     private Transform3d pose;
@@ -35,10 +36,12 @@ public class VisionDriveCommand extends Command{
 
     @Override
     public void initialize(){
+
         if(!result.hasTargets()){
             System.out.println("NO TARGETS");
         }
         pose = currentTarget.getBestCameraToTarget();
+        System.out.println(pose.getX() + "" + pose.getY());
         double xSpeed = (pose.getX()<nodeLR-VisionConstants.xMarginOfError || 
                          pose.getX()>nodeLR+VisionConstants.xMarginOfError)?
                          m_vision.getTranslationSpeed(pose.getX()):0; //real life y axis

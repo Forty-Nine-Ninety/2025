@@ -62,17 +62,22 @@ public class VisionSubsystem extends SubsystemBase{
     //This method finds the distance of the April Tag being scanned
     public void scanForApriltag(){
         List<PhotonPipelineResult> results = arducamOne.getAllUnreadResults();
-        PhotonPipelineResult result = results.get(-1);
         
-            //List<PhotonTrackedTarget> targetPositions = result.getTargets();
-        if(result.hasTargets()&&!driving){
-            Transform3d pose = result.getBestTarget().getBestCameraToTarget();
-            double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-            if(distance<=3){
-                new RumbleCommand(m_joystick);
-                m_rumble.schedule();
+        if (results.size()!=0 && results != null){
+            PhotonPipelineResult result = results.get(results.size()-1);
+            if(result.hasTargets()&&!driving){
+                Transform3d pose = result.getBestTarget().getBestCameraToTarget();
+                double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+                System.out.println("we have targets.");
+                System.out.println("distance:"+distance);
+                if(distance<=3){
+                    new RumbleCommand(m_joystick);
+                    m_rumble.schedule();
+                }
             }
         }
+        
+            //List<PhotonTrackedTarget> targetPositions = result.getTargets();
        
     }
     //Updates the que for Vision scanning. We run scanForApriltag to clear the que caused by getAllUnreadResults(). Update is frequently run
