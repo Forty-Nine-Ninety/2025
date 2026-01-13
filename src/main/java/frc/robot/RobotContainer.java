@@ -200,8 +200,8 @@ public class RobotContainer {
 
   //VISION COMMANDS
 
-  public void scanForApriltag(){
-    m_vision.scanForApriltag();
+  public void update(){
+    m_vision.update();
   }
 
   public void setTeleopDefaultCommands()

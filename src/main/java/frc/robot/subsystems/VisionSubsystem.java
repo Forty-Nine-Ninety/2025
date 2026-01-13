@@ -12,11 +12,13 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants.Ports.DriveSettings;
 import frc.robot.Constants.Ports.VisionConstants;
 import frc.robot.DriveUtil;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,13 +40,13 @@ public class VisionSubsystem extends SubsystemBase{
     private List<PhotonPipelineResult> results;
     private PhotonPipelineResult result;
     private PhotonTrackedTarget currentTarget;
-    private Transform3d pose;
     int aprilTagiD;
     double nodeLR;
 
     private RumbleCommand m_rumble;
     private CommandXboxController m_joystick;
-    double m_distance;
+    private Transform3d m_pose;
+    private Transform3d m_prevPose;
     private boolean driving = false;
 
     public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,CommandXboxController joystick){
@@ -53,9 +55,10 @@ public class VisionSubsystem extends SubsystemBase{
         nodeLR = -VisionConstants.tagToNode;
         m_rumble = new RumbleCommand(joystick);
         m_joystick = joystick;
+        m_pose = new Transform3d(0,0,0,new Rotation3d());
         m_driveCommand = new DriveCommand(m_drivebase);
         
-    }
+    } 
 
     public void setNodeLR(String node){
         nodeLR = (node.equals("left"))?(-VisionConstants.tagToNode):
@@ -68,41 +71,45 @@ public class VisionSubsystem extends SubsystemBase{
         if (results.size()!=0 && results != null){
             PhotonPipelineResult result = results.get(results.size()-1);
             if(result.hasTargets()&&!driving){
-                Transform3d pose = result.getBestTarget().getBestCameraToTarget();
-                double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
-                System.out.println("we have targets.");
-                System.out.println("distance:"+distance);
-                if(distance<=3){
-                    new RumbleCommand(m_joystick);
-                    m_rumble.schedule();
-                }
+                m_pose = result.getBestTarget().getBestCameraToTarget();
+                System.out.println(m_pose);
             }
-            m_distance = distance;
         }
-        
             //List<PhotonTrackedTarget> targetPositions = result.getTargets();
-       
     }
     //Updates the variables in Vision Subsystem. Run this method often.
     public void update(){
         this.scanForApriltag();
-        driving = true;
-        if(result.hasTargets()){currentTarget = result.getBestTarget();}
-        else{
-            System.out.println("Target not detected");
-            return;
+        double xSpeed,ySpeed,rotationSpeed = 0;
+        double x = m_pose.getX();
+        double y = m_pose.getY();
+        double z = m_pose.getZ();
+        double yaw = m_pose.getRotation().getZ()*180/Math.PI;
+        double distance = Math.sqrt(Math.pow(m_pose.getX(),2)+Math.pow(m_pose.getY(),2));
+        //System.out.println("x:"+pose.getX()+" ; y:"+pose.getY()+" ; z:"+pose.getZ()+" ; yaw:"+pose.getRotation().getZ()*180/Math.PI);
+        if(distance<=3){
+            new RumbleCommand(m_joystick);
+            m_rumble.schedule();
         }
-        m_visionDrive = new VisionDriveCommand(this,m_drivebase,result,currentTarget,nodeLR);
+        //GET SPEEDS
+        //get x speed
+        if (m_pose.getX()>1){xSpeed = 4.5;}
+        else if (m_pose.getX()>0.1524){xSpeed = 0.5*pose.getX();} // FIGURE OUT SPEEDS
+        else{xSpeed = 0;}
+        //get y speed
+        if (m_pose.getY()>1){ySpeed = 4.5;}
+        else if (m_pose.getY()>0.1524){ySpeed = 0.5*pose.getY();} // FIGURE OUT SPEEDS
+        else{ySpeed = 0;}
+        rotationSpeed = 0;
+        m_drivebase.drive(new ChassisSpeeds(xSpeed,ySpeed,rotationSpeed));
+        //m_visionDrive = new VisionDriveCommand(this,m_drivebase,result,currentTarget,nodeLR);
         //m_visionDrive.wait(200);
-        System.out.println("driving");
+        System.out.println("x: "+xSpeed+" y: "+ySpeed+" z: "+rotationSpeed);
     }
 
     // Getter methods. They return data. Only run after using update()
     public Transform3d getPose(){
         return pose;
-    }
-    public double getDistance(){
-        return m_distance;
     }
     // public (Unknown Data Type) getAngle(){
     //     return angle;
