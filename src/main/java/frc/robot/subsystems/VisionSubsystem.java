@@ -87,20 +87,26 @@ public class VisionSubsystem extends SubsystemBase{
         double yaw = m_pose.getRotation().getZ()*180/Math.PI;
         double distance = Math.sqrt(Math.pow(m_pose.getX(),2)+Math.pow(m_pose.getY(),2));
         //System.out.println("x:"+pose.getX()+" ; y:"+pose.getY()+" ; z:"+pose.getZ()+" ; yaw:"+pose.getRotation().getZ()*180/Math.PI);
-        if(distance<=3){
+        if(distance<=3 && distance>0){
             new RumbleCommand(m_joystick);
             m_rumble.schedule();
         }
         //GET SPEEDS
         //get x speed
+        //try{
+        System.out.println(m_pose.getX());
         if (m_pose.getX()>1){xSpeed = 4.5;}
-        else if (m_pose.getX()>0.1524){xSpeed = 0.5*pose.getX();} // FIGURE OUT SPEEDS
+        else if (m_pose.getX()>0.1524){xSpeed = 0.5*m_pose.getX();} // FIGURE OUT SPEEDS
         else{xSpeed = 0;}
         //get y speed
         if (m_pose.getY()>1){ySpeed = 4.5;}
-        else if (m_pose.getY()>0.1524){ySpeed = 0.5*pose.getY();} // FIGURE OUT SPEEDS
+        else if (m_pose.getY()>0.1524){ySpeed = 0.5*m_pose.getY();} // FIGURE OUT SPEEDS
         else{ySpeed = 0;}
         rotationSpeed = 0;
+        //}
+        //catch (NullPointerException e){
+        //    System.out.println("hi");
+        //}
         m_drivebase.drive(new ChassisSpeeds(xSpeed,ySpeed,rotationSpeed));
         //m_visionDrive = new VisionDriveCommand(this,m_drivebase,result,currentTarget,nodeLR);
         //m_visionDrive.wait(200);
@@ -108,15 +114,18 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     // Getter methods. They return data. Only run after using update()
+    /*
     public Transform3d getPose(){
         return pose;
     }
+     */
     // public (Unknown Data Type) getAngle(){
     //     return angle;
     // }
 
 
     // The ultimate goal, driving the robot to the vision tag once alligned. Before we work on this we need to potentially rework vision but at least fix it.
+    /*
     private void drive(){
         if(!result.hasTargets()){
             return;
@@ -143,4 +152,5 @@ public class VisionSubsystem extends SubsystemBase{
         double speed = 2.90/(1+4.75*Math.pow(Math.E,41)*Math.pow(Math.E,(-248*distance)));
         return speed;
     }
+    */
 }

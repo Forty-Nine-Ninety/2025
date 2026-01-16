@@ -13,7 +13,7 @@ import java.util.List;
 //import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class VisionDriveCommand extends Command{
-
+    /*
     private VisionSubsystem m_vision;
 
     private DriveCommand m_driveCommand;
@@ -58,4 +58,5 @@ public class VisionDriveCommand extends Command{
         m_driveCommand.setSuppliers(pose.getX(),pose.getY(),currentTarget.getYaw());
         m_driveCommand.schedule();
     }
+ */
 }
