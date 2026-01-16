@@ -72,7 +72,7 @@ public class VisionSubsystem extends SubsystemBase{
             PhotonPipelineResult result = results.get(results.size()-1);
             if(result.hasTargets()&&!driving){
                 m_pose = result.getBestTarget().getBestCameraToTarget();
-                System.out.println(m_pose);
+                //System.out.println(m_pose);
             }
         }
             //List<PhotonTrackedTarget> targetPositions = result.getTargets();
@@ -94,10 +94,16 @@ public class VisionSubsystem extends SubsystemBase{
         //GET SPEEDS
         //get x speed
         //try{
-        System.out.println(m_pose.getX());
-        if (m_pose.getX()>1){xSpeed = 4.5;}
-        else if (m_pose.getX()>0.1524){xSpeed = 0.5*m_pose.getX();} // FIGURE OUT SPEEDS
-        else{xSpeed = 0;}
+        if (m_pose.getX()>1){
+            xSpeed = 4.5;
+            System.out.println("case 1,"+m_pose.getX()+ " ; "+xSpeed);
+        }
+        else if (m_pose.getX()>0.3){
+            xSpeed = 0.5*m_pose.getX();
+            System.out.println("case 2,"+m_pose.getX()+" ; "+xSpeed);} // FIGURE OUT SPEEDS
+        else{
+            xSpeed = 0;
+            System.out.println("case 3,"+m_pose.getX()+" ; "+xSpeed);}
         //get y speed
         if (m_pose.getY()>1){ySpeed = 4.5;}
         else if (m_pose.getY()>0.1524){ySpeed = 0.5*m_pose.getY();} // FIGURE OUT SPEEDS
@@ -110,7 +116,7 @@ public class VisionSubsystem extends SubsystemBase{
         m_drivebase.drive(new ChassisSpeeds(xSpeed,ySpeed,rotationSpeed));
         //m_visionDrive = new VisionDriveCommand(this,m_drivebase,result,currentTarget,nodeLR);
         //m_visionDrive.wait(200);
-        System.out.println("x: "+xSpeed+" y: "+ySpeed+" z: "+rotationSpeed);
+        //System.out.println("x: "+xSpeed+" y: "+ySpeed+" z: "+rotationSpeed);
     }
 
     // Getter methods. They return data. Only run after using update()
