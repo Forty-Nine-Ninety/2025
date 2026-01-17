@@ -86,7 +86,7 @@ public class VisionSubsystem extends SubsystemBase{
         double poseY = m_pose.getY();
         double poseZ = m_pose.getZ();
         double poseYaw = m_pose.getRotation().getZ()*180/Math.PI;
-        double distance = Math.sqrt(Math.pow(m_pose.getX(),2)+Math.pow(m_pose.getY(),2));
+        double distance = Math.sqrt(Math.pow(poseX,2)+Math.pow(poseY,2));
         //System.out.println("x:"+pose.getX()+" ; y:"+pose.getY()+" ; z:"+pose.getZ()+" ; yaw:"+pose.getRotation().getZ()*180/Math.PI);
         if(distance<=3 && distance>0){
             new RumbleCommand(m_joystick);
@@ -99,7 +99,7 @@ public class VisionSubsystem extends SubsystemBase{
             System.out.println("xSpeed ; "+xSpeed);
         }
         else if (poseX>0.3){
-            xSpeed = 0.5*m_pose.getX();
+            xSpeed = 0.5*poseX;
             System.out.println("xSpeed ; "+xSpeed);} // FIGURE OUT SPEEDS
         else{
             xSpeed = 0;

@@ -100,7 +100,7 @@ public class RobotContainer {
       configureBindings();
     
 
-      CameraServer.startAutomaticCapture();
+      //CameraServer.startAutomaticCapture();
       
       // Auto - SmartDashboard
       NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));
