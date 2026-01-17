@@ -105,47 +105,47 @@ public class ClimberSubsystem extends SubsystemBase {
         switch (m_climbState) {
             case NOT_CLIMBING:
                 // lift trapdoor, advance state to trapdoor-lifted
-                System.out.println("Step 1 Initiated");
+               // System.out.println("Step 1 Initiated");
                 trapdoorController.setReference(MotionControl.TRADPDOOR_LIFTED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.TRAPDOOR_LIFTED;
-                System.out.println(m_climbState);
+              //  System.out.println(m_climbState);
                 break;
             case TRAPDOOR_LIFTED:
                 // move elevator to CLIMB_POS and advance state
                 m_elevator.moveToPosition(MotionControl.ELEVATOR_STINGER_POSITION);
                 m_climbState = ClimbState.ELEVATOR_CLIMB_POS;
-                System.out.println(m_climbState);
+            //    System.out.println(m_climbState);
                 break;
             case ELEVATOR_CLIMB_POS:
                 // deploy stinger and advance state
-                System.out.println("Step 3 Initiated");
+           //     System.out.println("Step 3 Initiated");
                 stingerController.setReference(MotionControl.STINGER_DEPLOYED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.STINGER_DEPLOYED;
-                System.out.println(m_climbState);
+            //    System.out.println(m_climbState);
                 break;
             case STINGER_DEPLOYED:
                 // move stinger to CAGE_LIFTED position and advance state
-                System.out.println("Step 4 Initiated");
+            //    System.out.println("Step 4 Initiated");
                 stingerController.setReference(MotionControl.STINGER_CAGEUP_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.STINGER_CAGE_LIFTED;
-                System.out.println(m_climbState);
+          //      System.out.println(m_climbState);
                 break;
             case STINGER_CAGE_LIFTED:
                 // move elevator to zero and advance state
-                System.out.println("Step 5 Initiated");
+         //       System.out.println("Step 5 Initiated");
                 m_elevator.moveToPosition(MotionControl.ELEVATOR_ZERO_POSITION);
                 m_climbState = ClimbState.ELEVATOR_TO_ZERO;
-                System.out.println(m_climbState);
+           //    System.out.println(m_climbState);
                 break;
             case ELEVATOR_TO_ZERO:
                 // engage clips and advance state
-                System.out.println("Step 6 Initiated");
+            //    System.out.println("Step 6 Initiated");
                 clipController.setReference(MotionControl.CLIPS_ENGAGED_POSITION, ControlType.kPosition);
                 m_climbState = ClimbState.CLIPS_ENGAGED;
-                System.out.println(m_climbState);
+          //      System.out.println(m_climbState);
                 break;
             case CLIPS_ENGAGED:
-                System.out.println("Clips already engaged! Climbing should be done");
+           //     System.out.println("Clips already engaged! Climbing should be done");
                 break;
         }
     }
@@ -153,7 +153,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void reverseClimbState() {
         switch (m_climbState) {
             case NOT_CLIMBING:
-                System.out.println("Not in climbing mode!");
+               // System.out.println("Not in climbing mode!");
                 break;
             case TRAPDOOR_LIFTED:
                 // lower trapdoor and update state

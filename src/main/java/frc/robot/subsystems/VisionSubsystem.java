@@ -120,6 +120,7 @@ public class VisionSubsystem extends SubsystemBase{
         // get rotational speed
         //System.out.println("poseYaw:"+poseYaw);
         if (Math.abs(180-Math.abs(poseYaw))>45){
+
             rotationSpeed = VisionConstants.maxRotationSpeed;
             System.out.println("rotationSpeed ; "+rotationSpeed);
         }

@@ -85,7 +85,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void zeroElevatorPosition(){
     pid_encoder.setPosition(0);
-    System.out.println("successful");
+  //  System.out.println("successful");
   }
 
   public void setElevatorPosition(double position){

@@ -81,10 +81,12 @@ public class SwerveSubsystem extends SubsystemBase
         //  The gear ratio is 6.75 motor revolutions per wheel rotation.
         //  The encoder resolution per motor revolution is 1 per motor revolution.
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(RobotMeasurements.DRIVETRAIN_WHEEL_DIAMETER_IN), RobotMeasurements.DRIVE_GEAR_RATIO);
+        /* 
         System.out.println("\"conversionFactor\": {");
         System.out.println("\t\"angle\": " + angleConversionFactor + ",");
         System.out.println("\t\"drive\": " + driveConversionFactor);
         System.out.println("}");
+        */
 
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
         SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -185,7 +187,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     public Command getAutonomousCommand(String pathName)
     {
-        System.out.println("SWERVEgetAutonomousCommand");
+        // System.out.println("SWERVEgetAutonomousCommand");
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         return new PathPlannerAuto(pathName);
     }
@@ -521,7 +523,7 @@ public class SwerveSubsystem extends SubsystemBase
      * Get the {@link SwerveDriveConfiguration} object.
      *
      * @return The {@link SwerveDriveConfiguration} fpr the current drive.
-     */
+     */ 
     public SwerveDriveConfiguration getSwerveDriveConfiguration()
     {
         return swerveDrive.swerveDriveConfiguration;
