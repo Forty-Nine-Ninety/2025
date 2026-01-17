@@ -188,8 +188,8 @@ public final class Constants
         public static final double xMarginOfError = 0.08;
         public static final double yMarginOfError = 0.03;
         public static final double rotationMarginOfError = 0.1;
-        public static final double translationSpeed = 0.05;
-        public static final double rotationSpeed = 0.1;
+        public static final double maxTranslationSpeed = 4.5;
+        public static final double maxRotationSpeed = 1.125;
     }
 
     public static class DriveSettings

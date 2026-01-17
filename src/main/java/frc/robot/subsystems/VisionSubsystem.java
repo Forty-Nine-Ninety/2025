@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.RumbleCommandHelper;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.VisionDriveCommand;
 import frc.robot.commands.auto.AutoVisionCommand;
 import java.util.List;
@@ -81,10 +82,10 @@ public class VisionSubsystem extends SubsystemBase{
     public void update(){
         this.scanForApriltag();
         double xSpeed,ySpeed,rotationSpeed = 0;
-        double x = m_pose.getX();
-        double y = m_pose.getY();
-        double z = m_pose.getZ();
-        double yaw = m_pose.getRotation().getZ()*180/Math.PI;
+        double poseX = m_pose.getX();
+        double poseY = m_pose.getY();
+        double poseZ = m_pose.getZ();
+        double poseYaw = m_pose.getRotation().getZ()*180/Math.PI;
         double distance = Math.sqrt(Math.pow(m_pose.getX(),2)+Math.pow(m_pose.getY(),2));
         //System.out.println("x:"+pose.getX()+" ; y:"+pose.getY()+" ; z:"+pose.getZ()+" ; yaw:"+pose.getRotation().getZ()*180/Math.PI);
         if(distance<=3 && distance>0){
@@ -93,22 +94,43 @@ public class VisionSubsystem extends SubsystemBase{
         }
         //GET SPEEDS
         //get x speed
-        //try{
-        if (m_pose.getX()>1){
-            xSpeed = 4.5;
-            System.out.println("case 1,"+m_pose.getX()+ " ; "+xSpeed);
+        if (poseX>1){
+            xSpeed = VisionConstants.maxTranslationSpeed;
+            System.out.println("xSpeed ; "+xSpeed);
         }
-        else if (m_pose.getX()>0.3){
+        else if (poseX>0.3){
             xSpeed = 0.5*m_pose.getX();
-            System.out.println("case 2,"+m_pose.getX()+" ; "+xSpeed);} // FIGURE OUT SPEEDS
+            System.out.println("xSpeed ; "+xSpeed);} // FIGURE OUT SPEEDS
         else{
             xSpeed = 0;
-            System.out.println("case 3,"+m_pose.getX()+" ; "+xSpeed);}
+            System.out.println("xSpeed ; "+xSpeed);}
         //get y speed
-        if (m_pose.getY()>1){ySpeed = 4.5;}
-        else if (m_pose.getY()>0.1524){ySpeed = 0.5*m_pose.getY();} // FIGURE OUT SPEEDS
-        else{ySpeed = 0;}
-        rotationSpeed = 0;
+        if (poseY>0.5){
+            ySpeed = VisionConstants.maxTranslationSpeed;
+            System.out.println("ySpeed ; "+ySpeed);
+        }
+        else if (poseY>0.15){
+            ySpeed = 0.5*m_pose.getY(); // FIGURE OUT SPEEDS
+            System.out.println("ySpeed ; "+ySpeed);
+        } 
+        else{
+            ySpeed = 0;
+            System.out.println("ySpeed ; "+ySpeed);
+        }
+        // get rotational speed
+        //System.out.println("poseYaw:"+poseYaw);
+        if (Math.abs(180-Math.abs(poseYaw))>45){
+            rotationSpeed = VisionConstants.maxRotationSpeed;
+            System.out.println("rotationSpeed ; "+rotationSpeed);
+        }
+        else if (Math.abs(180-Math.abs(poseYaw))>1){
+            rotationSpeed = 0.5*Math.abs(180-Math.abs(poseYaw))/90*VisionConstants.maxRotationSpeed;
+            System.out.println("rotationSpeed ; "+rotationSpeed);
+        }
+        else{
+            rotationSpeed = 0;
+            System.out.println("rotationSpeed ; "+rotationSpeed);
+        }
         //}
         //catch (NullPointerException e){
         //    System.out.println("hi");
