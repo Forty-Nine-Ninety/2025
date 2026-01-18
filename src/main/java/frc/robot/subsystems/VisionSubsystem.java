@@ -76,7 +76,9 @@ public class VisionSubsystem extends SubsystemBase{
                 //System.out.println(m_pose);
             }
         }
+        System.out.println(results.size());
         results.clear();
+        System.out.println(results.size());
             //List<PhotonTrackedTarget> targetPositions = result.getTargets();
     }
     //Updates the variables in Vision Subsystem. Run this method often.
