@@ -67,7 +67,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
     //This method finds the distance of the April Tag being scanned
     public void scanForApriltag(){
-        List<PhotonPipelineResult> results = arducamOne.getAllUnreadResults();
+        results = arducamOne.getAllUnreadResults();
         
         if (results.size()!=0 && results != null){
             PhotonPipelineResult result = results.get(results.size()-1);
@@ -76,6 +76,7 @@ public class VisionSubsystem extends SubsystemBase{
                 //System.out.println(m_pose);
             }
         }
+        results.clear();
             //List<PhotonTrackedTarget> targetPositions = result.getTargets();
     }
     //Updates the variables in Vision Subsystem. Run this method often.
