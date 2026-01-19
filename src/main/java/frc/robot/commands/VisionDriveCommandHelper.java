@@ -11,7 +11,7 @@ public class VisionDriveCommandHelper extends Command{
 
     @Override
     public void initialize(){
-        System.out.println("VISION HELPER");
+       // System.out.println("VISION HELPER");
         m_driveCommand.schedule();
     }
 

@@ -73,13 +73,13 @@ public class VisionSubsystem extends SubsystemBase{
             PhotonPipelineResult result = results.get(results.size()-1);
             if(result.hasTargets()&&!driving){
                 m_pose = result.getBestTarget().getBestCameraToTarget();
-                //System.out.println(m_pose);
+            } else {
+                m_pose = new Transform3d();
             }
+        } else {
+            m_pose = new Transform3d();
         }
-        System.out.println(results.size());
         results.clear();
-        System.out.println(results.size());
-            //List<PhotonTrackedTarget> targetPositions = result.getTargets();
     }
     //Updates the variables in Vision Subsystem. Run this method often.
     public void update(){
@@ -92,48 +92,51 @@ public class VisionSubsystem extends SubsystemBase{
         double distance = Math.sqrt(Math.pow(poseX,2)+Math.pow(poseY,2));
         //System.out.println("x:"+pose.getX()+" ; y:"+pose.getY()+" ; z:"+pose.getZ()+" ; yaw:"+pose.getRotation().getZ()*180/Math.PI);
         if(distance<=3 && distance>0){
-            new RumbleCommand(m_joystick);
-            m_rumble.schedule();
+            if(!m_rumble.isScheduled()){
+                m_rumble.schedule();
+            }
         }
         //GET SPEEDS
         //get x speed
         if (poseX>1){
             xSpeed = VisionConstants.maxTranslationSpeed;
-            System.out.println("xSpeed ; "+xSpeed);
+           // System.out.println("xSpeed ; "+xSpeed);
         }
         else if (poseX>0.3){
             xSpeed = 0.5*poseX;
-            System.out.println("xSpeed ; "+xSpeed);} // FIGURE OUT SPEEDS
+            //System.out.println("xSpeed ; "+xSpeed);
+        } // FIGURE OUT SPEEDS
         else{
             xSpeed = 0;
-            System.out.println("xSpeed ; "+xSpeed);}
+           // System.out.println("xSpeed ; "+xSpeed);
+        }
         //get y speed
         if (poseY>0.5){
             ySpeed = VisionConstants.maxTranslationSpeed;
-            System.out.println("ySpeed ; "+ySpeed);
+           // System.out.println("ySpeed ; "+ySpeed);
         }
         else if (poseY>0.15){
             ySpeed = 0.5*m_pose.getY(); // FIGURE OUT SPEEDS
-            System.out.println("ySpeed ; "+ySpeed);
+          //  System.out.println("ySpeed ; "+ySpeed);
         } 
         else{
             ySpeed = 0;
-            System.out.println("ySpeed ; "+ySpeed);
+          //  System.out.println("ySpeed ; "+ySpeed);
         }
         // get rotational speed
         //System.out.println("poseYaw:"+poseYaw);
         if (Math.abs(180-Math.abs(poseYaw))>45){
 
             rotationSpeed = VisionConstants.maxRotationSpeed;
-            System.out.println("rotationSpeed ; "+rotationSpeed);
+           // System.out.println("rotationSpeed ; "+rotationSpeed);
         }
         else if (Math.abs(180-Math.abs(poseYaw))>1){
             rotationSpeed = 0.5*Math.abs(180-Math.abs(poseYaw))/90*VisionConstants.maxRotationSpeed;
-            System.out.println("rotationSpeed ; "+rotationSpeed);
+          //  System.out.println("rotationSpeed ; "+rotationSpeed);
         }
         else{
             rotationSpeed = 0;
-            System.out.println("rotationSpeed ; "+rotationSpeed);
+           // System.out.println("rotationSpeed ; "+rotationSpeed);
         }
         //}
         //catch (NullPointerException e){
