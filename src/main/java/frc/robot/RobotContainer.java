@@ -82,8 +82,8 @@ public class RobotContainer {
     private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_L2L3shooter);
     private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
-    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
+    //private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
+    //private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
     private final AutoElevatorZeroCommand m_autoElevatorZeroCommand = new AutoElevatorZeroCommand(m_elevator);
     private final AutoElevatorResetCommand m_autoElevatorResetCommand = new AutoElevatorResetCommand(m_elevator);
     
@@ -189,8 +189,8 @@ public class RobotContainer {
 
         joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
         joystickOperator.povDown().onTrue(m_autoElevatorResetCommand);
-        joystickOperator.povLeft().toggleOnTrue(m_visionAlignLeftCommand);
-        joystickOperator.povRight().toggleOnTrue(m_visionAlignRightCommand);
+        //joystickOperator.povLeft().toggleOnTrue(m_visionAlignLeftCommand);
+        //joystickOperator.povRight().toggleOnTrue(m_visionAlignRightCommand);
 
         joystickOperator.leftBumper().toggleOnTrue(m_outtakeL1Command);
         joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
