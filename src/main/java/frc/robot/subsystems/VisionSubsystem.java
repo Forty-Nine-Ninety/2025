@@ -113,6 +113,8 @@ public class VisionSubsystem extends SubsystemBase{
         System.out.println("speeds: "+m_speeds[0]+" "+m_speeds[1]+" "+m_speeds[2]);
 
         m_drivebase.drive(new ChassisSpeeds(m_speeds[0],m_speeds[1],m_speeds[2]));
-        m_lastTargetTime = Timer.getFPGATimestamp();
+        if(poseX>0.3 || poseY>0.15 || poseYaw>1){
+            m_lastTargetTime = Timer.getFPGATimestamp();
+        }
     }
 }
