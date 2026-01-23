@@ -88,7 +88,7 @@ public class VisionSubsystem extends SubsystemBase{
             m_speeds[0] = VisionConstants.maxTranslationSpeed;
         } else if (poseX>0.3){
             m_speeds[0] = 0.5*poseX;
-        } else if(Timer.getFPGATimestamp()-m_lastTargetTime>0.0005){
+        } else if(Timer.getFPGATimestamp()-m_lastTargetTime>0.1){
             m_speeds[0] = 0;
         }
 
@@ -96,7 +96,7 @@ public class VisionSubsystem extends SubsystemBase{
             m_speeds[1] = VisionConstants.maxTranslationSpeed;
         } else if (poseY>0.15){
             m_speeds[1] = 0.5*poseY;
-        } else if (Timer.getFPGATimestamp()-m_lastTargetTime>0.0005){
+        } else if (Timer.getFPGATimestamp()-m_lastTargetTime>0.1){
             m_speeds[1] = 0;
         }
 
@@ -106,7 +106,7 @@ public class VisionSubsystem extends SubsystemBase{
             } else if (Math.abs(180-Math.abs(poseYaw))>1){
                 m_speeds[2] = 0.5*Math.abs(180-Math.abs(poseYaw))/90*VisionConstants.maxRotationSpeed;
             }
-        } else if(Timer.getFPGATimestamp()-m_lastTargetTime>0.0005){
+        } else if(Timer.getFPGATimestamp()-m_lastTargetTime>0.1){
             m_speeds[2] = 0;
         }
         //System.out.println("time: "+m_lastTargetTime+" "+Timer.getFPGATimestamp());
