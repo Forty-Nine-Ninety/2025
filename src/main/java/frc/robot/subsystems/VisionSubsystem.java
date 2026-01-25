@@ -31,7 +31,7 @@ import frc.robot.commands.VisionDriveCommand;
 import frc.robot.commands.auto.AutoVisionCommand;
 import java.util.List;
 
-public class VisionSubsystem extends SubsystemBase{
+public class VisionSubsystem extends SubsystemBase {
     private SwerveSubsystem m_drivebase;
     private VisionDriveCommand m_visionDrive;
     private DriveCommand m_driveCommand;
@@ -47,7 +47,13 @@ public class VisionSubsystem extends SubsystemBase{
     private Transform3d m_prevPose;
     private boolean driving = false;
 
-    public VisionSubsystem(SwerveSubsystem drivebase,PhotonCamera photonCamera,CommandXboxController joystick){
+    // Pose persistence fields
+    private Transform3d m_lastValidPose = null;
+    private double m_lastValidPoseTime = 0;
+    private static final double POSE_TIMEOUT = 0.3;
+    private static final double STOPPING_DISTANCE = 0.3048; // 1 foot in meters
+
+    public VisionSubsystem(SwerveSubsystem drivebase, PhotonCamera photonCamera, CommandXboxController joystick) {
         m_drivebase = drivebase;
         arducamOne = photonCamera;
         m_rumble = new RumbleCommand(joystick);
@@ -55,17 +61,15 @@ public class VisionSubsystem extends SubsystemBase{
         m_pose = new Transform3d();
         m_lastTargetTime = 0;
         m_driveCommand = new DriveCommand(m_drivebase);
-        m_speeds = new double[3]; // [xSpeed,ySpeed,rotationSpeed]
-        
-    } 
+        m_speeds = new double[3];
+    }
 
-    //This method finds the distance of the April Tag being scanned
-    public void scanForApriltag(){
+    public void scanForApriltag() {
         results = arducamOne.getAllUnreadResults();
         
-        if (results.size()!=0 && results!= null){
-            PhotonPipelineResult result = results.get(results.size()-1);
-            if(result.hasTargets()&&!driving){
+        if (results.size() != 0 && results != null) {
+            PhotonPipelineResult result = results.get(results.size() - 1);
+            if (result.hasTargets() && !driving) {
                 m_pose = result.getBestTarget().getBestCameraToTarget();
             } else {
                 m_pose = new Transform3d();
@@ -75,46 +79,75 @@ public class VisionSubsystem extends SubsystemBase{
         }
         results.clear();
     }
-    //Updates the variables in Vision Subsystem. Run this method often.
-    public void update(){
+
+    public void update() {
         this.scanForApriltag();
+        double currentTime = Timer.getFPGATimestamp();
+        
         double poseX = m_pose.getX();
         double poseY = m_pose.getY();
-        double poseYaw = m_pose.getRotation().getZ()*180/Math.PI;
 
-        //GET SPEEDS
-        //System.out.println("pose: "+poseX+" "+poseY+" "+poseYaw);
-        if (poseX>1){
-            m_speeds[0] = VisionConstants.maxTranslationSpeed;
-        } else if (poseX>0.3){
-            m_speeds[0] = 0.5*poseX;
-        } else if(Timer.getFPGATimestamp()-m_lastTargetTime>0.1){
-            m_speeds[0] = 0;
+        // Store valid pose when we see one
+        if (poseX != 0 || poseY != 0) {
+            m_lastValidPose = m_pose;
+            m_lastValidPoseTime = currentTime;
         }
 
-        if (poseY>0.5){
-            m_speeds[1] = VisionConstants.maxTranslationSpeed;
-        } else if (poseY>0.15){
-            m_speeds[1] = 0.5*poseY;
-        } else if (Timer.getFPGATimestamp()-m_lastTargetTime>0.1){
-            m_speeds[1] = 0;
+        // Determine which pose to use
+        Transform3d poseToUse = null;
+        if (poseX != 0 || poseY != 0) {
+            poseToUse = m_pose;
+        } else if (m_lastValidPose != null && (currentTime - m_lastValidPoseTime) < POSE_TIMEOUT) {
+            poseToUse = m_lastValidPose;
         }
 
-        if(poseYaw!=0){
-            if (Math.abs(180-Math.abs(poseYaw))>45){
-                m_speeds[2] = VisionConstants.maxRotationSpeed;
-            } else if (Math.abs(180-Math.abs(poseYaw))>1){
-                m_speeds[2] = 0.5*Math.abs(180-Math.abs(poseYaw))/90*VisionConstants.maxRotationSpeed;
+        // Reset all speeds
+        double forwardSpeed = 0;
+        double strafeSpeed = 0;
+        double rotSpeed = 0;
+
+        if (poseToUse != null) {
+            double useX = poseToUse.getX();
+            double useY = poseToUse.getY();
+
+            // ROTATION: Always turn toward tag
+            if (Math.abs(useY) > 0.05) {
+                rotSpeed = useY * 2.0;
+                if (rotSpeed > VisionConstants.maxRotationSpeed) {
+                    rotSpeed = VisionConstants.maxRotationSpeed;
+                } else if (rotSpeed < -VisionConstants.maxRotationSpeed) {
+                    rotSpeed = -VisionConstants.maxRotationSpeed;
+                }
             }
-        } else if(Timer.getFPGATimestamp()-m_lastTargetTime>0.1){
-            m_speeds[2] = 0;
-        }
-        //System.out.println("time: "+m_lastTargetTime+" "+Timer.getFPGATimestamp());
-        System.out.println("speeds: "+m_speeds[0]+" "+m_speeds[1]+" "+m_speeds[2]);
 
-        m_drivebase.drive(new ChassisSpeeds(m_speeds[0],m_speeds[1],m_speeds[2]));
-        if(poseX>0.3 || poseY>0.15 || poseYaw>1){
-            m_lastTargetTime = Timer.getFPGATimestamp();
+            // FORWARD: Always drive toward tag (but slower when misaligned)
+            double xError = useX - STOPPING_DISTANCE;
+            if (xError > 0.05) {
+                // Calculate base forward speed
+                double baseSpeed = Math.min(xError * 1.5, VisionConstants.maxTranslationSpeed);
+                
+                // Scale down speed when misaligned (but minimum 40% speed)
+                double alignmentFactor = Math.max(0.4, 1.0 - Math.abs(useY) / 0.5);
+                forwardSpeed = baseSpeed * alignmentFactor;
+            }
+
+            // No strafing
+            strafeSpeed = 0;
+
+            System.out.println("STATE: DRIVING+TURNING | useX=" + useX + " useY=" + useY + " fwd=" + forwardSpeed + " rot=" + rotSpeed);
+
+            m_lastTargetTime = currentTime;
+        } else {
+            System.out.println("STATE: NO TARGET");
         }
+
+        // Deadband
+        if (Math.abs(forwardSpeed) < 0.05) forwardSpeed = 0;
+        if (Math.abs(strafeSpeed) < 0.05) strafeSpeed = 0;
+        if (Math.abs(rotSpeed) < 0.05) rotSpeed = 0;
+
+        System.out.println("FINAL: fwd=" + forwardSpeed + " strafe=" + strafeSpeed + " rot=" + rotSpeed);
+
+        m_drivebase.setChassisSpeeds(new ChassisSpeeds(forwardSpeed, strafeSpeed, rotSpeed));
     }
 }
