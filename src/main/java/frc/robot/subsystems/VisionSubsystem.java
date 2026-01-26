@@ -110,9 +110,15 @@ public class VisionSubsystem extends SubsystemBase {
             double useX = poseToUse.getX();
             double useY = poseToUse.getY();
 
-            // ROTATION: Always turn toward tag
-            if (Math.abs(useY) > 0.05) {
-                rotSpeed = useY * 2.0;
+            // ROTATION: Scale gain based on distance
+            // Close: high gain (2.0), Far: low gain (0.8)
+            double rotGain = Math.max(0.8, Math.min(2.0, 3.0 / useX));
+            
+            // Larger deadband when far away to ignore noise
+            double rotDeadband = Math.min(0.3, 0.05 + useX * 0.05);
+            
+            if (Math.abs(useY) > rotDeadband) {
+                rotSpeed = useY * rotGain;
                 if (rotSpeed > VisionConstants.maxRotationSpeed) {
                     rotSpeed = VisionConstants.maxRotationSpeed;
                 } else if (rotSpeed < -VisionConstants.maxRotationSpeed) {
@@ -123,10 +129,7 @@ public class VisionSubsystem extends SubsystemBase {
             // FORWARD: Always drive toward tag (but slower when misaligned)
             double xError = useX - STOPPING_DISTANCE;
             if (xError > 0.05) {
-                // Calculate base forward speed
                 double baseSpeed = Math.min(xError * 1.5, VisionConstants.maxTranslationSpeed);
-                
-                // Scale down speed when misaligned (but minimum 40% speed)
                 double alignmentFactor = Math.max(0.4, 1.0 - Math.abs(useY) / 0.5);
                 forwardSpeed = baseSpeed * alignmentFactor;
             }
@@ -134,7 +137,7 @@ public class VisionSubsystem extends SubsystemBase {
             // No strafing
             strafeSpeed = 0;
 
-            System.out.println("STATE: DRIVING+TURNING | useX=" + useX + " useY=" + useY + " fwd=" + forwardSpeed + " rot=" + rotSpeed);
+            System.out.println("useX=" + useX + " useY=" + useY + " rotGain=" + rotGain + " rotDeadband=" + rotDeadband + " fwd=" + forwardSpeed + " rot=" + rotSpeed);
 
             m_lastTargetTime = currentTime;
         } else {
@@ -145,8 +148,6 @@ public class VisionSubsystem extends SubsystemBase {
         if (Math.abs(forwardSpeed) < 0.05) forwardSpeed = 0;
         if (Math.abs(strafeSpeed) < 0.05) strafeSpeed = 0;
         if (Math.abs(rotSpeed) < 0.05) rotSpeed = 0;
-
-        System.out.println("FINAL: fwd=" + forwardSpeed + " strafe=" + strafeSpeed + " rot=" + rotSpeed);
 
         m_drivebase.setChassisSpeeds(new ChassisSpeeds(forwardSpeed, strafeSpeed, rotSpeed));
     }
