@@ -69,6 +69,7 @@ public class RobotContainer {
     private final BlinkinSubsystem m_blinkin = new BlinkinSubsystem();
     //Commands
     private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
+    private final VisionDriveCommand m_visionDriveCommand = new VisionDriveCommand(m_vision, joystickDrive);
     private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
     //private final ElevatorUnclimbCommand m_elevatorUnclimbCommand = new ElevatorUnclimbCommand(m_climber);
     private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
