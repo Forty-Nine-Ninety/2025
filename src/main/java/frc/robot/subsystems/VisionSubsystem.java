@@ -78,6 +78,7 @@ public class VisionSubsystem extends SubsystemBase {
             m_pose = new Transform3d();
         }
         results.clear();
+        new RumbleCommand(m_joystick);
     }
 
     public void update() {

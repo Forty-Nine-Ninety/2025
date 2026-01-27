@@ -17,10 +17,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -36,6 +32,7 @@ import frc.robot.Constants.Ports.DriveSettings;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.*;
+
 
 import java.io.File;
 
@@ -111,7 +108,8 @@ public class RobotContainer {
       m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
       m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
       
-      Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
+      
+      SmartDashboard.putData("Auto Choose", m_autoChooser);
       
       m_coralChooser.setDefaultOption("Exit","0");
       m_coralChooser.addOption("1 Coral","1");
@@ -174,6 +172,7 @@ public class RobotContainer {
         );
 
         joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
+        joystickDrive.y().toggleOnTrue(m_visionDriveCommand);
         joystickDrive.leftBumper().toggleOnTrue(m_outtakeL1Command);
         joystickDrive.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
@@ -200,9 +199,14 @@ public class RobotContainer {
 
   //VISION COMMANDS
 
+  public void scanForApriltag(){
+    m_vision.scanForApriltag();
+  }
+  /*
   public void update(){
     m_vision.update();
   }
+  */
 
   public void setTeleopDefaultCommands()
   {
