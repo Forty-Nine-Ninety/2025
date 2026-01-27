@@ -1,100 +1,138 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.Constants.Ports.DriveSettings;
 import frc.robot.Constants.Ports.VisionConstants;
-import frc.robot.DriveUtil;
-import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.RumbleCommand;
-import frc.robot.commands.RumbleCommandHelper;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.commands.VisionDriveCommand;
-import frc.robot.commands.auto.AutoVisionCommand;
-import java.util.List;
 
 public class VisionSubsystem extends SubsystemBase {
     private SwerveSubsystem m_drivebase;
-    private VisionDriveCommand m_visionDrive;
-    private DriveCommand m_driveCommand;
     private PhotonCamera arducamOne;
     
-    private List<PhotonPipelineResult> results;
-    private PhotonTrackedTarget currentTarget;
-    private RumbleCommand m_rumble;
     private CommandXboxController m_joystick;
     private Transform3d m_pose;
     private double m_lastTargetTime;
-    private double[] m_speeds;
-    private Transform3d m_prevPose;
-    private boolean driving = false;
 
     // Pose persistence fields
     private Transform3d m_lastValidPose = null;
     private double m_lastValidPoseTime = 0;
     private static final double POSE_TIMEOUT = 0.3;
-    private static final double STOPPING_DISTANCE = 0.3048; // 1 foot in meters
+    private static final double STOPPING_DISTANCE = 0.3048;
+
+    // Vision toggle
+    private volatile boolean m_visionEnabled = false;
+    
+    // Button edge detection
+    private boolean m_prevRightBumper = false;
+    
+    // Skip frames
+    private int m_frameSkip = 0;
+    
+    // Cached speeds
+    private double m_cachedForward = 0;
+    private double m_cachedRot = 0;
 
     public VisionSubsystem(SwerveSubsystem drivebase, PhotonCamera photonCamera, CommandXboxController joystick) {
         m_drivebase = drivebase;
         arducamOne = photonCamera;
-        m_rumble = new RumbleCommand(joystick);
         m_joystick = joystick;
         m_pose = new Transform3d();
         m_lastTargetTime = 0;
-        m_driveCommand = new DriveCommand(m_drivebase);
-        m_speeds = new double[3];
     }
 
+    // ==================== VISION TOGGLE METHODS ====================
+
+    public void enableVision() {
+        m_visionEnabled = true;
+        m_lastValidPose = null;
+        m_cachedForward = 0;
+        m_cachedRot = 0;
+        System.out.println("VISION: ENABLED");
+    }
+
+    public void disableVision() {
+        m_visionEnabled = false;
+        m_drivebase.setChassisSpeeds(new ChassisSpeeds(0, 0, 0));
+        m_lastValidPose = null;
+        m_pose = new Transform3d();
+        m_cachedForward = 0;
+        m_cachedRot = 0;
+        System.out.println("VISION: DISABLED");
+    }
+
+    public void toggleVision() {
+        if (m_visionEnabled) {
+            disableVision();
+        } else {
+            enableVision();
+        }
+    }
+
+    public boolean isVisionEnabled() {
+        return m_visionEnabled;
+    }
+
+    // ==================== EXISTING METHODS ====================
+
     public void scanForApriltag() {
-        results = arducamOne.getAllUnreadResults();
-        
-        if (results.size() != 0 && results != null) {
-            PhotonPipelineResult result = results.get(results.size() - 1);
-            if (result.hasTargets() && !driving) {
+        try {
+            // USE getLatestResult() instead of getAllUnreadResults()
+            // This doesn't accumulate - just gets the most recent frame
+            PhotonPipelineResult result = arducamOne.getLatestResult();
+            
+            if (result != null && result.hasTargets()) {
                 m_pose = result.getBestTarget().getBestCameraToTarget();
             } else {
                 m_pose = new Transform3d();
             }
-        } else {
+        } catch (Exception e) {
             m_pose = new Transform3d();
         }
-        results.clear();
-        new RumbleCommand(m_joystick);
+        // REMOVED: new RumbleCommand(m_joystick); - was creating garbage every frame
     }
 
     public void update() {
+        // ===== BUTTON CHECK - ONLY ONCE PER LOOP =====
+        boolean currentRightBumper = m_joystick.getHID().getRightBumper();
+        
+        if (currentRightBumper && !m_prevRightBumper) {
+            System.out.println("TOGGLE PRESSED");
+            toggleVision();
+        }
+        
+        m_prevRightBumper = currentRightBumper;
+        
+        // ===== EXIT IF VISION DISABLED =====
+        if (!m_visionEnabled) {
+            return;
+        }
+        
+        // ===== SKIP FRAMES =====
+        m_frameSkip++;
+        if (m_frameSkip < 3) {
+            m_drivebase.setChassisSpeeds(new ChassisSpeeds(m_cachedForward, 0, m_cachedRot));
+            return;
+        }
+        m_frameSkip = 0;
+
+        // ===== VISION LOGIC =====
         this.scanForApriltag();
+        
         double currentTime = Timer.getFPGATimestamp();
         
         double poseX = m_pose.getX();
         double poseY = m_pose.getY();
 
-        // Store valid pose when we see one
         if (poseX != 0 || poseY != 0) {
             m_lastValidPose = m_pose;
             m_lastValidPoseTime = currentTime;
         }
 
-        // Determine which pose to use
         Transform3d poseToUse = null;
         if (poseX != 0 || poseY != 0) {
             poseToUse = m_pose;
@@ -102,32 +140,22 @@ public class VisionSubsystem extends SubsystemBase {
             poseToUse = m_lastValidPose;
         }
 
-        // Reset all speeds
         double forwardSpeed = 0;
-        double strafeSpeed = 0;
         double rotSpeed = 0;
 
         if (poseToUse != null) {
             double useX = poseToUse.getX();
             double useY = poseToUse.getY();
 
-            // ROTATION: Scale gain based on distance
-            // Close: high gain (2.0), Far: low gain (0.8)
             double rotGain = Math.max(0.8, Math.min(2.0, 3.0 / useX));
-            
-            // Larger deadband when far away to ignore noise
             double rotDeadband = Math.min(0.3, 0.05 + useX * 0.05);
             
             if (Math.abs(useY) > rotDeadband) {
                 rotSpeed = useY * rotGain;
-                if (rotSpeed > VisionConstants.maxRotationSpeed) {
-                    rotSpeed = VisionConstants.maxRotationSpeed;
-                } else if (rotSpeed < -VisionConstants.maxRotationSpeed) {
-                    rotSpeed = -VisionConstants.maxRotationSpeed;
-                }
+                rotSpeed = Math.max(-VisionConstants.maxRotationSpeed, 
+                           Math.min(VisionConstants.maxRotationSpeed, rotSpeed));
             }
 
-            // FORWARD: Always drive toward tag (but slower when misaligned)
             double xError = useX - STOPPING_DISTANCE;
             if (xError > 0.05) {
                 double baseSpeed = Math.min(xError * 1.5, VisionConstants.maxTranslationSpeed);
@@ -135,21 +163,17 @@ public class VisionSubsystem extends SubsystemBase {
                 forwardSpeed = baseSpeed * alignmentFactor;
             }
 
-            // No strafing
-            strafeSpeed = 0;
-
-            System.out.println("useX=" + useX + " useY=" + useY + " rotGain=" + rotGain + " rotDeadband=" + rotDeadband + " fwd=" + forwardSpeed + " rot=" + rotSpeed);
-
             m_lastTargetTime = currentTime;
-        } else {
-            System.out.println("STATE: NO TARGET");
         }
 
         // Deadband
         if (Math.abs(forwardSpeed) < 0.05) forwardSpeed = 0;
-        if (Math.abs(strafeSpeed) < 0.05) strafeSpeed = 0;
         if (Math.abs(rotSpeed) < 0.05) rotSpeed = 0;
 
-        m_drivebase.setChassisSpeeds(new ChassisSpeeds(forwardSpeed, strafeSpeed, rotSpeed));
+        // Cache speeds
+        m_cachedForward = forwardSpeed;
+        m_cachedRot = rotSpeed;
+
+        m_drivebase.setChassisSpeeds(new ChassisSpeeds(forwardSpeed, 0, rotSpeed));
     }
 }

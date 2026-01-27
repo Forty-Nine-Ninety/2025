@@ -64,7 +64,7 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber = new ClimberSubsystem(m_elevator);
     private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
     private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
-    private final VisionSubsystem m_vision = new VisionSubsystem(m_drivebase,m_arducam,joystickDrive);
+    private final VisionSubsystem m_vision = new VisionSubsystem(m_drivebase, m_arducam, joystickDrive);
     
     private final BlinkinSubsystem m_blinkin = new BlinkinSubsystem();
     //Commands
@@ -101,44 +101,44 @@ public class RobotContainer {
       //CameraServer.startAutomaticCapture();
       
       // Auto - SmartDashboard
-      NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));
+      NamedCommands.registerCommand("L1Shooter", new AutoL1ShooterCommand(m_L1shooter));
   
       m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
       m_autoChooser.addOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
-      m_autoChooser.addOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"11CBlue"));
-      m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
-      m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
+      m_autoChooser.addOption("Blue 1: One Coral", new Auto1NBlueCommand(m_drivebase, m_L1shooter, "11CBlue"));
+      m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase, m_L1shooter, "21CBlue"));
+      m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase, m_L1shooter, "31CBlue"));
       
       
       SmartDashboard.putData("Auto Choose", m_autoChooser);
       
-      m_coralChooser.setDefaultOption("Exit","0");
-      m_coralChooser.addOption("1 Coral","1");
+      m_coralChooser.setDefaultOption("Exit", "0");
+      m_coralChooser.addOption("1 Coral", "1");
       //m_coralChooser.addOption("2 Coral","2");
       //m_coralChooser.addOption("3 Coral","3");
   
-      m_exitChooser.setDefaultOption("Blue Exit 1","1");
-      m_exitChooser.addOption("Exit 2","2");
-      m_exitChooser.addOption("Blue Exit 3","3");
+      m_exitChooser.setDefaultOption("Blue Exit 1", "1");
+      m_exitChooser.addOption("Exit 2", "2");
+      m_exitChooser.addOption("Blue Exit 3", "3");
       String m_chosenExit = m_exitChooser.getSelected();
       String m_chosenCoral = m_coralChooser.getSelected();
       //Command m_chosenAuto;
 
-    switch(m_chosenExit){
+    switch(m_chosenExit) {
       case "1":
-        switch(m_chosenCoral){
+        switch(m_chosenCoral) {
           case "0":
             m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
           case "1":
             m_chosenAuto = m_drivebase.getAutonomousCommand("11CBlue");
         }
       case "2":
-        switch(m_chosenCoral){
+        switch(m_chosenCoral) {
           case "1":
             m_chosenAuto = m_drivebase.getAutonomousCommand("21CBlue");
         }  
       case "3":
-        switch(m_chosenCoral){
+        switch(m_chosenCoral) {
           case "0":
             m_chosenAuto = m_drivebase.getAutonomousCommand("3ExitBlue");
           case "1":
@@ -171,15 +171,18 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
             () -> MathUtil.applyDeadband(-joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
         );
+        
+        // Give DriveCommand access to vision state so they don't fight
+        m_driveCommand.setVisionSubsystem(m_vision);
 
         joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
         joystickDrive.y().toggleOnTrue(m_visionDriveCommand);
         joystickDrive.leftBumper().toggleOnTrue(m_outtakeL1Command);
-        joystickDrive.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
+  
 
         //OPERATOR CONTROLLER
         m_elevatorManualCommand.setSuppliers(
-          () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getRightY(),1),DriveSettings.ARM_DEADBAND)
+          () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getRightY(), 1), DriveSettings.ARM_DEADBAND)
         );
 
         joystickOperator.a().onTrue(m_elevatorL1Command);
@@ -200,6 +203,7 @@ public class RobotContainer {
 
   //VISION COMMANDS
 
+  public void update() {
   public void scanForApriltag(){
     m_vision.scanForApriltag();
   }
