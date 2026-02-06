@@ -222,7 +222,10 @@ public class VisionSubsystem extends SubsystemBase {
         double currentTime = Timer.getFPGATimestamp();
         
         double poseX = m_pose.getX();
+     //   double poseX = m_pose.getX();
+
         double poseY = m_pose.getY();
+       // double poseY = m_pose.getY();
 
         if (poseX != 0 || poseY != 0) {
             m_lastValidPose = m_pose;
@@ -237,6 +240,7 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         double visionForward = 0;
+
         double visionRot = 0;
 
         if (poseToUse != null) {
