@@ -36,6 +36,11 @@ public class VisionSubsystem extends SubsystemBase {
     private double m_rumbleCycleStart = 0;
     private boolean m_inRumbleZone = false;
 
+    // Ideal range for LED indicator (5.5 to 6.5 feet in meters)
+    private static final double IDEAL_RANGE_MIN = 5.5 * 0.3048;  // 1.676 meters
+    private static final double IDEAL_RANGE_MAX = 6.5 * 0.3048;  // 1.981 meters
+    private boolean m_inIdealRange = false;
+
     // Vision toggle
     private volatile boolean m_visionEnabled = false;
     
@@ -71,6 +76,7 @@ public class VisionSubsystem extends SubsystemBase {
         m_cachedStrafe = 0;
         m_cachedRot = 0;
         m_inRumbleZone = false;
+        m_inIdealRange = false;
         System.out.println("VISION: ENABLED");
     }
 
@@ -85,6 +91,7 @@ public class VisionSubsystem extends SubsystemBase {
         // Stop rumble when vision disabled
         setRumble(0);
         m_inRumbleZone = false;
+        m_inIdealRange = false;
         System.out.println("VISION: DISABLED");
     }
 
@@ -98,6 +105,19 @@ public class VisionSubsystem extends SubsystemBase {
 
     public boolean isVisionEnabled() {
         return m_visionEnabled;
+    }
+
+    // ==================== IDEAL RANGE CHECK (FOR LED SUBSYSTEM) ====================
+
+    /**
+     * Returns true if the robot is in the ideal range from the AprilTag (5.5 to 6.5 feet).
+     * Use this in LED subsystem:
+     * - GREEN: isVisionEnabled() && isInIdealRange()
+     * - RED: isVisionEnabled() && !isInIdealRange()
+     * - OFF: !isVisionEnabled()
+     */
+    public boolean isInIdealRange() {
+        return m_inIdealRange;
     }
 
     // ==================== RUMBLE ====================
@@ -222,10 +242,7 @@ public class VisionSubsystem extends SubsystemBase {
         double currentTime = Timer.getFPGATimestamp();
         
         double poseX = m_pose.getX();
-     //   double poseX = m_pose.getX();
-
         double poseY = m_pose.getY();
-       // double poseY = m_pose.getY();
 
         if (poseX != 0 || poseY != 0) {
             m_lastValidPose = m_pose;
@@ -240,12 +257,14 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         double visionForward = 0;
-
         double visionRot = 0;
 
         if (poseToUse != null) {
             double useX = poseToUse.getX();
             double useY = poseToUse.getY();
+
+            // ===== UPDATE IDEAL RANGE STATUS (FOR LED) =====
+            m_inIdealRange = (useX >= IDEAL_RANGE_MIN && useX <= IDEAL_RANGE_MAX);
 
             // ===== PERIODIC RUMBLE WHEN CLOSE =====
             updateRumble(useX);
@@ -268,7 +287,8 @@ public class VisionSubsystem extends SubsystemBase {
 
             m_lastTargetTime = currentTime;
         } else {
-            // No target - stop rumble
+            // No target - not in ideal range, stop rumble
+            m_inIdealRange = false;
             updateRumble(999);  // Pass large distance to stop rumble
         }
 
