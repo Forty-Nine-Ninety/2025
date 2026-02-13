@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -50,6 +51,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+    
     public Command m_chosenAuto = null;
     CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
     CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
@@ -81,18 +83,22 @@ public class RobotContainer {
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
     private final AutoElevatorZeroCommand m_autoElevatorZeroCommand = new AutoElevatorZeroCommand(m_elevator);
     private final AutoElevatorResetCommand m_autoElevatorResetCommand = new AutoElevatorResetCommand(m_elevator);
-    
+    private final VisionDetectionCommand m_visonDetectCommand = new VisionDetectionCommand(m_blinkin, m_vision);
   
     //Auto
     private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
     private SendableChooser<String> m_coralChooser = new SendableChooser<>();
     private SendableChooser<String> m_exitChooser = new SendableChooser<>();
-  
+    String gameData = " ";
+    
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
       // Configure the trigger bindings
       configureBindings();
+
+      updateAllianceTurn();
       
+      SmartDashboard.putString("Game Data", gameData);
       // Auto - SmartDashboard
       NamedCommands.registerCommand("L1Shooter", new AutoL1ShooterCommand(m_L1shooter));
   
@@ -179,7 +185,7 @@ public class RobotContainer {
       joystickOperator.x().onTrue(m_autoElevatorZeroCommand);
 
       joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
-      joystickOperator.povDown().onTrue(m_autoElevatorResetCommand);
+      joystickOperator.povDown().onTrue(m_visonDetectCommand);
 
       joystickOperator.leftBumper().toggleOnTrue(m_outtakeL1Command);
       joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
@@ -189,10 +195,35 @@ public class RobotContainer {
 
   public void update() {
       m_vision.update();
+      updateAllianceTurn();
   }
 
   public void setTeleopDefaultCommands() {
       CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
+  }
+
+  public void updateAllianceTurn() {
+    gameData = DriverStation.getGameSpecificMessage(); // Correctly update gameData
+    if (gameData.length() > 0) {
+      switch (gameData.charAt(0)) {
+        case 'B':
+          m_blinkin.setColor(m_blinkin.blue);
+          SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.blue));
+          break;
+        case 'R':
+          m_blinkin.setColor(m_blinkin.red);
+          SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.red));
+          break;
+        default:
+          m_blinkin.setColor(m_blinkin.black);
+          SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.black));
+          break;
+      }
+    } 
+    else {
+      m_blinkin.setColor(m_blinkin.purple);
+      SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.purple));
+    }
   }
 
   /**
