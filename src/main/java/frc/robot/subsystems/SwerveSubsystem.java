@@ -12,7 +12,6 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import java.util.List;
 //import com.pathplanner.lib.util.DriveFeedforwards;
 //import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 //import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
@@ -35,7 +34,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.Ports.DriveSettings;
 import frc.robot.Constants.Ports.RobotMeasurements;
 import frc.robot.DriveUtil;
-import frc.robot.subsystems.VisionSubsystem;
 
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -54,7 +52,6 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase
 {
 
-    //private final VisionSubsystem m_vision;
     /**
      * Swerve drive object.
      */
@@ -71,7 +68,6 @@ public class SwerveSubsystem extends SubsystemBase
      */
     public SwerveSubsystem(File directory)
     {
-        
         // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
         //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
         //  The encoder resolution per motor revolution is 1 per motor revolution.
@@ -81,12 +77,10 @@ public class SwerveSubsystem extends SubsystemBase
         //  The gear ratio is 6.75 motor revolutions per wheel rotation.
         //  The encoder resolution per motor revolution is 1 per motor revolution.
         double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(RobotMeasurements.DRIVETRAIN_WHEEL_DIAMETER_IN), RobotMeasurements.DRIVE_GEAR_RATIO);
-        /* 
         System.out.println("\"conversionFactor\": {");
         System.out.println("\t\"angle\": " + angleConversionFactor + ",");
         System.out.println("\t\"drive\": " + driveConversionFactor);
         System.out.println("}");
-        */
 
         // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
         SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -124,17 +118,15 @@ public class SwerveSubsystem extends SubsystemBase
      */
     public Command aimAtTarget(PhotonCamera camera)
     {
-        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
-        PhotonPipelineResult result = results.get(-1);
         return run(() -> {
-            //Temporary fix. We need to find a way to get "result" into swerve subsystem through a method or a rework of another method.
-            
-            
-            if (result.hasTargets()) {
-                drive(getTargetSpeeds(0,0, Rotation2d.fromDegrees(result.getBestTarget().getYaw()))); // Not sure if this will work, more math may be required.
+            PhotonPipelineResult result = camera.getLatestResult();
+            if (result.hasTargets())
+            {
+                drive(getTargetSpeeds(0,
+                                                            0,
+                                                            Rotation2d.fromDegrees(result.getBestTarget()
+                                                                                                                     .getYaw()))); // Not sure if this will work, more math may be required.
             }
-
-          
         });
     }
 
@@ -187,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     public Command getAutonomousCommand(String pathName)
     {
-        // System.out.println("SWERVEgetAutonomousCommand");
+        System.out.println("SWERVEgetAutonomousCommand");
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         return new PathPlannerAuto(pathName);
     }
@@ -523,7 +515,7 @@ public class SwerveSubsystem extends SubsystemBase
      * Get the {@link SwerveDriveConfiguration} object.
      *
      * @return The {@link SwerveDriveConfiguration} fpr the current drive.
-     */ 
+     */
     public SwerveDriveConfiguration getSwerveDriveConfiguration()
     {
         return swerveDrive.swerveDriveConfiguration;

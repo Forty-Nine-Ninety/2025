@@ -12,17 +12,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.RobotBase;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -34,15 +32,13 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.*;
 
-
 import java.io.File;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,7 +47,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    
+
     public Command m_chosenAuto = null;
     CommandXboxController joystickDrive = new CommandXboxController(Ports.PORT_JOYSTICK_DRIVE);
     CommandXboxController joystickOperator = new CommandXboxController(Ports.PORT_JOYSTICK_OPERATOR);
@@ -66,41 +62,37 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber = new ClimberSubsystem(m_elevator);
     private final L1ShooterSubsystem m_L1shooter = new L1ShooterSubsystem();
     private final L2L3ShooterSubsystem m_L2L3shooter = new L2L3ShooterSubsystem();
-    private final VisionSubsystem m_vision = new VisionSubsystem(m_drivebase, m_arducam, joystickDrive);
-    
-    private final BlinkinSubsystem m_blinkin = new BlinkinSubsystem();
+    private final VisionSubsystem m_vision = new VisionSubsystem(m_drivebase,m_arducam,joystickDrive);
     //Commands
     private final DriveCommand m_driveCommand = new DriveCommand(m_drivebase);
-    private final VisionDriveCommand m_visionDriveCommand = new VisionDriveCommand(m_vision, joystickDrive);
     private final ElevatorClimbCommand m_elevatorClimbCommand = new ElevatorClimbCommand(m_climber);
+    //private final ElevatorUnclimbCommand m_elevatorUnclimbCommand = new ElevatorUnclimbCommand(m_climber);
     private final ElevatorL1Command m_elevatorL1Command = new ElevatorL1Command(m_elevator);
     private final ElevatorL2Command m_elevatorL2Command = new ElevatorL2Command(m_elevator);
     private final ElevatorL3Command m_elevatorL3Command = new ElevatorL3Command(m_elevator);
     private final ElevatorManualCommand m_elevatorManualCommand = new ElevatorManualCommand(m_elevator);
     private final ElevatorNeutralCommand m_elevatorNeutralCommand = new ElevatorNeutralCommand(m_elevator);
-    private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_L2L3shooter);
+    private final IntakeElevatorCommand m_intakeElevatorCommand = new IntakeElevatorCommand(m_elevator, m_L2L3shooter);
     private final OuttakeL1Command m_outtakeL1Command = new OuttakeL1Command(m_L1shooter);
     private final OuttakeL2L3Command m_outtakeL2L3Command = new OuttakeL2L3Command(m_L2L3shooter);
-    private final AutoElevatorZeroCommand m_autoElevatorZeroCommand = new AutoElevatorZeroCommand(m_elevator);
-    private final AutoElevatorResetCommand m_autoElevatorResetCommand = new AutoElevatorResetCommand(m_elevator);
-    private final VisionDetectionCommand m_visonDetectCommand = new VisionDetectionCommand(m_blinkin, m_vision);
+    private final VisionAlignLeftCommand m_visionAlignLeftCommand = new VisionAlignLeftCommand(m_drivebase,m_arducam,joystickOperator);
+    private final VisionAlignRightCommand m_visionAlignRightCommand = new VisionAlignRightCommand(m_drivebase,m_arducam,joystickOperator);
+    
   
     //Auto
     private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
     private SendableChooser<String> m_coralChooser = new SendableChooser<>();
     private SendableChooser<String> m_exitChooser = new SendableChooser<>();
-    String gameData = " ";
-    
+    //private final AutoCommand m_autoCommand = new AutoCommand(m_arm,m_shooter,m_drivebase,"11NBlue");
+  
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
       // Configure the trigger bindings
       configureBindings();
-
-      updateAllianceTurn();
+  
       
-      SmartDashboard.putString("Game Data", gameData);
       // Auto - SmartDashboard
-      NamedCommands.registerCommand("L1Shooter", new AutoL1ShooterCommand(m_L1shooter));
+      NamedCommands.registerCommand("L1Shooter",new AutoL1ShooterCommand(m_L1shooter));
   
       m_autoChooser.setDefaultOption("Blue 1: Exit", m_drivebase.getAutonomousCommand("1ExitBlue"));
       m_autoChooser.addOption("Blue 3: Exit", m_drivebase.getAutonomousCommand("3ExitBlue"));
@@ -108,122 +100,95 @@ public class RobotContainer {
       m_autoChooser.addOption("Blue 2: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"21CBlue"));
       m_autoChooser.addOption("Blue 3: One Coral", new Auto1NBlueCommand(m_drivebase,m_L1shooter,"31CBlue"));
       
-      SmartDashboard.putData("Auto Choose", m_autoChooser);
+      Shuffleboard.getTab("Auto Choose").add("Choose Auto Path", m_autoChooser);
       
-      m_coralChooser.setDefaultOption("Exit", "0");
-      m_coralChooser.addOption("1 Coral", "1");
-
-      m_exitChooser.setDefaultOption("Blue Exit 1", "1");
-      m_exitChooser.addOption("Exit 2", "2");
-      m_exitChooser.addOption("Blue Exit 3", "3");
-      
+      m_coralChooser.setDefaultOption("Exit","0");
+      m_coralChooser.addOption("1 Coral","1");
+      //m_coralChooser.addOption("2 Coral","2");
+      //m_coralChooser.addOption("3 Coral","3");
+  
+      m_exitChooser.setDefaultOption("Blue Exit 1","1");
+      m_exitChooser.addOption("Exit 2","2");
+      m_exitChooser.addOption("Blue Exit 3","3");
       String m_chosenExit = m_exitChooser.getSelected();
       String m_chosenCoral = m_coralChooser.getSelected();
+      //Command m_chosenAuto;
 
-      switch(m_chosenExit) {
-        case "1":
-          switch(m_chosenCoral) {
-            case "0":
-              m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
-              break;
-            case "1":
-              m_chosenAuto = m_drivebase.getAutonomousCommand("11CBlue");
-              break;
-          }
-          break;
-        case "2":
-          switch(m_chosenCoral) {
-            case "1":
-              m_chosenAuto = m_drivebase.getAutonomousCommand("21CBlue");
-              break;
-          }
-          break;
-        case "3":
-          switch(m_chosenCoral) {
-            case "0":
-              m_chosenAuto = m_drivebase.getAutonomousCommand("3ExitBlue");
-              break;
-            case "1":
-              m_chosenAuto = m_drivebase.getAutonomousCommand("31CBlue");
-              break;
-          }
-          break;
-        default:
-          m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
-          break;
-      }
-      
-      System.out.println(m_chosenAuto);
+    switch(m_chosenExit){
+      case "1":
+        switch(m_chosenCoral){
+          case "0":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
+          case "1":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("11CBlue");
+        }
+      case "2":
+        switch(m_chosenCoral){
+          case "1":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("21CBlue");
+        }  
+      case "3":
+        switch(m_chosenCoral){
+          case "0":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("3ExitBlue");
+          case "1":
+            m_chosenAuto = m_drivebase.getAutonomousCommand("31CBlue");
+            
+        }
+      default:
+        m_chosenAuto = m_drivebase.getAutonomousCommand("1ExitBlue");
     }
+    System.out.println(m_chosenAuto);
+    //SmartDashboard.updateValues();
+  }
 
   /**
-   * Use this method to define your trigger->command mappings.
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
    */
-  private void configureBindings() {
-      //DRIVE CONTROLLER
-      m_driveCommand.setSuppliers(
-          () -> MathUtil.applyDeadband(-joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
-          () -> MathUtil.applyDeadband(joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
-          () -> MathUtil.applyDeadband(-joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
-      );
-      
-      // Give DriveCommand access to vision state so they don't fight
-      m_driveCommand.setVisionSubsystem(m_vision);
+  private void configureBindings()
+    {
+        //XBOX
+        //DRIVE CONTROLLER
+        m_driveCommand.setSuppliers(
+            () -> MathUtil.applyDeadband(-joystickDrive.getLeftY(), DriveSettings.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(-joystickDrive.getLeftX(), DriveSettings.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(-joystickDrive.getRightX(), DriveSettings.RIGHT_X_DEADBAND)
+        );
 
-      joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
-      joystickDrive.y().toggleOnTrue(m_visionDriveCommand);
-      joystickDrive.leftBumper().toggleOnTrue(m_outtakeL1Command);
+        joystickDrive.a().onTrue(Commands.runOnce(m_drivebase::zeroGyro));
+        joystickDrive.leftBumper().toggleOnTrue(m_outtakeL1Command);
+        joystickDrive.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
-      //OPERATOR CONTROLLER
-      m_elevatorManualCommand.setSuppliers(
-        () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getRightY(), 1), DriveSettings.ARM_DEADBAND)
-      );
+        //OPERATOR CONTROLLER
+        m_elevatorManualCommand.setSuppliers(
+          () -> MathUtil.applyDeadband(DriveUtil.powCopySign(joystickOperator.getRightY(),1),DriveSettings.ARM_DEADBAND)
+        );
 
-      joystickOperator.a().onTrue(m_elevatorL1Command);
-      joystickOperator.b().onTrue(m_elevatorL2Command);
-      joystickOperator.y().onTrue(m_elevatorL3Command);
-      joystickOperator.x().onTrue(m_autoElevatorZeroCommand);
+        joystickOperator.a().onTrue(m_elevatorL1Command);
+        joystickOperator.b().onTrue(m_elevatorL2Command);
+        joystickOperator.y().onTrue(m_elevatorL3Command);
+        joystickOperator.x().onTrue(m_elevatorNeutralCommand);
 
-      joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
-      joystickOperator.povDown().onTrue(m_visonDetectCommand);
+        joystickOperator.povUp().toggleOnTrue(m_elevatorClimbCommand);
+        joystickOperator.povDown().onTrue(m_intakeElevatorCommand);
+        joystickOperator.povLeft().toggleOnTrue(m_visionAlignLeftCommand);
+        joystickOperator.povRight().toggleOnTrue(m_visionAlignRightCommand);
 
-      joystickOperator.leftBumper().toggleOnTrue(m_outtakeL1Command);
-      joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
+        joystickOperator.leftBumper().toggleOnTrue(m_outtakeL1Command);
+        joystickOperator.rightBumper().toggleOnTrue(m_outtakeL2L3Command);
 
-      joystickOperator.rightStick().toggleOnTrue(m_elevatorManualCommand);
+        joystickOperator.rightStick().onTrue(m_elevatorManualCommand);
   }
 
-  public void update() {
-      m_vision.update();
-      updateAllianceTurn();
-  }
-
-  public void setTeleopDefaultCommands() {
+  public void setTeleopDefaultCommands()
+  {
       CommandScheduler.getInstance().setDefaultCommand(m_drivebase, m_driveCommand);
-  }
-
-  public void updateAllianceTurn() {
-    gameData = DriverStation.getGameSpecificMessage(); // Correctly update gameData
-    if (gameData.length() > 0) {
-      switch (gameData.charAt(0)) {
-        case 'B':
-          m_blinkin.setColor(m_blinkin.blue);
-          SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.blue));
-          break;
-        case 'R':
-          m_blinkin.setColor(m_blinkin.red);
-          SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.red));
-          break;
-        default:
-          m_blinkin.setColor(m_blinkin.black);
-          SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.black));
-          break;
-      }
-    } 
-    else {
-      m_blinkin.setColor(m_blinkin.purple);
-      SmartDashboard.putString("Alliance Color", m_blinkin.colorToHex(m_blinkin.purple));
-    }
   }
 
   /**
@@ -232,10 +197,26 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      return m_autoChooser.getSelected();
+    return m_autoChooser.getSelected();
   }
 
-  public void setMotorBrake(boolean brake) {
-      m_drivebase.setMotorBrake(brake);
+  public void scanForApriltag(){
+    m_vision.scanForApriltag();
+    /*PhotonPipelineResult result = m_arducam.getLatestResult();
+    System.out.println("2. Container scan. Pose and distance:");
+    if(result.hasTargets()){
+      Transform3d pose = result.getBestTarget().getBestCameraToTarget();
+      double distance = Math.sqrt(Math.pow(pose.getX(),2)+Math.pow(pose.getY(),2));
+      System.out.println(pose);
+      System.out.println(distance);
+      //if(distance<=3){
+      //  m_vision.update();
+      //}
+    }*/
+  }
+
+  public void setMotorBrake(boolean brake)
+  {
+    m_drivebase.setMotorBrake(brake);
   }
 }
