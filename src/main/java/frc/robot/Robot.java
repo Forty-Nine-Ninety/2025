@@ -2,7 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 package frc.robot;
 
 import java.io.File;
@@ -18,10 +17,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.Ports.SubsystemConfig;
 import swervelib.parser.SwerveParser;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
- * the TimedRobot documentation. If you change the name of this class or the package after creating
+ * the TimedRobot do cumentation. If you change the name of this class or the package after creating
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
@@ -41,21 +41,15 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
   }
 
-
-    /**
-     * This function is run when the robot is first started up and should be used for any initialization code.
-     */
-    @Override
-    public void robotInit()
-    {
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        // autonomous chooser on the dashboard.
-        //m_robotContainer = new RobotContainer();
-        
-        // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
-        // immediately when disabled, but then also let it be pushed more 
-        disabledTimer = new Timer();
-    }
+  /**
+   * This function is run when the robot is first started up and should be used for any initialization code.
+   */
+  @Override
+  public void robotInit() {
+    // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
+    // immediately when disabled, but then also let it be pushed more 
+    disabledTimer = new Timer();
+  }
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -83,11 +77,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (disabledTimer.hasElapsed(SubsystemConfig.WHEEL_LOCK_TIME))
-        {
-            m_robotContainer.setMotorBrake(false);
-            disabledTimer.stop();
-        }
+    if (disabledTimer.hasElapsed(SubsystemConfig.WHEEL_LOCK_TIME)) {
+      m_robotContainer.setMotorBrake(false);
+      disabledTimer.stop();
+    }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -112,9 +105,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    //if (m_autonomousCommand != null) {
-    //  m_autonomousCommand.cancel();
-    //}
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
 
     m_robotContainer.setTeleopDefaultCommands();
     m_robotContainer.setMotorBrake(true);
@@ -123,20 +116,20 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //m_robotContainer.scanForApriltag();
+    // FIXED: Call update() directly instead of addPeriodic()
+    // addPeriodic() was adding a NEW callback every loop, causing CPU overload!
+    m_robotContainer.update();
   }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    try
-        {
-            new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
-        } catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+    try {
+      new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /** This function is called periodically during test mode. */
