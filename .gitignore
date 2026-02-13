@@ -6,3 +6,4 @@ build
 *.swp
 
 src/main/java/frc/robot/Constants.java
+.DS_Store
